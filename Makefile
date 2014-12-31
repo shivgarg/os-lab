@@ -41,9 +41,9 @@ WARNINGS=
 NO_SIMD=-mno-mmx -mno-sse -mno-sse2 -mno-sse3 -mno-3dnow 
 
 
-CXXFLAGS    = -std=c++11\
+CXXFLAGS    = -std=c++0x \
               $(WARNINGS) \
-              -ffreestanding -fno-rtti -fno-exceptions -flto\
+              -ffreestanding -fno-rtti -fno-exceptions \
               -fstrength-reduce -fomit-frame-pointer -finline-functions \
               -mno-red-zone \
               $(NO_SIMD)\
@@ -55,7 +55,7 @@ CXXFLAGS.x86/except.cc = $(NO_SIMD)
 LINK.script = $I/make/util/linker.t
 LDFLAGS     = -static -T $(LINK.script) \
               -nostdlib -nodefaultlibs -nostartfiles \
-              -z max-page-size=0x1000 -flto\
+              -z max-page-size=0x1000 \
 
 
 QEMU=qemu-system-i386
