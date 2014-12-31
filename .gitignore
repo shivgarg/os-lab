@@ -1,0 +1,8 @@
+.*
+tags
+a.out
+*.exe
+*.o
+*.log
+_tmp
+*.hi
