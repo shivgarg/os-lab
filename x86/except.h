@@ -6,9 +6,7 @@
 
 
 #define __isr   extern "C" __attribute__ ((visibility("hidden")))
-#define __isr_helper extern "C" __attribute__((used,visibility("hidden")))
-
-
+#define __isr_helper extern "C" __attribute__((used,visibility("hidden"))) __attribute__((force_align_arg_pointer))
 
 
 

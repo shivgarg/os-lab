@@ -53,4 +53,6 @@ typedef uint32_t Dir;
 
 #define ALIGN(x) __attribute__((aligned(x)))
 
+#define STACK_FORCE_ALIGN __attribute__((force_align_arg_pointer))
+
 
