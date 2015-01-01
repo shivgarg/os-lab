@@ -63,9 +63,9 @@ nokey:
   //
   if(apps.render_flag && render_eq(apps.render_state, apps.rendertmp)){
     apps.render_state=apps.rendertmp;
-    apps.render_flag = true;
     goto norender;
   }
+  apps.render_flag = true;
 
   //can reserve space to write data
   if(!apps.channel0_writeport.write_canreserve(1)){
