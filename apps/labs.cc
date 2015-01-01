@@ -2,7 +2,7 @@
 
 
 static inline channels_t& channels_get(int othercore, shm_t& shm){
-  addr_t p= shm.get_shared();
+  addr_t p= shm.get(othercore);
   return *(channels_t*)p;
 }
 
