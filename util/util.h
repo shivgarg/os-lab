@@ -24,7 +24,7 @@ typedef uint32_t Index;
 
 template<typename T,typename... Args>
 static inline void construct(T* p, Args&&... args){
-  new (reinterpret_cast<void*>(p)) T{std::forward<Args>(args)...};
+  new (reinterpret_cast<void*>(p)) T(std::forward<Args>(args)...);
 }
 
 template<typename T>
