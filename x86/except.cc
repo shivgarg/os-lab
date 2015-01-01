@@ -509,7 +509,7 @@ _ring3_cfunc(uf_critical,  wc_critical);
 
 _ring0_cfunc(kmf_user, wc_user_ring0);
 _ring0_cfunc(kff_user, wc_user_ring0);
-_ring3_cfunc(uf_user,  wc_upcall_ring3);
+_ring3_upcall(uf_user, wc_upcall_ring3);
 
 _ring0_cfunc(kmf_pic_master, wc_pic_master);
 _ring0_cfunc(kff_pic_master, wc_pic_master);
