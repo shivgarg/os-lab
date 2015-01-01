@@ -9,10 +9,6 @@
 #define __isr_helper extern "C" __attribute__((used,visibility("hidden")))
 
 
-struct regs_t{
-  enum { N=3 };
-  uint32_t r[N];
-};
 
 
 
