@@ -15,10 +15,6 @@ SOURCES=\
 				$I/apps/labs.cc \
 				$I/util/debug.cc \
 				$I/util/lib.cc \
-				$I/labs/shell.cc \
-				$I/labs/coroutine.cc \
-				$I/labs/fiber.cc \
-				$I/labs/fiber_schedular.cc \
 
 
 CPPFLAGS    = -I$I #-DTEST_LABS
