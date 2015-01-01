@@ -353,7 +353,7 @@ _handler(handler_lapic_internal,        kmf_lapic_internal,         kff_lapic_in
 //
 // preemption: To Kernel
 //
-// LABS: - We don't want preemption on LAPIC(keyboard press etc) 
+// LABS: - We don't want preemption on LAPIC(keyboard press etc)
 //       - We want to force students to use Timer based preemption
 //       - To motivate use of timer based preemption, we need to have atleast
 //         two threads running. So that they need to be executed on round robin
@@ -434,7 +434,7 @@ _handler(handler_lapic_internal,        kmf_lapic_internal,         kff_lapic_in
 
 
 
-// 
+//
 // preemption: To User (schedular activation)
 //
 // #  define  _user_setflag(_name,_f)                \
@@ -485,8 +485,8 @@ _ring3_cfunc(uf_lapic_internal,  c_lapic_internal);
 //
 // iret
 //
-// two paths 
-// - for debugging 
+// two paths
+// - for debugging
 // - for TAL: for type checking of these iret
 //    Note: We may have to make this a macro and replicate on all paths
 //
@@ -594,7 +594,7 @@ __isr_helper void c_lapic(regs_t regs, int x){
 __isr_helper void c_lapic_internal(regs_t regs, int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
-  if(x==4){
+  if(x==lapic_internal_spurious){
     lapic_eoi(); //spurious
     return;
   }
