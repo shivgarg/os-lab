@@ -17,6 +17,7 @@ SOURCES     = \
               $I/labs/shell.cc  \
               $I/labs/coroutine.cc  \
               $I/labs/fiber.cc  \
+              $I/labs/fiber_schedular.cc  \
 
 ISO_SOURCES = \
               $O/iso/boot/$(NAME).exe   \

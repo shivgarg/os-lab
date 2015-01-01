@@ -4,6 +4,7 @@
 #include "labs/shell.h"
 #include "labs/coroutine.h"
 #include "labs/fiber.h"
+#include "labs/fiber_schedular.h"
 
 
 
@@ -19,13 +20,20 @@ struct core_t{
   f_t           f_locals;
 
   //for one fiber
+  enum { ARRAY_SIZE=4096};
   addr_t        main_stack;
   addr_t        f_stack;
   size_t        f_arraysize;
   uint32_t      f_debug1;
-  uint8_t       f_array[4096] ALIGN(64);
+  uint8_t       f_array[ARRAY_SIZE] ALIGN(64);
   uint32_t      f_debug2;
 
+  //for fiber_schedular
+  enum { STACKPTRS_SIZE=10};
+  size_t        stackptrs_size;
+  addr_t        stackptrs[STACKPTRS_SIZE];
+  size_t        arrays_size;
+  uint8_t       arrays[STACKPTRS_SIZE*ARRAY_SIZE] ALIGN(64);
 
   renderstate_t render_state; //separate renderstate from shellstate
 
@@ -75,6 +83,10 @@ extern "C" void core_init(core_t& core){
   core.f_arraysize    = sizeof(core.f_array);
   core.f_debug1       = 0xface600d; // for debug
   core.f_debug2       = 0xface600d;
+  core.stackptrs_size = core_t::STACKPTRS_SIZE;
+  core.arrays_size    = sizeof(core.arrays);
+
+  hoh_assert(core.arrays_size==core_t::STACKPTRS_SIZE*core_t::ARRAY_SIZE,"Bug: core.arrays_size="<<core.arrays_size);
 
   lpc_kbd_initialize(&core.lpc_kbd,0x60);
 
@@ -129,14 +141,8 @@ static void core_loop_step(core_t& core){
   shell_update(input, core.shell_state);
 
 nokey:
-  // execute shell for one time slot to do some computation, if required.
-  shell_step(core.shell_state);
-
-  // execute shell for one time slot to do some computation based on coroutine, if required.
-  shell_step_coroutine(core.shell_state, core.f_coro, core.f_locals);
-
-  // execute shell for one time slot to do some computation based on fiber, if required.
-  shell_step_fiber(core.shell_state, core.main_stack, core.f_stack, core.f_array, core.f_arraysize);
+  // execute shell for one time slot to do one of the ready computation.
+  shell_step_fiber_schedular(core.shell_state, core.stackptrs, core.stackptrs_size, core.arrays, core.arrays_size);
 
   // shellstate -> renderstate: compute render state from shell state
   shell_render(core.shell_state, rendertmp);
