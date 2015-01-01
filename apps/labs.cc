@@ -83,7 +83,7 @@ nokey:
   //save state
   apps.render_state=apps.rendertmp;
 
-  hoh_debug("rank0");
+  //hoh_debug("rank0");
 
 norender:
   //hoh_debug("norender");
