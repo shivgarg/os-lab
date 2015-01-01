@@ -54,7 +54,8 @@ struct process_t{
 #define process_offset_stackend  (1024+60)
     addr_t        stackend;  //design issue: overflow.
 
-
+#define process_offset_state     (1024+64)
+    uint32_t      state;
 
 #define process_offset_mmu       4096
     dev_pde32_t   mmu;
@@ -76,6 +77,8 @@ struct process_t{
       masterro=0;
       masterrw=0;
       sharedrw=0;
+
+      state=0;
 
       hoh_assert(offsetof(process_t, fpu_simd) ==0, "XXX");
       hoh_assert(offsetof(process_t, edi) == 1024, "XXX");
