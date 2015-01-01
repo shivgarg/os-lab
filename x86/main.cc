@@ -119,7 +119,7 @@ nokey:
   // ie. For the same render state, render() will always generate the same UI.
   // So, If the render state is same as last render state, let's optimize it away.
   //
-  if(!render_eq(core.render_state, rendertmp)){
+  if(render_eq(core.render_state, rendertmp)){
     goto done;
   }
 
