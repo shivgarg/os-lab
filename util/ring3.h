@@ -57,6 +57,9 @@ struct process_t{
 #define process_offset_state     (1024+64)
     uint32_t      state;
 
+#define process_offset_iopl      (1024+68)
+    uint32_t      iopl;
+
 #define process_offset_mmu       4096
     dev_pde32_t   mmu;
     /*no tss*/
@@ -79,6 +82,7 @@ struct process_t{
       sharedrw=0;
 
       state=0;
+      iopl=0;
 
       hoh_assert(offsetof(process_t, fpu_simd) ==0, "XXX");
       hoh_assert(offsetof(process_t, edi) == 1024, "XXX");

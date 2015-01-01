@@ -1,4 +1,5 @@
 #include "apps/labs.h"
+#include "labs/ring3_downcall.h"
 
 typedef renderstate_t sharedmesg_t;
 
@@ -20,7 +21,7 @@ static inline sharedmesg_t& channel0_get_data(int othercore, shm_t& shm, size_t 
 //
 // app step
 //
-static void apps_loop_step(int rank, addr_t& main_stack, preempt_t& preempt, apps_t& apps, dev_lapic_t& lapic, shm_t& shm){
+static void apps_loop_step(int rank, addr_t& main_stack, preempt_t& preempt, apps_t& apps, dev_lapic_t& lapic, shm_t& shm, bitpool_t& pool4M){
   if(rank==0){
     if(apps.state==1){
       goto rank0_ring3_done;
@@ -140,6 +141,7 @@ rank0_ring3_done:
   //cancel and cleanup, if any
   apps.state=0;
   ring3_step_done(apps.proc,lapic);
+  ring3_downcall(apps.proc,lapic,pool4M);
 
   goto done;
 rank1:
@@ -235,18 +237,19 @@ extern "C" void apps_reset(int rank, apps_t& apps, shm_t& shm, bitpool_t& pool4M
 //
 // main loop
 //
-extern "C" void apps_loop(int rank, addr_t* pmain_stack, preempt_t* ppreempt, apps_t* p_apps, dev_lapic_t* plapic, shm_t* pshm){
+extern "C" void apps_loop(int rank, addr_t* pmain_stack, preempt_t* ppreempt, apps_t* p_apps, dev_lapic_t* plapic, shm_t* pshm, bitpool_t* ppool4M){
   addr_t& main_stack = *pmain_stack;
   preempt_t& preempt = *ppreempt;
   apps_t& apps       = *p_apps;
   dev_lapic_t& lapic = *plapic;
   shm_t& shm         = *pshm;
+  bitpool_t& pool4M  = *ppool4M;
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug("apps_loop: esp="<<esp);
 
   for(;;){
-    apps_loop_step(rank, main_stack, preempt, apps,lapic,shm);
+    apps_loop_step(rank, main_stack, preempt, apps, lapic, shm, pool4M);
   }
 }
 
