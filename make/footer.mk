@@ -153,32 +153,36 @@ img: $(IMG)
 %.md: %.Rmd
 	R -e "library(knitr); knit(\"$*.Rmd\")"
 
-_PANDOC=pandoc -N -f markdown+definition_lists+multiline_tables+grid_tables+all_symbols_escapable
+_PANDOC=pandoc -N -f markdown+definition_lists+multiline_tables+grid_tables+all_symbols_escapable --highlight-style=tango --chapters --slide-level=4 -S
 
 %.beamerposter.tex: %.md image_dep img
 	$(_PANDOC) --base-header-level=6 --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
 	sed -i -e 's/\\begin{frame}{\(.*\)}/\\begin{column}{\1\\textwidth}/' -e 's/\\end{frame}/\\end{column}/' $@
 
 
-%.beamerposter.pdf: %.md image_dep img
-	$(_PANDOC) --base-header-level=6 --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
+%.beamerposter.pdf: %.beamerposter.tex
+	pdflatex $<
 
 
 
 %.beamer.tex: %.md image_dep img
-	$(_PANDOC) --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
+	$(_PANDOC) -s --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
 
 %.beamer.pdf: %.md image_dep img
-	$(_PANDOC) --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
+	$(_PANDOC) -s --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
 
 %.pdf: %.md image_dep img
-	$(_PANDOC)  --filter $(IMG) $< -o $@
+	$(_PANDOC) -s --filter $(IMG) $< -o $@
 
 %.tex: %.md image_dep img
-	$(_PANDOC)  --filter $(IMG) $< -o $@
+	$(_PANDOC) -s --filter $(IMG) $< -o $@
 
 %.html: %.md image_dep img
-	$(_PANDOC)  --filter $(IMG) $< -o $@
+	$(_PANDOC) -s --filter $(IMG) -t html5 $< -o $@
+
+%.slides.html: %.md image_dep img
+	$(_PANDOC) -s --toc --filter $(IMG) -t revealjs $< -o $@
+
 
 %.eps : %.dia 
 	dia -t eps $*.dia -e $*.eps
