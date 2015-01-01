@@ -3,6 +3,7 @@
 #include "util/config.h"
 #include "util/debug.h"
 #include <new>
+#include <limits>
 
 
 #define XSTR(x) #x
@@ -115,6 +116,44 @@ struct ScopedTimer{
   const char* name;
   uint64_t r_start,r_end;
 };
+
+
+
+
+
+
+//
+// Better to have language support for overflow<T>
+//
+struct overflow_uint32_t{
+  bool     valid;
+  uint32_t value;
+
+  overflow_uint32_t()    : valid(true), value(0){
+  }
+  explicit overflow_uint32_t(uint32_t v) : valid(true), value(v){
+  }
+};
+
+static inline overflow_uint32_t operator + (const overflow_uint32_t& a, const overflow_uint32_t& b){
+  overflow_uint32_t ret;
+  ret.valid = a.valid && b.valid;
+  if(ret.valid){
+    ret.valid = a.value <= (std::numeric_limits<uint32_t>::max() - b.value);
+    ret.value = a.value + b.value;
+  }
+  return ret;
+}
+
+static inline overflow_uint32_t operator * (const overflow_uint32_t& a, const overflow_uint32_t& b){
+  overflow_uint32_t ret;
+  ret.valid = a.valid && b.valid;
+  if(ret.valid){
+    ret.valid = (b.value == 0) || (a.value <= (std::numeric_limits<uint32_t>::max() / b.value));
+    ret.value = a.value * b.value;
+  }
+  return ret;
+}
 
 
 

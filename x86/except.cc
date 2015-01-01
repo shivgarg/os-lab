@@ -1,6 +1,8 @@
 #include "x86/except.h"
 #include "x86/main.h"
-
+#include "labs/preempt.h"
+#include "labs/ring3_preempt.h"
+#include "labs/ring3_upcall.h"
 
 //
 // This file should be compiled with floats and SIMDs disabled
@@ -16,6 +18,7 @@
 //  3b. PIC Slave  exceptions : PIC_BASE+ 0x8 + (0x0 -> 0x7)
 //  4a. LAPIC exceptions: LAPIC_BASE+ (0x0 -> 0xf)
 //  4b. LAPIC internal exceptions: LAPIC_BASE +0x10 +(0x0 -> 0x6) : LINT0, LINT1, Perfcnt, Thermal, ERR, Spurious, Timer
+//  5a. Downcall/Systemcall (User -> Kernel)
 //
 //
 
@@ -139,6 +142,21 @@
          "   jmp handler_lapic_internal      \n\t"\
          )                                        \
 
+//
+//  Macro for Class 5  ISRs
+//
+#define _isr_downcall(_n)                         \
+         __isr      void isr_downcall##_n();      \
+         __asm(                                   \
+         "  .text                            \n\t"\
+         "  .global isr_downcall" STR(_n) "  \n\t"\
+         "  isr_downcall" STR(_n) ":         \n\t"\
+         "   pushl $0                        \n\t"\
+         "   pushl $" STR(_n) "              \n\t"\
+         "   jmp handler_downcall            \n\t"\
+         )                                        \
+
+
 
 
 //
@@ -246,7 +264,11 @@ _isr_lapic_internal(5);
 _isr_lapic_internal(6);
 
 
+//
+// Define Class 5  ISRs
+//
 
+_isr_downcall(0);
 
 //
 // helper function
@@ -294,6 +316,7 @@ _handler(handler_pic_master,            kmf_pic_master,             kff_pic_mast
 _handler(handler_pic_slave,             kmf_pic_slave,              kff_pic_slave,                  uf_pic_slave);
 _handler(handler_lapic,                 kmf_lapic,                  kff_lapic,                      uf_lapic);
 _handler(handler_lapic_internal,        kmf_lapic_internal,         kff_lapic_internal,             uf_lapic_internal);
+_handler(handler_downcall,              kmf_downcall,               kff_downcall,                   uf_downcall);
 
 
 
@@ -346,6 +369,36 @@ _handler(handler_lapic_internal,        kmf_lapic_internal,         kff_lapic_in
          "  popl  %edx                       \n\t"\
          "  jmp iret_toring3                 \n\t"\
          )                                        \
+
+
+//
+// Stack layout
+//     24 ss     << only for _ring3
+//     20 esp    << only for _ring3
+//     16 flags  << for all
+//     12 cs
+//      8 eip
+//      4 errcode
+//      0 num
+//
+//
+// change:
+// 20 esp  : masterrw + LARGEPAGE_SIZE - 32
+//  8 eip  : user_start + 4
+//
+//         32: cr2
+//         28: %old_eip
+//         24: %old_esp
+//         20: errorcode
+//         16: num
+//         12: sharedrw
+//          8: masterrw
+//          4: masterro
+//          0: rank
+//
+//
+//
+//#  define  _ring3_upcall(_name,_f)                \
 
 
 
@@ -456,7 +509,7 @@ _ring3_cfunc(uf_critical,  c_critical);
 
 _ring0_cfunc(kmf_user, c_user_ring0);
 _ring0_cfunc(kff_user, c_user_ring0);
-_ring3_cfunc(uf_user,  c_user_ring3);
+_ring3_upcall(uf_user, c_upcall_ring3);
 
 _ring0_cfunc(kmf_pic_master, c_pic_master);
 _ring0_cfunc(kff_pic_master, c_pic_master);
@@ -472,9 +525,11 @@ _ring3_cfunc(uf_lapic,  c_lapic);
 
 _ring0_setflag(kmf_lapic_internal, c_lapic_internal);
 _ring0_preempt(kff_lapic_internal, c_lapic_internal);
-_ring3_cfunc(uf_lapic_internal,  c_lapic_internal);
+_ring3_preempt(uf_lapic_internal,  c_lapic_internal);
 
-
+_ring0_die(kmf_downcall,  c_downcall);
+_ring0_die(kff_downcall,  c_downcall);
+_ring3_preempt(uf_downcall, c_downcall);
 
 
 
@@ -540,6 +595,17 @@ __isr_helper void c_user_ring3(regs_t regs, int x){
   hoh_debug(": inside isr user ring3: "<<x<<"  esp="<<esp);
 }
 
+//
+// C helper for Class 2a,2b ISRs
+//
+__isr_helper void c_upcall_ring3(regs_t regs, int x){
+  uint32_t esp;
+  asm volatile ("mov %%esp,%0":"=r"(esp)::);
+  hoh_debug(": upcall: inside isr user ring3: "<<x<<"  esp="<<esp);
+}
+
+
+
 
 //
 // C helper for Class 3a ISRs
@@ -602,13 +668,26 @@ __isr_helper void c_lapic_internal(regs_t regs, int x){
   //lapic_dump();
   lapic_eoi();
 }
+
+
+//
+// C helper for Class 5 ISRs
+//
+__isr_helper void c_downcall(regs_t regs, int x){
+  uint32_t esp;
+  asm volatile ("mov %%esp,%0":"=r"(esp)::);
+  hoh_debug(": inside isr downcall: "<<x<<"  esp="<<esp);
+}
+
+
+
 //
 //
 
 
 extern "C" void idt_reset(dev_idt32_t& idt){
-  //idt[0x80].init(isr0,GDT::code*sizeof(gdt_node_t),0xee);
 #define idt_set(n,f) idt.set(n,(uintptr_t)f,dev_gdt32_tss_t::code*ia32_gdt_size,0x8e)
+#define idt_set3(n,f) idt.set(n,(uintptr_t)f,dev_gdt32_tss_t::code*ia32_gdt_size,0xee)
 
   //
   // Class 1
@@ -623,7 +702,7 @@ extern "C" void idt_reset(dev_idt32_t& idt){
   idt_set(0x0,  isr_user0);
   idt_set(0x1,  isr_user1);
   idt_set(0x2,  isr_user2);
-  idt_set(0x3,  isr_user3);
+  idt_set3(0x3,  isr_user3);
   idt_set(0x4,  isr_user4);
   idt_set(0x5,  isr_user5);
   idt_set(0x6,  isr_user6);
@@ -698,6 +777,9 @@ extern "C" void idt_reset(dev_idt32_t& idt){
   idt_set(lapic_internal_base+0x4, isr_lapic_internal4);
   idt_set(lapic_internal_base+0x5, isr_lapic_internal5);
   idt_set(lapic_internal_base+0x6, isr_lapic_internal6);
+
+
+  idt_set3(downcall_base+0x0, isr_downcall0);
 
 #undef idt_set
 }

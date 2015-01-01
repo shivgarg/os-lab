@@ -92,7 +92,7 @@ struct core_t{
 
 public:
   // Note: called on a tiny stack
-  core_t(int trank, addr_t tmastermsg, const bitpool_t& p4M, const bitpool_t& p4K, addr_t tstack, size_t tstacksize, const config_t& tconfig):
+  core_t(int trank, addr_t tsharedmsg, const bitpool_t& p4M, const bitpool_t& p4K, addr_t tstack, size_t tstacksize, const config_t& tconfig):
     self(this),
     rank(trank),
     main_stackbegin(tstack), // XXX: reset the pool too
@@ -103,7 +103,7 @@ public:
     pool4K(p4K),
     config(tconfig),
     hal(tstack,tstacksize,addr_t(this),sizeof(core_t),allocT<dev_pde32_t>(pool4K),tconfig),
-    shm(trank,tmastermsg)
+    shm(trank,tsharedmsg)
   {
     main_stack = addr_t(0xfacebaad); //to tell you that their value is random
     magic=0xface600d;

@@ -7,6 +7,8 @@
 
 #include "util/multicore.h"
 
+#include <algorithm>       // std::min
+
 //
 // initialize config
 //
@@ -28,7 +30,7 @@ static void hal_reset(int rank,hal_t& hal){
   asm volatile ("cli" ::: "memory");
 
   idt_reset(hal.idt);
-  hal.pde32->map(0, (char*)~0x3fffffUL, 0);
+  hal.pde32->map_identity();
   hal.gdt.reset();
 
   if(rank==0){
@@ -65,7 +67,7 @@ extern "C" void core_reset(int rank, core_t& core){
   if(rank==0){
     remotecore_reset_helper<channels_t>(rank+1,rank,core.hal.cmos,core.hal.lapic,core.pool4M,core.shm);
   }
-  apps_reset(core.rank,core.apps,core.shm);
+  apps_reset(core.rank,core.apps,core.shm,core.pool4M);
 }
 
 //
@@ -98,9 +100,15 @@ extern "C" void core_master_init(uint32_t magic, multiboot_info_t* pinfo, addr_t
   //
   hoh_debug_if(test_bit(info.flags,0), "mem_lower = "<<info.mem_lower<<", "<<"mem_upper = "<<info.mem_upper);
   hoh_debug_if(test_bit(info.flags,2), "cmdline   = "<<info.cmdline);
+
+  addr_t end  = addr_t(&g_end[0]);
+
   if(test_bit(info.flags,3)){
     for(size_t i=0;i<info.mods_count;i++){
-      hoh_debug("mod_start="<<info.mods_addr[i].mod_start<<", mod_end="<<info.mods_addr[i].mod_end<<", mod_cmdline="<<info.mods_addr[i].cmdline<<",FB="<<*(const char*)info.mods_addr[i].mod_start);
+      hoh_debug("mod_start="<<info.mods_addr[i].mod_start<<", mod_end="<<info.mods_addr[i].mod_end<<", mod_cmdline="<<info.mods_addr[i].cmdline);
+      if(addr_t(info.mods_addr[i].mod_end) > end){
+        end = addr_t(info.mods_addr[i].mod_end);
+      }
     }
   }
 
@@ -124,7 +132,6 @@ extern "C" void core_master_init(uint32_t magic, multiboot_info_t* pinfo, addr_t
       addr_t to   = from + r.len;
 
       //consider only memory after g_end as free
-      addr_t end  = addr_t(&g_end[0]);
       if(to < end){
         continue;
       }
@@ -147,6 +154,26 @@ extern "C" void core_master_init(uint32_t magic, multiboot_info_t* pinfo, addr_t
   hoh_debug("Pool Size: "<<pool_tmp.remaining()<<" Pool="<<uint32_t(&pool_tmp));
   hoh_assert(pool_tmp.remaining() > 10, "Not enough memory");
   sharedmem=alloc(pool_tmp);
+
+  //copy module info into shared mem
+  // format: uint32_t array: count. (start, end)^count
+  // ensure: count = min ( info.mods_count , (sizeof(page))/2 - 1 )
+  // XXX : hack
+
+  uint32_t count = 0;
+  uint32_t* p = (uint32_t*)sharedmem;
+
+  if(test_bit(info.flags,3)){
+    count = std::min ( info.mods_count, pool_tmp.datasize()/2 - 1);
+
+    for(size_t i=0;i<info.mods_count;i++){
+      p[1+i*2+0] = info.mods_addr[i].mod_start;
+      p[1+i*2+1] = info.mods_addr[i].mod_end;
+    }
+
+  }
+
+  p[0] = count;
 
 }
 

@@ -52,6 +52,9 @@ static inline T  set_bits(T x,T2 y){
 
 
 
+static inline char hex2char(unsigned int i){
+  return  "0123456789abcdef"[i%16];
+}
 
 
 
@@ -107,9 +110,6 @@ static inline dout_t& operator<<(dout_t& os,const char* s){
   return os;
 }
 
-static inline char hex2char(unsigned int i){
-  return  "0123456789abcdef"[i%16];
-}
 
 static inline dout_t& operator<<(dout_t& os,uint8_t x){
   enum {max=sizeof(uint8_t)*2+1};

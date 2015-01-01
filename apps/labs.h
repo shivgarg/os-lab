@@ -9,6 +9,7 @@
 #include "labs/fiber_schedular.h"
 #include "labs/preempt.h"
 #include "labs/multicore.h"
+#include "labs/ring3.h"
 
 #include "devices/lapic.h"
 #include "util/shm.h"
@@ -28,6 +29,7 @@ struct channels_t{
 
 
 struct apps_t{
+
   addr_t        vgatext_base;   //=addr_t(0xb8000);
   int           vgatext_width;  //=80;
   int           vgatext_height; //=25;
@@ -62,6 +64,13 @@ struct apps_t{
   uint8_t       input;
   renderstate_t rendertmp;
 
+
+
+  //for one process
+  size_t        state;          //=0;
+  process_t     proc;
+
+
   // multicore
   readport_t    channel0_readport;
   size_t        channel0_readport_read_index_tmp;
@@ -90,11 +99,13 @@ public:
     render_flag    = false;
 
     hoh_assert(arrays_size==STACKPTRS_SIZE*ARRAY_SIZE,"Bug: apps.arrays_size="<<arrays_size);
+
+    state          = 0;
   }
 
 };
 
 
-extern "C" void apps_reset(int rank, apps_t& apps, shm_t& shm);
+extern "C" void apps_reset(int rank, apps_t& apps, shm_t& shm, bitpool_t& pool4M);
 extern "C" void apps_loop(int rank, addr_t* main_stack, preempt_t* pprempt, apps_t* p_apps, dev_lapic_t* lapic, shm_t* pshm);
 

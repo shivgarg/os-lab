@@ -26,24 +26,28 @@
 
 #define stack_saverestore(from_stack,to_stack) do {                  \
  asm volatile(                                                       \
-   "  pushl %%eax      \n\t"                                         \
-   "  pushl %%ecx      \n\t"                                         \
-   "  pushl %%ebx      \n\t"                                         \
-   "  pushl %%ebp      \n\t"                                         \
-   "  pushl $1f        \n\t"                                         \
-   "                   \n\t"                                         \
-   "  movl  %%esp,(%0) \n\t"                                         \
-   "  movl  (%1),%%esp \n\t"                                         \
-   "                   \n\t"                                         \
-   "  ret              \n\t"                                         \
-   "1:                 \n\t"                                         \
-   "  popl %%ebp       \n\t"                                         \
-   "  popl %%ebx       \n\t"                                         \
-   "  popl %%ecx       \n\t"                                         \
-   "  popl %%eax       \n\t"                                         \
+   "  pushl %%eax                \n\t"                               \
+   "  pushl %%ecx                \n\t"                               \
+   "  pushl %%ebx                \n\t"                               \
+   "  pushl %%ebp                \n\t"                               \
+   "  call  1f                   \n\t"                               \
+   "1:                           \n\t"                               \
+   "  popl %%ebx                 \n\t"                               \
+   "  leal (1f-1b)(%%ebx), %%ebx \n\t"                               \
+   "  pushl %%ebx                \n\t"                               \
+   "                             \n\t"                               \
+   "  movl  %%esp,(%0)           \n\t"                               \
+   "  movl  (%1),%%esp           \n\t"                               \
+   "                             \n\t"                               \
+   "  ret                        \n\t"                               \
+   "1:                           \n\t"                               \
+   "  popl %%ebp                 \n\t"                               \
+   "  popl %%ebx                 \n\t"                               \
+   "  popl %%ecx                 \n\t"                               \
+   "  popl %%eax                 \n\t"                               \
   :                                                                  \
   :"a" (&from_stack), "c"  (&to_stack)                               \
-  :_ALL_REGISTERS, "memory"                                          \
+  :_ALL_REGISTERS, "memory", "flags"                                 \
  );                                                                  \
 } while(false)
 
@@ -67,13 +71,18 @@
 
 #define stack_inithelper(_teip)  do{                                 \
  asm volatile(                                                       \
-   "  movl $1f,%0      \n\t"                                         \
-   "  jmp  2f          \n\t"                                         \
-   "1:                 \n\t"                                         \
-   "  movl $0, %%ebp   \n\t"                                         \
-   "  jmp *(%%esp)    \n\t"                                         \
-   "2:                 \n\t"                                         \
-  :"=m" (_teip)                                                      \
+   "  call 1f                    \n\t"                               \
+   "1:                           \n\t"                               \
+   "  popl %0                    \n\t"                               \
+   "  leal (1f-1b)(%0), %0       \n\t"                               \
+   "                             \n\t"                               \
+   "  jmp  2f                    \n\t"                               \
+   "1:                           \n\t"                               \
+   "  movl $0, %%ebp             \n\t"                               \
+   "  jmp *(%%esp)               \n\t"                               \
+   "2:                           \n\t"                               \
+   "  nop                        \n\t"                               \
+  :"=r" (_teip)                                                      \
   :                                                                  \
  );                                                                  \
 }while(false)
