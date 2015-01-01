@@ -2,6 +2,7 @@
 #include "util/debug.h"
 #include "labs/keyboard.h"
 #include "labs/shell.h"
+#include "labs/coroutine.h"
 
 
 
@@ -11,6 +12,9 @@ struct core_t{
   int           vgatext_height; //=25;
 
   shellstate_t  shell_state;
+  coroutine_t   f_coro;
+  f_t           f_locals;
+
   renderstate_t render_state; //separate renderstate from shellstate
 
   lpc_kbd_t     lpc_kbd;
@@ -109,6 +113,9 @@ static void core_loop_step(core_t& core){
 nokey:
   // execute shell for one time slot to do some computation, if required.
   shell_step(core.shell_state);
+
+  // execute shell for one time slot to do some computation based on coroutine, if required.
+  shell_step_coroutine(core.shell_state, core.f_coro, core.f_locals);
 
   // shellstate -> renderstate: compute render state from shell state
   shell_render(core.shell_state, rendertmp);
