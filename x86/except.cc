@@ -528,9 +528,9 @@ _ring0_preempt(kff_lapic_internal, wc_lapic_internal);
 _ring3_preempt(uf_lapic_internal,  wc_lapic_internal);
 
 
-_ring0_die(kmf_downcall,  c_downcall);
-_ring0_die(kff_downcall,  c_downcall);
-_ring3_preempt(uf_downcall, c_downcall);
+_ring0_die(kmf_downcall,    wc_downcall);
+_ring0_die(kff_downcall,    wc_downcall);
+_ring3_preempt(uf_downcall, wc_downcall);
 
 
 
@@ -593,6 +593,8 @@ wrap_cfunc(wc_pic_master    ,c_pic_master);
 wrap_cfunc(wc_pic_slave     ,c_pic_slave);
 wrap_cfunc(wc_lapic         ,c_lapic);
 wrap_cfunc(wc_lapic_internal,c_lapic_internal);
+wrap_cfunc(wc_upcall_ring3,  c_upcall_ring3);
+wrap_cfunc(wc_downcall,      c_downcall);
 
 
 //
@@ -627,7 +629,7 @@ __isr_helper void c_user_ring3(int x){
 //
 // C helper for Class 2a,2b ISRs
 //
-__isr_helper void c_upcall_ring3(regs_t regs, int x){
+__isr_helper void c_upcall_ring3(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": upcall: inside isr user ring3: "<<x<<"  esp="<<esp);
@@ -702,7 +704,7 @@ __isr_helper void c_lapic_internal(int x){
 //
 // C helper for Class 5 ISRs
 //
-__isr_helper void c_downcall(regs_t regs, int x){
+__isr_helper void c_downcall(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr downcall: "<<x<<"  esp="<<esp);
