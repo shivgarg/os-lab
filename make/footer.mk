@@ -153,7 +153,7 @@ img: $(IMG)
 %.md: %.Rmd
 	R -e "library(knitr); knit(\"$*.Rmd\")"
 
-_PANDOC=pandoc -N -f markdown+definition_lists+multiline_tables+grid_tables+all_symbols_escapable --highlight-style=tango --chapters --slide-level=4 -S
+_PANDOC=pandoc -N -f markdown+definition_lists+multiline_tables+grid_tables+all_symbols_escapable+yaml_metadata_block+header_attributes --highlight-style=kate --chapters --slide-level=4 -S
 
 %.beamerposter.tex: %.md image_dep img
 	$(_PANDOC) --base-header-level=6 --toc --filter $(IMG) -t beamer -V theme:Warsaw  $< -o $@
@@ -178,7 +178,7 @@ _PANDOC=pandoc -N -f markdown+definition_lists+multiline_tables+grid_tables+all_
 	$(_PANDOC) -s --filter $(IMG) $< -o $@
 
 %.html: %.md image_dep img
-	$(_PANDOC) -s --filter $(IMG) -t html5 $< -o $@
+	$(_PANDOC) -s --toc --filter $(IMG) -t html5  --css=css/normalize.css --css=css/skeleton.css --css=css/pandoc.css --css=css/solarized-light.css --section-divs $< -o $@
 
 %.slides.html: %.md image_dep img
 	$(_PANDOC) -s --toc --filter $(IMG) -t revealjs $< -o $@
