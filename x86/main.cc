@@ -1,4 +1,5 @@
 #include "labs/vgatext.h"
+#include "util/debug.h"
 
 
 //
@@ -11,6 +12,8 @@ extern "C" void core_boot(){
   for(int loc=0;*p;loc++,p++){
     vgatext::writechar(loc,*p,0,7,vgatext_base);
   }
+
+  hoh_debug("Hello, serial!");
 
 }
 
