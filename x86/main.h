@@ -111,12 +111,12 @@ public:
 };
 
 
-extern "C" void core_reset(int rank, core_t& core);
-extern "C" void core_loop(int rank, core_t* p_core);
+extern "C" void core_reset(int rank, core_t& core)  STACK_FORCE_ALIGN;
+extern "C" void core_loop(int rank, core_t* p_core) STACK_FORCE_ALIGN;
 
 
 
 
-extern "C" void core_master_init(uint32_t magic, multiboot_info_t* pinfo, addr_t& mymem, bitpool_t& pool_tmp);
-extern "C" void core_mem_init(int rank, addr_t mastermsg, addr_t mymsg, bitpool_t& pool_tmp, bitpool_t& pool_tmp2, addr_t& ret_stack, addr_t& ret_core);
+extern "C" void core_master_init(uint32_t magic, multiboot_info_t* pinfo, addr_t& mymem, bitpool_t& pool_tmp) STACK_FORCE_ALIGN;
+extern "C" void core_mem_init(int rank, addr_t mastermsg, addr_t mymsg, bitpool_t& pool_tmp, bitpool_t& pool_tmp2, addr_t& ret_stack, addr_t& ret_core) STACK_FORCE_ALIGN;
 
