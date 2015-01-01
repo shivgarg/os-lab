@@ -19,7 +19,7 @@ class dev_pde32_t{
     }
   public:
     void map_identity(){
-      map_large(0,0, 0x83, 1u << (32-20));
+      map_large(0,0, 0x83, 1u << (32-22));
     }
 
     void map_large(addr_t va, addr_t pa, uint16_t flags, size_t num_pages){
@@ -38,6 +38,7 @@ class dev_pde32_t{
   private:
     void set(int i, uint32_t addr,uint16_t flags){
       hoh_assert((get_bits<11,0>(addr)==0),"XXX");
+      hoh_assert(i>=0 && i<N,"XXX");
       m_page[i]=(get_bits<31,12>(addr)<<12) | flags;
     }
     void unset(int i){
