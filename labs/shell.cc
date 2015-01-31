@@ -169,6 +169,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
       hoh_debug("inp_ind "<<stateinout.inp_ind);
       if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='b' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
       {
+        hoh_debug("in fib");
         int i=4,arg=0;bool ill=false;;
         while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
         {
@@ -204,6 +205,18 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
           for(int g=0;g<17;g++)
             stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
         }
+      }
+      else if(stateinout.inp[stateinout.inp_ind-2][0]=='e' && stateinout.inp[stateinout.inp_ind-2][1]=='c' && stateinout.inp[stateinout.inp_ind-2][2]=='h' && stateinout.inp[stateinout.inp_ind-2][3]=='o' && stateinout.inp[stateinout.inp_ind-2][4]==' ')
+      {
+       hoh_debug("in echo");
+        int i=5;
+        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        {
+          stateinout.inp[stateinout.inp_ind-1][i-5]=stateinout.inp[stateinout.inp_ind-2][i];
+          i++;
+        }
+        stateinout.inp[stateinout.inp_ind-1][i+1]='\0';
+
       }
     }
 
