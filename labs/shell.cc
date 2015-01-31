@@ -1,14 +1,29 @@
 #include "labs/shell.h"
 #include "util/debug.h"
 #include "labs/vgatext.h"
+#include <string.h>
 
+
+
+
+char keymap[]=    {'?','~','1','2','3','4','5','6','7','8','9','0','-','=','\b','\t',  'q','w','e','r','t','y','u','i','o','p','[',']','?','?','a','s',  'd','f','g','h','j','k','l',';','?','?','?','?','z','x','c','v',  'b','n','m',',','.','/','?'};
+char digi[]={'0','1','2','3','4','5','6','7','8','9'};
 //
 // initialize shellstate
 //
 void shell_init(shellstate_t& state){
+  for(int i=0;i<200;i++)
+	 state.inp[i][0]='\0';
+  state.index=0;
+  state.inp_ind=state.index;
+  state.char_ind=0;
+  state.change=0;
+  state.left=1;
+  state.leftarea=0;
+  hoh_debug("hihihihi");
 
 }
-
+int fib(int n);
 //
 // handle keyboard event.
 // key is in scancode format.
@@ -43,6 +58,154 @@ void shell_init(shellstate_t& state){
 void shell_update(uint8_t scankey, shellstate_t& stateinout){
 
     hoh_debug("Got: "<<unsigned(scankey));
+    stateinout.keys++;
+    stateinout.output=0;
+    
+    hoh_debug(int(stateinout.inp_ind)<<"\n");
+    hoh_debug("index key "<<int(stateinout.index)<<"\n");
+    if((scankey>=2 && scankey<12) || (scankey>=16 && scankey<26) || (scankey>=30 && scankey<39) || (scankey>=44 && scankey<51))
+    {
+      stateinout.inp[stateinout.inp_ind][stateinout.char_ind]=keymap[scankey];
+      stateinout.inp[stateinout.inp_ind][stateinout.char_ind+1]='\0';
+      stateinout.change=1-stateinout.change;
+      stateinout.char_ind+=1;
+      if(stateinout.index!=stateinout.inp_ind)
+	  		stateinout.index=stateinout.inp_ind;
+	
+    }
+    else if(scankey==57)
+    {
+      stateinout.inp[stateinout.inp_ind][stateinout.char_ind]=' ';
+      stateinout.inp[stateinout.inp_ind][stateinout.char_ind+1]='\0';
+      stateinout.change=1-stateinout.change;
+      stateinout.char_ind+=1;
+      if(stateinout.index!=stateinout.inp_ind)
+        stateinout.index=stateinout.inp_ind;
+    }
+    else if(scankey==14)
+    {
+      if(stateinout.char_ind-1>=0)
+        stateinout.char_ind-=1;
+      stateinout.inp[stateinout.inp_ind][stateinout.char_ind]='\0';
+      stateinout.change=1-stateinout.change;
+    }
+    else if(scankey==72)
+    {
+        if(stateinout.left==0)
+        {
+        	stateinout.change=1-stateinout.change;
+        	stateinout.index-=2;
+        	if(stateinout.index<0)
+        		stateinout.index+=200;
+          int char_i=0;
+        	for(int i=0;i<35;i++)
+        	{
+            if(stateinout.inp[stateinout.index][i]=='\0')
+              break;
+        		stateinout.inp[stateinout.inp_ind][i]=stateinout.inp[stateinout.index][i];
+            char_i++;
+        	}
+          stateinout.char_ind=char_i;
+          stateinout.inp[stateinout.inp_ind][char_i]='\0';
+        }
+        else
+        {
+        	stateinout.leftarea-=1;
+        	if(stateinout.leftarea<0)
+          		stateinout.leftarea+=4;
+        }
+    }
+    else if(scankey==80)
+    {
+        if(stateinout.left==0)
+        {
+        		if(stateinout.index!=stateinout.inp_ind)
+        		{
+        			stateinout.change=1-stateinout.change;
+        			stateinout.index+=2;
+        			stateinout.index%=200;
+        			int char_i=0;
+          for(int i=0;i<35;i++)
+          {
+            if(stateinout.inp[stateinout.index][i]=='\0')
+              break;
+            stateinout.inp[stateinout.inp_ind][i]=stateinout.inp[stateinout.index][i];
+            char_i++;
+          }
+          stateinout.char_ind=char_i;
+          stateinout.inp[stateinout.inp_ind][char_i]='\0';
+        				
+        		}
+        		
+
+        }
+        else
+        {        
+        	stateinout.leftarea+=1;
+        	stateinout.leftarea%=4;
+        }
+    }
+    else if(scankey==75)
+    {
+      stateinout.left-=1;
+      if(stateinout.left<0)
+      	stateinout.left+=2;
+    }
+    else if(scankey==77)
+    {
+    	stateinout.left+=1;
+    	stateinout.left%=2;
+    }
+    else if(scankey==28)
+    {
+      stateinout.output=1;
+      hoh_debug("inp_deb"<<int(stateinout.inp_ind));
+      stateinout.inp_ind+=2;
+      stateinout.index=stateinout.inp_ind;
+      stateinout.inp[stateinout.inp_ind][0]='\0';
+      stateinout.inp_ind%=200;
+      stateinout.char_ind=0;
+      stateinout.change=1-stateinout.change;
+      hoh_debug("inp_ind "<<stateinout.inp_ind);
+      if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='b' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      {
+        int i=4,arg=0;bool ill=false;;
+        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        {
+          
+          if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
+            arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+          else
+            {ill=true;break;}
+          i++;
+        }
+        if(!ill)
+        {
+            int ans=fib(arg);
+            int po=0;
+            int p=ans;
+            while((p/10)!=0)
+            {
+             po++;
+             p=p/10;
+            }
+            po++;
+            stateinout.inp[stateinout.inp_ind-1][po]='\0';
+            for(int i=0;i<po;i++)
+            {
+             stateinout.inp[stateinout.inp_ind-1][po-1-i]=digi[ans%10];
+             ans=ans/10;
+            }
+        }
+        else
+        {
+          char tmp[17]="Illegal Argument";
+          tmp[16]='\0';
+          for(int g=0;g<17;g++)
+            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+        }
+      }
+    }
 
     // increment the
 }
@@ -58,12 +221,36 @@ void shell_step(shellstate_t& stateinout){
   // if a function is enabled in stateinout
   //   call that function( with arguments stored in stateinout) ;
   //
+  stateinout.iter++;
+    if(stateinout.iter<0)
+      stateinout.iter=0;
+  // if(stateinout.output)
+  // {
+  //     int ans=0;
+  //     int po=0;
+  //     int p=ans;
+  //     while((p/10)!=0)
+  //     {
+  //     	po++;
+  //     	p=p/10;
+  //     }
+  //     po++;
+  //     stateinout.inp[stateinout.inp_ind][po]='\0';
+  //     for(int i=0;i<po;i++)
+  //     {
+  //     	stateinout.inp[stateinout.inp_ind][po-1-i]=digi[ans%10];
+  //     	ans=ans/10;
+  //     }
+
+  //     hoh_debug("step inp_ind"<< stateinout.inp_ind);
+  
+  // }
 
 }
 
 
 //
-// shellstate --> renderstate
+// shellstate -. renderstate
 //
 void shell_render(const shellstate_t& shell, renderstate_t& render){
 
@@ -76,6 +263,18 @@ void shell_render(const shellstate_t& shell, renderstate_t& render){
   //
   // etc.
   //
+
+  render.keys=shell.keys;
+  
+  render.leftarea=shell.leftarea;
+  render.left=shell.left;
+  
+  render.iter=shell.iter;
+  for(int i=0;i<200;i++)
+    for(int j=0;j<35;j++)
+      render.inp[i][j]=shell.inp[i][j];
+  render.inp_ind=shell.inp_ind;
+  render.change=shell.change;
 }
 
 
@@ -83,10 +282,26 @@ void shell_render(const shellstate_t& shell, renderstate_t& render){
 // compare a and b
 //
 bool render_eq(const renderstate_t& a, const renderstate_t& b){
-  return false;
+  //hoh_debug(""<<int(a.keys)<< "  "<<int(b.keys)<<" "<< int(a.iter));
+  if(a.keys!=b.keys)
+    return false;
+  else if((b.iter/10000)%2!=((b.iter+1)/10000)%2)
+    return false;
+  else if(b.change!=a.change)
+      return false;
+  else
+    return true;
 }
 
-
+int fib(int n)
+{
+	if(n==0)
+		return 1;
+	else if(n==1)
+		return 1;
+	else
+		return fib(n-1)+fib(n-2);
+}
 static void fillrect(int x0, int y0, int x1, int y1, uint8_t bg, uint8_t fg, int w, int h, addr_t vgatext_base);
 static void drawrect(int x0, int y0, int x1, int y1, uint8_t bg, uint8_t fg, int w, int h, addr_t vgatext_base);
 static void drawtext(int x,int y, const char* str, int maxw, uint8_t bg, uint8_t fg, int w, int h, addr_t vgatext_base);
@@ -105,22 +320,57 @@ void render(const renderstate_t& state, int w, int h, addr_t vgatext_base){
   // You may also have simple command line user interface
   // or menu based interface or a combination of both.
   //
-  fillrect(0,0,w,h,1,7,      w,h,vgatext_base);
-  drawrect(3,3,w-3,h-3,1,7,  w,h,vgatext_base);
+  fillrect(0,0,w,h,3,6,      w,h,vgatext_base);
+  drawrect(0,0,w/4-1,h,1,7,  w,h,vgatext_base);
 
-  fillrect(10,5,w-10,h-5,1,7,  w,h,vgatext_base);
-  drawrect(10,5,w-10,h-5,1,7,  w,h,vgatext_base);
+  fillrect(w/4-1,0,w,h,3,6,  w,h,vgatext_base);
+  drawrect(w/4-1,0,w,h,1,7,  w,h,vgatext_base);
+ 
+  for(int i=0;i<20;i+=2)
+  { 
+    int tmp=state.inp_ind-i;
+    int tmp1=state.inp_ind-i+1;
+    if(state.inp_ind-i<0)
+      tmp+=200;
+    if(tmp1<0)
+      tmp1+=200;
+    drawtext(w/4,20-i,"$>", 2, 3,5,w,h,vgatext_base);
+    drawtext(w/4+2,20-i,state.inp[tmp],35,3,5,w,h,vgatext_base);
+    drawtext(w/4+2,20-i+1,state.inp[tmp1],35,3,5,w,h,vgatext_base);
+  }
+  if(state.left){
+  if(state.leftarea==0)
+    drawtext(2, 7,"1. Item1", w-25, 7,1,w,h,vgatext_base);
+  else
+    drawtext(2, 7,"1. Item1", w-25, 1,7,w,h,vgatext_base);
+  if(state.leftarea==1)
+    drawtext(2, 8,"2. Item2", w-25, 7,1,w,h,vgatext_base);
+  else
+    drawtext(2, 8,"2. Item2", w-25, 1,7,w,h,vgatext_base);
+  if(state.leftarea==2)
+    drawtext(2, 9,"3. Item3", w-25, 7,1,w,h,vgatext_base);
+  else
+    drawtext(2, 9,"3. Item3", w-25, 1,7,w,h,vgatext_base);
+  if(state.leftarea==3)
+    drawtext(2,10,"4. Item4", w-25, 7,1,w,h,vgatext_base);
+  else
+    drawtext(2,10,"4. Item4", w-25, 1,7,w,h,vgatext_base);}
+  else{
 
-  drawtext(20, 7,"1. Item1", w-25, 1,7,w,h,vgatext_base);
-  drawtext(20, 8,"2. Item2", w-25, 7,1,w,h,vgatext_base);
-  drawtext(20, 9,"3. Item3", w-25, 1,7,w,h,vgatext_base);
-  drawtext(20,10,"4. Item4", w-25, 1,7,w,h,vgatext_base);
+  drawtext(2, 7,"1. Item1", w-25, 1,7,w,h,vgatext_base);  
+  drawtext(2, 8,"2. Item2", w-25, 1,7,w,h,vgatext_base);
+  drawtext(2, 9,"3. Item3", w-25, 1,7,w,h,vgatext_base);
+  drawtext(2,10,"4. Item4", w-25, 1,7,w,h,vgatext_base);
+  }
+  // if((state.iter/10000)%2==0)
+  //   	drawtext(w/4+6,2,"_", 1, 3,5,w,h,vgatext_base);
+  drawtext(1,13,"Keys Presses:", 15, 1,7,w,h,vgatext_base);
+  drawnumberinhex(2,14,state.keys, w-25, 1,7,w,h,vgatext_base);
 
-  drawtext(20,13,"No of keys pressed: ", w-25, 1,7,w,h,vgatext_base);
-  drawnumberinhex(40,13,7, w-25, 1,7,w,h,vgatext_base);
+  
+  
 
-  drawtext(20,15,"Enter string: ", w-25, 1,7,w,h,vgatext_base);
-  drawtext(40,15,"Hello! ", w-25, 1,7,w,h,vgatext_base);
+  //drawtext(40,15,"Hello! ", w-25, 1,7,w,h,vgatext_base);
 
 }
 
