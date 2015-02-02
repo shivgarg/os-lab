@@ -20,8 +20,9 @@ void shell_init(shellstate_t& state){
   state.change=0;
   state.left=1;
   state.leftarea=0;
-  hoh_debug("hihihihi");
-
+  state.done=true;
+  state.init_coroutine=false;
+  state.coroutine_out[0]='\0';
 }
 int fib(int n);
 //
@@ -218,6 +219,55 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
         stateinout.inp[stateinout.inp_ind-1][i+1]='\0';
 
       }
+      else if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='c' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      {
+        hoh_debug("in fib");
+        int i=4,arg=0;bool ill=false;;
+        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        {
+          
+          if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
+            arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+          else
+            {ill=true;break;}
+          i++;
+        }
+        if(!ill)
+        {
+            // int ans=fib(arg);
+            // int po=0;
+            // int p=ans;
+            // while((p/10)!=0)
+            // {
+            //  po++;
+            //  p=p/10;
+            // }
+            // po++;
+            // stateinout.inp[stateinout.inp_ind-1][po]='\0';
+            // for(int i=0;i<po;i++)
+            // {
+            //  stateinout.inp[stateinout.inp_ind-1][po-1-i]=digi[ans%10];
+            //  ans=ans/10;
+            // }
+            stateinout.coroutine_arg=arg;
+            stateinout.init_coroutine=true;
+
+        }
+        else
+        {
+          char tmp[17]="Illegal Argument";
+          tmp[16]='\0';
+          for(int g=0;g<17;g++)
+            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+        } 
+      }
+      else
+      {
+        char s[16]="Illegal Command";
+        s[15]='\0';
+        for(int g=0;g<16;g++)
+          stateinout.inp[stateinout.inp_ind-1][g]=s[g];
+      }
     }
 
     // increment the
@@ -286,7 +336,10 @@ void shell_render(const shellstate_t& shell, renderstate_t& render){
   for(int i=0;i<200;i++)
     for(int j=0;j<35;j++)
       render.inp[i][j]=shell.inp[i][j];
+  for(int j=0;j<35;j++)
+    render.coroutine_out[j]=shell.coroutine_out[j];
   render.inp_ind=shell.inp_ind;
+  render.done=shell.done;
   render.change=shell.change;
 }
 
@@ -300,7 +353,7 @@ bool render_eq(const renderstate_t& a, const renderstate_t& b){
     return false;
   else if((b.iter/10000)%2!=((b.iter+1)/10000)%2)
     return false;
-  else if(b.change!=a.change)
+  else if(b.change!=a.change || b.done!=a.done)
       return false;
   else
     return true;
@@ -379,8 +432,11 @@ void render(const renderstate_t& state, int w, int h, addr_t vgatext_base){
   //   	drawtext(w/4+6,2,"_", 1, 3,5,w,h,vgatext_base);
   drawtext(1,13,"Keys Presses:", 15, 1,7,w,h,vgatext_base);
   drawnumberinhex(2,14,state.keys, w-25, 1,7,w,h,vgatext_base);
-
-  
+  drawtext(1,15,"Coroutine Output", 16, 1,7,w,h,vgatext_base);
+  if(state.done)
+      drawtext(1,17,state.coroutine_out, 15, 1,7,w,h,vgatext_base);
+        
+      
   
 
   //drawtext(40,15,"Hello! ", w-25, 1,7,w,h,vgatext_base);

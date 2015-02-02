@@ -12,6 +12,10 @@ struct shellstate_t{
 	int change;
 	int left;
 	int output;
+	bool done=true;
+	bool init_coroutine=false;
+	char coroutine_out[35];
+	int coroutine_arg=0;
 };
 
 struct renderstate_t{
@@ -21,7 +25,9 @@ struct renderstate_t{
 	char inp[200][35];
 	int iter;
 	int inp_ind;
-	int change;			
+	int change;	
+	bool done;
+	char coroutine_out[35];		
 };
 
 void shell_init(shellstate_t& state);
