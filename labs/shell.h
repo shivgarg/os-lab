@@ -31,7 +31,9 @@ struct renderstate_t{
 	int inp_ind;
 	int change;	
 	bool done;
-	char coroutine_out[35];		
+	char coroutine_out[35];
+	bool fiber_done;	
+	char fiber_out[35];	
 };
 
 void shell_init(shellstate_t& state);

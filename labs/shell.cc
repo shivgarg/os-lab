@@ -167,6 +167,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
       stateinout.inp_ind+=2;
       stateinout.index=stateinout.inp_ind;
       stateinout.inp[stateinout.inp_ind][0]='\0';
+      stateinout.inp[stateinout.inp_ind+1][0]='\0';
       stateinout.inp_ind%=200;
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
@@ -350,8 +351,11 @@ void shell_render(const shellstate_t& shell, renderstate_t& render){
       render.inp[i][j]=shell.inp[i][j];
   for(int j=0;j<35;j++)
     render.coroutine_out[j]=shell.coroutine_out[j];
+  for(int j=0;j<35;j++)
+  	render.fiber_out[j]=shell.fiber_out[j];
   render.inp_ind=shell.inp_ind;
   render.done=shell.done;
+  render.fiber_done=shell.fiber_done;
   render.change=shell.change;
 }
 
@@ -365,7 +369,7 @@ bool render_eq(const renderstate_t& a, const renderstate_t& b){
     return false;
   else if((b.iter/10000)%2!=((b.iter+1)/10000)%2)
     return false;
-  else if(b.change!=a.change || b.done!=a.done)
+  else if(b.change!=a.change || b.done!=a.done || b.fiber_done!=a.fiber_done)
       return false;
   else
     return true;
@@ -418,35 +422,38 @@ void render(const renderstate_t& state, int w, int h, addr_t vgatext_base){
   }
   if(state.left){
   if(state.leftarea==0)
-    drawtext(2, 7,"1. Item1", w-25, 7,1,w,h,vgatext_base);
+    drawtext(2, 2,"1. Item1", w-25, 7,1,w,h,vgatext_base);
   else
-    drawtext(2, 7,"1. Item1", w-25, 1,7,w,h,vgatext_base);
+    drawtext(2, 2,"1. Item1", w-25, 1,7,w,h,vgatext_base);
   if(state.leftarea==1)
-    drawtext(2, 8,"2. Item2", w-25, 7,1,w,h,vgatext_base);
+    drawtext(2, 3,"2. Item2", w-25, 7,1,w,h,vgatext_base);
   else
-    drawtext(2, 8,"2. Item2", w-25, 1,7,w,h,vgatext_base);
+    drawtext(2, 3,"2. Item2", w-25, 1,7,w,h,vgatext_base);
   if(state.leftarea==2)
-    drawtext(2, 9,"3. Item3", w-25, 7,1,w,h,vgatext_base);
+    drawtext(2, 4,"3. Item3", w-25, 7,1,w,h,vgatext_base);
   else
-    drawtext(2, 9,"3. Item3", w-25, 1,7,w,h,vgatext_base);
+    drawtext(2, 4,"3. Item3", w-25, 1,7,w,h,vgatext_base);
   if(state.leftarea==3)
-    drawtext(2,10,"4. Item4", w-25, 7,1,w,h,vgatext_base);
+    drawtext(2,5,"4. Item4", w-25, 7,1,w,h,vgatext_base);
   else
-    drawtext(2,10,"4. Item4", w-25, 1,7,w,h,vgatext_base);}
+    drawtext(2,5,"4. Item4", w-25, 1,7,w,h,vgatext_base);}
   else{
 
-  drawtext(2, 7,"1. Item1", w-25, 1,7,w,h,vgatext_base);  
-  drawtext(2, 8,"2. Item2", w-25, 1,7,w,h,vgatext_base);
-  drawtext(2, 9,"3. Item3", w-25, 1,7,w,h,vgatext_base);
-  drawtext(2,10,"4. Item4", w-25, 1,7,w,h,vgatext_base);
+  drawtext(2, 2,"1. Item1", w-25, 1,7,w,h,vgatext_base);  
+  drawtext(2, 3,"2. Item2", w-25, 1,7,w,h,vgatext_base);
+  drawtext(2, 4,"3. Item3", w-25, 1,7,w,h,vgatext_base);
+  drawtext(2,5,"4. Item4", w-25, 1,7,w,h,vgatext_base);
   }
   // if((state.iter/10000)%2==0)
   //   	drawtext(w/4+6,2,"_", 1, 3,5,w,h,vgatext_base);
-  drawtext(1,13,"Keys Presses:", 15, 1,7,w,h,vgatext_base);
-  drawnumberinhex(2,14,state.keys, w-25, 1,7,w,h,vgatext_base);
-  drawtext(1,15,"Coroutine Output", 16, 1,7,w,h,vgatext_base);
+  drawtext(1,7,"Keys Presses:", 15, 1,7,w,h,vgatext_base);
+  drawnumberinhex(2,8,state.keys, w-25, 1,7,w,h,vgatext_base);
+  drawtext(1,9,"Coroutine Output", 16, 1,7,w,h,vgatext_base);
   if(state.done)
-      drawtext(1,17,state.coroutine_out, 15, 1,7,w,h,vgatext_base);
+      drawtext(2,10,state.coroutine_out, 15, 1,7,w,h,vgatext_base);
+  drawtext(1,11,"Fiber Output",16,1,7,w,h,vgatext_base);
+  if(state.fiber_done)
+  		drawtext(1,10,state.fiber_out,15,1,7,w,h,vgatext_base);
         
       
   
