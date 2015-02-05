@@ -453,7 +453,7 @@ void render(const renderstate_t& state, int w, int h, addr_t vgatext_base){
       drawtext(2,10,state.coroutine_out, 15, 1,7,w,h,vgatext_base);
   drawtext(1,11,"Fiber Output",16,1,7,w,h,vgatext_base);
   if(state.fiber_done)
-  		drawtext(1,10,state.fiber_out,15,1,7,w,h,vgatext_base);
+  		drawtext(2,12,state.fiber_out,15,1,7,w,h,vgatext_base);
         
       
   
