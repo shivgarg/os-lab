@@ -7,19 +7,37 @@ struct shellstate_t{
 	int keys=0;
 	int iter=0;
 	int index;
+	
+
 	int inp_ind;
 	int char_ind;
 	int change;
+	
 	int left;
 	int output;
+	
+
+
 	bool done=true;
 	bool init_coroutine=false;
 	int coroutine_out;
 	int coroutine_arg=0;
+	
+
+
 	bool init_fiber=false;
 	int fiber_out;
 	int fiber_arg;
 	bool fiber_done;
+	
+
+
+	int scheduler_assign;
+	int scheduler_run;
+	int scheduler_arg;
+	int scheduler_out;
+	bool schd_slots[10];
+
 };
 
 struct renderstate_t{

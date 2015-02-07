@@ -25,6 +25,10 @@ void shell_init(shellstate_t& state){
   state.init_fiber=false;
   state.fiber_out=0;
   state.fiber_done=true;
+  state.scheduler_assign=-1;
+  state.scheduler_run=-1;
+  for(int i=0;i<10;i++)
+    state.schd_slots[i]=false;
 }
 int fib(int n);
 //
@@ -60,12 +64,12 @@ int fib(int n);
 //
 void shell_update(uint8_t scankey, shellstate_t& stateinout){
 
-    hoh_debug("Got: "<<unsigned(scankey));
+   // hoh_debug("Got: "<<unsigned(scankey));
     stateinout.keys++;
     stateinout.output=0;
     char keymap[]=    {'?','~','1','2','3','4','5','6','7','8','9','0','-','=','\b','\t',  'q','w','e','r','t','y','u','i','o','p','[',']','?','?','a','s',  'd','f','g','h','j','k','l',';','?','?','?','?','z','x','c','v',  'b','n','m',',','.','/','?'};
-    hoh_debug(int(stateinout.inp_ind)<<"\n");
-    hoh_debug("index key "<<int(stateinout.index)<<"\n");
+    //hoh_debug(int(stateinout.inp_ind)<<"\n");
+    //hoh_debug("index key "<<int(stateinout.index)<<"\n");
     if((scankey>=2 && scankey<12) || (scankey>=16 && scankey<26) || (scankey>=30 && scankey<39) || (scankey>=44 && scankey<51))
     {
       stateinout.inp[stateinout.inp_ind][stateinout.char_ind]=keymap[scankey];
@@ -186,7 +190,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
   if(stateinout.output)
   {
   	stateinout.output=0;
-      hoh_debug("inp_deb"<<int(stateinout.inp_ind));
+      //hoh_debug("inp_deb"<<int(stateinout.inp_ind));
       stateinout.inp_ind+=2;
       stateinout.index=stateinout.inp_ind;
       stateinout.inp[stateinout.inp_ind][0]='\0';
@@ -194,10 +198,10 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       stateinout.inp_ind%=200;
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
-      hoh_debug("inp_ind "<<stateinout.inp_ind);
+     // hoh_debug("inp_ind "<<stateinout.inp_ind);
       if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='b' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
       {
-        hoh_debug("in fib");
+       // hoh_debug("in fib");
         int i=4,arg=0;bool ill=false;;
         while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
         {
@@ -236,7 +240,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       }
       else if(stateinout.inp[stateinout.inp_ind-2][0]=='e' && stateinout.inp[stateinout.inp_ind-2][1]=='c' && stateinout.inp[stateinout.inp_ind-2][2]=='h' && stateinout.inp[stateinout.inp_ind-2][3]=='o' && stateinout.inp[stateinout.inp_ind-2][4]==' ')
       {
-       hoh_debug("in echo");
+      // hoh_debug("in echo");
         int i=5;
         while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
         {
@@ -297,6 +301,72 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
           for(int g=0;g<17;g++)
             stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
         } 
+      }
+      else if(stateinout.inp[stateinout.inp_ind-2][0]=='s' && stateinout.inp[stateinout.inp_ind-2][1]=='c' && stateinout.inp[stateinout.inp_ind-2][2]=='h' && stateinout.inp[stateinout.inp_ind-2][3]=='d' && stateinout.inp[stateinout.inp_ind-2][4]==' ')
+      {
+        int i,arg=0;bool ill=false;
+        if(stateinout.inp[stateinout.inp_ind-2][5]=='1' && stateinout.inp[stateinout.inp_ind-2][6]==' ')
+        {
+          i=7;
+           while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+            {
+              
+              if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
+                arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+              else
+                {ill=true;break;}
+              i++;
+            }
+            if(!ill)
+            {
+                stateinout.scheduler_arg=arg;
+                stateinout.scheduler_out=stateinout.inp_ind-1;
+                stateinout.scheduler_assign=1;
+
+            }
+            else
+            {
+              char tmp[17]="Illegal Argument";
+              tmp[16]='\0';
+              for(int g=0;g<17;g++)
+                stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+            }
+        }
+        else if(stateinout.inp[stateinout.inp_ind-2][5]=='2' && stateinout.inp[stateinout.inp_ind-2][6]==' ')
+        {
+              i=7;
+              while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+              {
+              if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
+                arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+              else
+                {ill=true;break;}
+              i++;
+            }
+            if(!ill)
+            {
+                stateinout.scheduler_arg=arg;
+                stateinout.scheduler_out=stateinout.inp_ind-1;
+                stateinout.scheduler_assign=1;
+
+            }
+            else
+            {
+              char tmp[17]="Illegal Argument";
+              tmp[16]='\0';
+              for(int g=0;g<17;g++)
+                stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+            }          
+        }
+        else
+        {
+          char tmp[35]="Undefined Function";
+          tmp[18]='\0';
+          for(int g=0;g<35;g++)
+            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+
+        }
+        
       }
       else
       {

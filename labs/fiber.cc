@@ -12,7 +12,9 @@ void g(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg){
 	for(i=1;i<arg;i++)
 		for(j=1;j<arg;j++)
 			for(k=1;k<arg;k++)
-				{ans=i*j/k;hoh_debug(""<<ans<<"\n");stack_saverestore(f_stack,main_stack);}
+				{ans=i*j/k;
+					//hoh_debug(""<<ans<<"\n");
+					stack_saverestore(f_stack,main_stack);}
 	ans=i*j/k;
 	int po=0;
 	int p=ans;
