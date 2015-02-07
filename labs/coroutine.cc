@@ -1,9 +1,10 @@
 #include "labs/coroutine.h"
 
-char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
+
 
 void g(coroutine_t* pf_coro, f_t* pf_locals, char* ret, bool* done,int arg)
 {
+	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
 	coroutine_t& f_coro=*pf_coro;
 	char* retvalue=ret;
 	bool& cdone=*done;

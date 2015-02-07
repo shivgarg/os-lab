@@ -6,8 +6,7 @@
 
 
 
-char keymap[]=    {'?','~','1','2','3','4','5','6','7','8','9','0','-','=','\b','\t',  'q','w','e','r','t','y','u','i','o','p','[',']','?','?','a','s',  'd','f','g','h','j','k','l',';','?','?','?','?','z','x','c','v',  'b','n','m',',','.','/','?'};
-char digi[]={'0','1','2','3','4','5','6','7','8','9'};
+
 //
 // initialize shellstate
 //
@@ -64,7 +63,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
     hoh_debug("Got: "<<unsigned(scankey));
     stateinout.keys++;
     stateinout.output=0;
-    
+    char keymap[]=    {'?','~','1','2','3','4','5','6','7','8','9','0','-','=','\b','\t',  'q','w','e','r','t','y','u','i','o','p','[',']','?','?','a','s',  'd','f','g','h','j','k','l',';','?','?','?','?','z','x','c','v',  'b','n','m',',','.','/','?'};
     hoh_debug(int(stateinout.inp_ind)<<"\n");
     hoh_debug("index key "<<int(stateinout.index)<<"\n");
     if((scankey>=2 && scankey<12) || (scankey>=16 && scankey<26) || (scankey>=30 && scankey<39) || (scankey>=44 && scankey<51))
@@ -163,6 +162,30 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
     else if(scankey==28)
     {
       stateinout.output=1;
+      
+    }
+
+    // increment the
+}
+
+
+//
+// do computation
+//
+void shell_step(shellstate_t& stateinout){
+		
+char digi[]={'0','1','2','3','4','5','6','7','8','9'};
+  //
+  //one way:
+  // if a function is enabled in stateinout
+  //   call that function( with arguments stored in stateinout) ;
+  //
+  stateinout.iter++;
+    if(stateinout.iter<0)
+      stateinout.iter=0;
+  if(stateinout.output)
+  {
+  	stateinout.output=0;
       hoh_debug("inp_deb"<<int(stateinout.inp_ind));
       stateinout.inp_ind+=2;
       stateinout.index=stateinout.inp_ind;
@@ -281,46 +304,11 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
         for(int g=0;g<16;g++)
           stateinout.inp[stateinout.inp_ind-1][g]=s[g];
       }
-    }
-
-    // increment the
-}
-
-
-//
-// do computation
-//
-void shell_step(shellstate_t& stateinout){
-
-  //
-  //one way:
-  // if a function is enabled in stateinout
-  //   call that function( with arguments stored in stateinout) ;
-  //
-  stateinout.iter++;
-    if(stateinout.iter<0)
-      stateinout.iter=0;
-  // if(stateinout.output)
-  // {
-  //     int ans=0;
-  //     int po=0;
-  //     int p=ans;
-  //     while((p/10)!=0)
-  //     {
-  //     	po++;
-  //     	p=p/10;
-  //     }
-  //     po++;
-  //     stateinout.inp[stateinout.inp_ind][po]='\0';
-  //     for(int i=0;i<po;i++)
-  //     {
-  //     	stateinout.inp[stateinout.inp_ind][po-1-i]=digi[ans%10];
-  //     	ans=ans/10;
-  //     }
-
-  //     hoh_debug("step inp_ind"<< stateinout.inp_ind);
   
-  // }
+  }
+
+
+
 
 }
 
