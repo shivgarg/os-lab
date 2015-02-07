@@ -18,20 +18,20 @@ void g(coroutine_t* pf_coro, f_t* pf_locals, char* ret, bool* done,int arg)
 			for(k=1;k<arg+1;k++)
 			{
 				int ans=i*j/k;
-            	int po=0;
-            	int p=ans;
-            	while((p/10)!=0)
-	            {
-    		         po++;
-            		 p=p/10;
-            	}
-            	po++;
-            	retvalue[po]='\0';
-            	for(int i=0;i<po;i++)
-            	{
-             		retvalue[po-1-i]=digi1[ans%10];
-             		ans=ans/10;
-            	}
+            	// int po=0;
+            	// int p=ans;
+            	// while((p/10)!=0)
+	            // {
+    		       //   po++;
+            	// 	 p=p/10;
+            	// }
+            	// po++;
+            	// retvalue[po]='\0';
+            	// for(int i=0;i<po;i++)
+            	// {
+             // 		retvalue[po-1-i]=digi1[ans%10];
+             // 		ans=ans/10;
+            	// }
             	cdone=false;
             	h_yield(f_coro);
 
@@ -69,7 +69,7 @@ void shell_step_coroutine(shellstate_t& shellstate, coroutine_t& f_coro, f_t& f_
 	}
 	else if(!shellstate.done)
 	{
-		g(&f_coro,&f_locals,shellstate.coroutine_out,&shellstate.done,shellstate.coroutine_arg);
+		g(&f_coro,&f_locals,shellstate.inp[shellstate.coroutine_out],&shellstate.done,shellstate.coroutine_arg);
 	}
 
 

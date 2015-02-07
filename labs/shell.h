@@ -14,10 +14,10 @@ struct shellstate_t{
 	int output;
 	bool done=true;
 	bool init_coroutine=false;
-	char coroutine_out[35];
+	int coroutine_out;
 	int coroutine_arg=0;
 	bool init_fiber=false;
-	char fiber_out[35];
+	int fiber_out;
 	int fiber_arg;
 	bool fiber_done;
 };
@@ -31,9 +31,9 @@ struct renderstate_t{
 	int inp_ind;
 	int change;	
 	bool done;
-	char coroutine_out[35];
+	int coroutine_out;
 	bool fiber_done;	
-	char fiber_out[35];	
+	int fiber_out;	
 };
 
 void shell_init(shellstate_t& state);

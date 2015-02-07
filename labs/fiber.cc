@@ -39,10 +39,10 @@ void shell_step_fiber(shellstate_t& shellstate, addr_t& main_stack, addr_t& f_st
  		if(shellstate.init_fiber)
  		{
  			shellstate.fiber_done=false;;
- 			shellstate.fiber_out[0]='\0';
+ 			
  			shellstate.init_fiber=false;
  			
- 			stack_init5(f_stack,f_array,f_arraysize,&g,&main_stack,&f_stack,shellstate.fiber_out,&shellstate.fiber_done,shellstate.fiber_arg);
+ 			stack_init5(f_stack,f_array,f_arraysize,&g,&main_stack,&f_stack,shellstate.inp[shellstate.fiber_out],&shellstate.fiber_done,shellstate.fiber_arg);
  		}
  		else if(!shellstate.fiber_done)
  		{
