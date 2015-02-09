@@ -37,6 +37,7 @@ struct shellstate_t{
 	int scheduler_arg;
 	int scheduler_out;
 	bool schd_slots[10];
+	int run_instances[5];
 
 };
 

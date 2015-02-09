@@ -18,7 +18,7 @@
 
 
 
-void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg){
+void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg,int * run){
 	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
 	hoh_debug("running\n");
 	addr_t& main_stack=*pmain_stack;
@@ -27,7 +27,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg)
 	bool& done = *pdone;
 	int i,j,k;
 	int ans;
-	
+	int& shell_run=*run;
 	for(i=1;i<arg;i++)
 		for(j=1;j<arg;j++)
 			for(k=1;k<arg;k++)
@@ -51,13 +51,15 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg)
  		ans=ans/10;
 	}
 	done=false;	
-	hoh_debug("before final");
+	//hoh_debug("before final"<<(*run));
+	shell_run--;
+	//hoh_debug("before final"<<(*run));
 	stack_saverestore(f_stack,main_stack);
 
 
 }
 
-void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg){
+void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg,int * run){
 	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
 	hoh_debug("running\n");
 	addr_t& main_stack=*pmain_stack;
@@ -67,6 +69,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg)
 	int i=2;
 	int ans;
 	bool t=false;
+	int& shell_run=*run;
 	for(i=2;i<arg;i++)
 	{
 		if(arg%i==0)
@@ -95,6 +98,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg)
  		ans=ans/10;
 	}
 	done=false;	
+	shell_run--;
 	hoh_debug("before final");
 	stack_saverestore(f_stack,main_stack);
 
@@ -114,7 +118,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t stackptrs[], si
     {
     	hoh_debug("in scheduler_assign"<< shellstate.scheduler_assign);
     	int slt=-1;
-    	for(int i=0;i<9;i++)
+    	for(int i=0;i<5;i++)
     	{
     		if(!shellstate.schd_slots[i])
     			{	
@@ -132,10 +136,19 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t stackptrs[], si
     			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
 
     	}
+    	else if(shellstate.run_instances[0]==3)
+    	{
+    		char tmp[35]="Three Instances already running";
+    		tmp[31]='\0';
+    		shellstate.schd_slots[slt]=false;
+    		for(int l=0;l<35;l++)
+    			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
+    	}	
     	else{
     	//stackptrs[slt]=arrays+(slt+1)*(arrays_size)/10;
     	uint32_t stk_off=(slt+1)*((uint32_t)arrays_size)/10;
-    	stack_init5(stackptrs[slt],arrays,stk_off,&one,&stackptrs[9],&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg);
+    	shellstate.run_instances[0]+=1;
+    	stack_init6(stackptrs[slt],arrays,stk_off,&one,&stackptrs[9],&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg,&shellstate.run_instances[0]);
     	}
     	shellstate.scheduler_assign=-1;
     }
@@ -143,7 +156,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t stackptrs[], si
     {
     	hoh_debug("in scheduler_assign gjty  "<< shellstate.scheduler_assign);
     	int slt=-1;
-    	for(int i=0;i<9;i++)
+    	for(int i=0;i<5;i++)
     	{
     		if(!shellstate.schd_slots[i])
     			{	
@@ -161,25 +174,34 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t stackptrs[], si
     			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
 
     	}
+    	else if(shellstate.run_instances[1]==3)
+    	{
+    		char tmp[35]="Three Instances already running";
+    		tmp[31]='\0';
+    		shellstate.schd_slots[slt]=false;
+    		for(int l=0;l<35;l++)
+    			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
+    	}
     	else{
     	//stackptrs[slt]=arrays+(slt+1)*(arrays_size)/10;
     	uint32_t stk_off=(slt+1)*((uint32_t)arrays_size)/10;
-    	stack_init5(stackptrs[slt],arrays,stk_off,&two,&stackptrs[9],&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg);
+    	shellstate.run_instances[1]+=1;
+    	stack_init6(stackptrs[slt],arrays,stk_off,&two,&stackptrs[9],&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg,&shellstate.run_instances[1]);
     	}
     	shellstate.scheduler_assign=-1;
     }
     int ind=1;
-    while(ind<10 && (!shellstate.schd_slots[(shellstate.scheduler_run+ind)%9]))
+    while(ind<6 && (!shellstate.schd_slots[(shellstate.scheduler_run+ind)%5]))
     {
     	ind++;
     }
     
-    if(ind!=10)
+    if(ind!=6)
     {
-    	hoh_debug("ind run"<<(shellstate.scheduler_run+ind)%9<<" "<< ind);
-    	stack_saverestore(stackptrs[9],stackptrs[(shellstate.scheduler_run+ind)%9]);
+    	hoh_debug("ind run"<<(shellstate.scheduler_run+ind)%6<<" "<< ind);
+    	stack_saverestore(stackptrs[9],stackptrs[(shellstate.scheduler_run+ind)%5]);
     	shellstate.scheduler_run+=ind;
-    	shellstate.scheduler_run%=9;
+    	shellstate.scheduler_run%=5;
     }
 
 

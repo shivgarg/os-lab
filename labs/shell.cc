@@ -29,6 +29,8 @@ void shell_init(shellstate_t& state){
   state.scheduler_run=-1;
   for(int i=0;i<10;i++)
     state.schd_slots[i]=false;
+  state.run_instances[0]=0;
+  state.run_instances[1]=0;
 }
 int fib(int n);
 //
