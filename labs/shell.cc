@@ -347,7 +347,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
             {
                 stateinout.scheduler_arg=arg;
                 stateinout.scheduler_out=stateinout.inp_ind-1;
-                stateinout.scheduler_assign=1;
+                stateinout.scheduler_assign=2;
 
             }
             else
