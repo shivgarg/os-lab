@@ -15,7 +15,7 @@ void g(coroutine_t* pf_coro, f_t* pf_locals, char* ret, bool* done,int arg)
 	
 	for(i=0;i<arg;i++)
 		for(j=0;j<arg;j++)
-			for(k=1;k<arg+1;k++)
+			for(k=1;k<arg;k++)
 			{
 				int ans=i*j/k;
             	// int po=0;

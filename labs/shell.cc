@@ -32,7 +32,7 @@ void shell_init(shellstate_t& state){
   state.run_instances[0]=0;
   state.run_instances[1]=0;
 }
-int fib(int n);
+int fun(int n);
 //
 // handle keyboard event.
 // key is in scancode format.
@@ -201,7 +201,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
      // hoh_debug("inp_ind "<<stateinout.inp_ind);
-      if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='b' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='u' && stateinout.inp[stateinout.inp_ind-2][2]=='n' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
       {
        // hoh_debug("in fib");
         int i=4,arg=0;bool ill=false;;
@@ -216,7 +216,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
         }
         if(!ill)
         {
-            int ans=fib(arg);
+            int ans=fun(arg);
             int po=0;
             int p=ans;
             while((p/10)!=0)
@@ -252,7 +252,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
         stateinout.inp[stateinout.inp_ind-1][i+1]='\0';
 
       }
-      else if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='c' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      else if(stateinout.inp[stateinout.inp_ind-2][0]=='c' && stateinout.inp[stateinout.inp_ind-2][1]=='o' && stateinout.inp[stateinout.inp_ind-2][2]=='r' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
       {
         int i=4,arg=0;bool ill=false;;
         while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
@@ -278,7 +278,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
             stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
         } 
       }
-      else if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='f' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      else if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='b' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
       {
         int i=4,arg=0;bool ill=false;;
         while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
@@ -436,14 +436,17 @@ bool render_eq(const renderstate_t& a, const renderstate_t& b){
     return true;
 }
 
-int fib(int n)
+int fun(int arg)
 {
-	if(n==0)
-		return 1;
-	else if(n==1)
-		return 1;
-	else
-		return fib(n-1)+fib(n-2);
+  int ans;
+  int i,j,k;
+for(i=0;i<arg;i++){
+    for(j=0;j<arg;j++){
+      for(k=1;k<arg;k++)
+        {ans=i*j/k;}}
+    }
+    ans=i*j/k;
+    return ans;
 }
 static void fillrect(int x0, int y0, int x1, int y1, uint8_t bg, uint8_t fg, int w, int h, addr_t vgatext_base);
 static void drawrect(int x0, int y0, int x1, int y1, uint8_t bg, uint8_t fg, int w, int h, addr_t vgatext_base);

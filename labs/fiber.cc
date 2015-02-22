@@ -9,8 +9,8 @@ void g(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg){
 	int i,j,k;
 	int ans;
 	
-	for(i=1;i<arg;i++)
-		for(j=1;j<arg;j++)
+	for(i=0;i<arg;i++)
+		for(j=0;j<arg;j++)
 			for(k=1;k<arg;k++)
 				{ans=i*j/k;
 					//hoh_debug(""<<ans<<"\n");
