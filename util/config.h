@@ -2,6 +2,7 @@
 
 #if 1 || defined(SIMULATOR)
 #include <stdint.h>
+#include <stddef.h>
 
 #else
 typedef unsigned char       uint8_t;
