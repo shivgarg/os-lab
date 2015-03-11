@@ -148,7 +148,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     	//stackptrs[slt]=arrays+(slt+1)*(arrays_size)/10;
     	uint32_t stk_off=(slt+1)*((uint32_t)arrays_size)/10;
     	shellstate.run_instances[0]+=1;
-    	stack_init6(stackptrs[slt],arrays,stk_off,&one,&stackptrs[9],&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg,&shellstate.run_instances[0]);
+    	stack_init6(stackptrs[slt],arrays,stk_off,&one,&main_stack,&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg,&shellstate.run_instances[0]);
     	}
     	shellstate.scheduler_assign=-1;
     }
@@ -186,7 +186,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     	//stackptrs[slt]=arrays+(slt+1)*(arrays_size)/10;
     	uint32_t stk_off=(slt+1)*((uint32_t)arrays_size)/10;
     	shellstate.run_instances[1]+=1;
-    	stack_init6(stackptrs[slt],arrays,stk_off,&two,&stackptrs[9],&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg,&shellstate.run_instances[1]);
+    	stack_init6(stackptrs[slt],arrays,stk_off,&two,&main_stack,&stackptrs[slt],shellstate.inp[shellstate.scheduler_out],&shellstate.schd_slots[slt],shellstate.scheduler_arg,&shellstate.run_instances[1]);
     	}
     	shellstate.scheduler_assign=-1;
     }
@@ -199,7 +199,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     if(ind!=6)
     {
     	hoh_debug("ind run"<<(shellstate.scheduler_run+ind)%6<<" "<< ind);
-    	stack_saverestore(stackptrs[9],stackptrs[(shellstate.scheduler_run+ind)%5]);
+    	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
     	shellstate.scheduler_run+=ind;
     	shellstate.scheduler_run%=5;
     }
