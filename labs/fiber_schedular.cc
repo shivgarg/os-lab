@@ -109,7 +109,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg,
 
 
 
-void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t stackptrs[], size_t stackptrs_size, addr_t arrays, size_t arrays_size){
+void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,preempt_t& preempt,addr_t stackptrs[], size_t stackptrs_size, addr_t arrays, size_t arrays_size,dev_lapic_t& lapic){
 
     //insert your code here
     
