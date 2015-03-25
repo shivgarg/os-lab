@@ -1,6 +1,11 @@
 #pragma once
 #include "util/config.h"
 
+
+	struct pair_int{
+		bool * done;
+		int * slot;
+	};
 struct shellstate_t{
 	int leftarea=0;
 	char inp[200][35];
@@ -38,6 +43,8 @@ struct shellstate_t{
 	int scheduler_out;
 	bool schd_slots[10];
 	int run_instances[5];
+
+	pair_int fib1,fib2;
 
 };
 
