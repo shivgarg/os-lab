@@ -33,8 +33,11 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 			for(k=1;k<arg;k++)
 				{
 					ans=i*j/k;
-					// pre->saved_stack=0;
-     //                stack_saverestore(f_stack,main_stack);
+					pre->saved_stack=0;
+                           for(int i=0;i<5;i++)
+            hoh_debug("yield\n");
+
+                    stack_saverestore(f_stack,main_stack);
 				}
 	ans=i*j/k;
 	int po=0;
@@ -55,8 +58,11 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	//hoh_debug("before final"<<(*run));
 	shell_run--;
 	//hoh_debug("before final"<<(*run));
- //    pre->saved_stack=0;
-	// stack_saverestore(f_stack,main_stack);
+    pre->saved_stack=0;
+          for(int i=0;i<5;i++)
+            hoh_debug("yield\n");
+
+	stack_saverestore(f_stack,main_stack);
 
 
 }
@@ -79,8 +85,10 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 			t=true;
 		
 		}
-       // pre->saved_stack=0;
-		//stack_saverestore(f_stack,main_stack);
+        pre->saved_stack=0;
+        for(int i=0;i<5;i++)
+            hoh_debug("yield\n");
+		stack_saverestore(f_stack,main_stack);
 	}
 	if(t)
 		ans=0;
@@ -102,9 +110,12 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	}
 	done=false;	
 	shell_run--;
-	hoh_debug("before final");
- //    pre->saved_stack=0;
-	// stack_saverestore(f_stack,main_stack);
+//	hoh_debug("before final");
+    pre->saved_stack=0;
+      for(int i=0;i<5;i++)
+          hoh_debug("yield\n");
+
+    stack_saverestore(f_stack,main_stack);
 
 
 }

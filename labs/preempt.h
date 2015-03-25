@@ -52,7 +52,8 @@ struct preempt_t{
       "  popl  %edx                       \n\t"\
       "                                   \n\t"\
       "  # insert your code here          \n\t"\
-      "                                   \n\t"\
+      "   cmpl $0, %gs:24                 \n\t"\
+      "   je ret_i						  \n\t"\
       "   pushl %eax                      \n\t"\
       "   pushl %ebx                      \n\t"\
       "   pushl %ecx                      \n\t"\
@@ -73,7 +74,7 @@ struct preempt_t{
       "   popl %ecx                       \n\t"\
       "   popl %ebx                       \n\t"\
       "   popl %eax                       \n\t"\
-      "                                   \n\t"\
+      "  ret_i:                               \n\t"\
       "  jmp iret_toring0                 \n\t"\
       )                                        \
 
