@@ -77,7 +77,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg,
 			t=true;
 		
 		}
-		stack_saverestore(f_stack,main_stack);
+		//stack_saverestore(f_stack,main_stack);
 	}
 	if(t)
 		ans=0;
@@ -100,7 +100,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret, bool* pdone,int arg,
 	done=false;	
 	shell_run--;
 	hoh_debug("before final");
-	stack_saverestore(f_stack,main_stack);
+	//stack_saverestore(f_stack,main_stack);
 
 
 }
@@ -199,6 +199,8 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     if(ind!=6)
     {
     	hoh_debug("ind run"<<(shellstate.scheduler_run+ind)%6<<" "<< ind);
+        lapic.reset_timer_count(100);
+        preempt.saved_stack=(addr_t)&stackptrs[(shellstate.scheduler_run+ind)%5];
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
     	shellstate.scheduler_run+=ind;
     	shellstate.scheduler_run%=5;
