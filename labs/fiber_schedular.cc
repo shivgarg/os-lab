@@ -20,7 +20,7 @@
 
 void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,preempt_t *pre){
 	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
-	hoh_debug("running\n");
+	//hoh_debug("running\n");
 	addr_t& main_stack=*pmain_stack;
 	addr_t& f_stack=*pf_stack;
 	char* retvalue=pret;
@@ -32,12 +32,11 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 		for(j=1;j<arg;j++)
 			for(k=1;k<arg;k++)
 				{
-					
+					hoh_debug("in two\n");
                     ans=i*j/k;
 					pre->saved_stack=0;
-                           for(int jk=0;jk<5;jk++)
-            hoh_debug("yield\n");
-
+                           // for(int jk=0;jk<5;jk++)
+                    hoh_debug("yield\n");
                     stack_saverestore(f_stack,main_stack);
 				}
 	ans=i*j/k;
@@ -61,9 +60,8 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	shell_run--;
 	//hoh_debug("before final"<<(*run));
     pre->saved_stack=0;
-          for(i=0;i<5;i++)
-            hoh_debug("yield\n");
-
+          // for(i=0;i<5;i++)
+    hoh_debug("yield\n");
 	stack_saverestore(f_stack,main_stack);
 
 
@@ -71,7 +69,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 
 void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,preempt_t *pre){
 	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
-	hoh_debug("running\n");
+	//hoh_debug("running\n");
 	addr_t& main_stack=*pmain_stack;
 	addr_t& f_stack=*pf_stack;
 	char* retvalue=pret;
@@ -82,14 +80,15 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	int& shell_run=*pp->slot;
 	for(i=2;i<arg;i++)
 	{
-		if(arg%i==0)
+		hoh_debug("in two\n");
+        if(arg%i==0)
 		{
 			t=true;
 		
 		}
         pre->saved_stack=0;
-        for(int ik=0;ik<5;ik++)
-            hoh_debug("yield\n");
+        // for(int ik=0;ik<5;ik++)
+        hoh_debug("yield\n");
 		stack_saverestore(f_stack,main_stack);
 	}
 	if(t)
@@ -114,8 +113,8 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	shell_run--;
 //	hoh_debug("before final");
     pre->saved_stack=0;
-      for(int i=0;i<5;i++)
-          hoh_debug("yield\n");
+      // for(int i=0;i<5;i++)
+    hoh_debug("yield\n");
 
     stack_saverestore(f_stack,main_stack);
 
@@ -133,7 +132,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
    	stackptrs[9]=arrays+arrays_size;
     if(shellstate.scheduler_assign==1)
     {
-    	hoh_debug("in scheduler_assign"<< shellstate.scheduler_assign);
+    	//hoh_debug("in scheduler_assign"<< shellstate.scheduler_assign);
     	int slt=-1;
     	for(int i=0;i<5;i++)
     	{
@@ -144,7 +143,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     				break;
     			}
     	}
-    	hoh_debug("slot "<<slt);
+    	//hoh_debug("slot "<<slt);
     	if(slt==-1)
     	{
     		char tmp[35]="Low on Resources";
@@ -173,7 +172,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     }
     else if(shellstate.scheduler_assign==2)
     {
-    	hoh_debug("in scheduler_assign gjty  "<< shellstate.scheduler_assign);
+    	//hoh_debug("in scheduler_assign gjty  "<< shellstate.scheduler_assign);
     	int slt=-1;
     	for(int i=0;i<5;i++)
     	{
@@ -184,7 +183,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     				break;
     			}
     	}
-    	hoh_debug("slot "<<slt);
+    	//hoh_debug("slot "<<slt);
     	if(slt==-1)
     	{
     		char tmp[35]="Low on Resources";
@@ -219,9 +218,9 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     
     if(ind!=6)
     {
-    	hoh_debug("ind run "<<(shellstate.scheduler_run+ind)%5<<" "<< ind);
+    	//hoh_debug("ind run "<<(shellstate.scheduler_run+ind)%5<<" "<< ind);
         preempt.saved_stack=(addr_t)&stackptrs[(shellstate.scheduler_run+ind)%5];
-        lapic.reset_timer_count(10);
+        lapic.reset_timer_count(2);
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
         lapic.reset_timer_count(0);
         hoh_debug("context switched out\n");
