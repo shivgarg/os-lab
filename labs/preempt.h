@@ -61,12 +61,22 @@ struct preempt_t{
       "   pushl %ebp                      \n\t"\
       "   pushl %esi                      \n\t"\
       "   pushl %edi                      \n\t"\
+      "   movl %esp, %eax 				  \n\t"\
+      "   andl $0xf,%eax 		  		  \n\t"\
+      "   andl $0xffffff0,%esp			  \n\t"\
+      "   subl $512,%esp				  \n\t"\
+      "    fxsave (%esp)				  \n\t"\
+       "   pushl %eax 					  \n\t"\
       "   pushl $1f                       \n\t"\
       "   movl %gs:24, %eax               \n\t"\
       "   movl %esp, (%eax)               \n\t"\
       "   movl %gs:8, %esp                \n\t"\
       "   ret                             \n\t"\
       "  1:                               \n\t"\
+      "   popl %eax                       \n\t"\
+      "   fxrstor (%esp)				  \n\t"\
+      "   addl $512,%esp                  \n\t"\
+      "   addl %eax,%esp 				  \n\t"\
       "   popl %edi                       \n\t"\
       "   popl %esi                       \n\t"\
       "   popl %ebp                       \n\t"\

@@ -91,7 +91,7 @@ qemu-direct:: exe
 	$(QEMU) $(QEMUFLAGS) $(QEMULOG) -serial stdio -serial null -kernel $O/$(NAME).exe -append "/help" 
 
 qemu-gdb-direct:: exe
-	$(QEMU) $(QEMUFLAGS) -S -s -serial stdio  -serial null -kernel $O/$(NAME).exe -append "/help"
+	$(QEMU) $(QEMUFLAGS) -S -s -p 26000 -serial stdio  -serial null -kernel $O/$(NAME).exe -append "/help"
 
 iso:: $O/$(NAME).iso
 

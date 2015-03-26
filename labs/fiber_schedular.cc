@@ -25,16 +25,17 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	addr_t& f_stack=*pf_stack;
 	char* retvalue=pret;
 	bool& done = *pp->done;
-	int i,j,k;
+	int i=1,j=1,k=1;
 	int ans;
 	int& shell_run=*pp->slot;
 	for(i=1;i<arg;i++)
 		for(j=1;j<arg;j++)
 			for(k=1;k<arg;k++)
 				{
-					ans=i*j/k;
+					
+                    ans=i*j/k;
 					pre->saved_stack=0;
-                           for(int i=0;i<5;i++)
+                           for(int jk=0;jk<5;jk++)
             hoh_debug("yield\n");
 
                     stack_saverestore(f_stack,main_stack);
@@ -42,6 +43,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	ans=i*j/k;
 	int po=0;
 	int p=ans;
+    //hoh_debug("asas\n");
 	while((p/10)!=0)
     {
          po++;
@@ -49,7 +51,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	}
 	po++;
 	retvalue[po]='\0';
-	for(int i=0;i<po;i++)
+	for(i=0;i<po;i++)
 	{
  		retvalue[po-1-i]=digi1[ans%10];
  		ans=ans/10;
@@ -59,7 +61,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 	shell_run--;
 	//hoh_debug("before final"<<(*run));
     pre->saved_stack=0;
-          for(int i=0;i<5;i++)
+          for(i=0;i<5;i++)
             hoh_debug("yield\n");
 
 	stack_saverestore(f_stack,main_stack);
@@ -86,7 +88,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, char* pret,int arg,pair_int *pp,
 		
 		}
         pre->saved_stack=0;
-        for(int i=0;i<5;i++)
+        for(int ik=0;ik<5;ik++)
             hoh_debug("yield\n");
 		stack_saverestore(f_stack,main_stack);
 	}
@@ -219,8 +221,9 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     {
     	hoh_debug("ind run "<<(shellstate.scheduler_run+ind)%5<<" "<< ind);
         preempt.saved_stack=(addr_t)&stackptrs[(shellstate.scheduler_run+ind)%5];
-        lapic.reset_timer_count(100);
+        lapic.reset_timer_count(10);
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
+        lapic.reset_timer_count(0);
         hoh_debug("context switched out\n");
         __asm("sti\n\t");
         lapic.reset_timer_count(0);
