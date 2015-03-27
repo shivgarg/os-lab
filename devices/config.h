@@ -12,7 +12,8 @@ enum {
   pic_master_base=0x20,
   pic_slave_base=0x28,
   lapic_base=0x30,
-  lapic_internal_base = 0x40
+  lapic_internal_base = 0x40,
+  downcall_base = 0x48
 };
 
 

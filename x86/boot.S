@@ -76,11 +76,11 @@ boot16:
    #self patching code
    #
    LOWPC_RELATIVE(spatch0, %esi)
-   addl %edi, (%esi) # patch with edi not ebx
+   addl %esi, (%esi) # patch with edi not ebx
    LOWPC_RELATIVE(spatch1, %esi)
-   addl %edi, (%esi)
+   addl %esi, (%esi)
    LOWPC_RELATIVE(spatch2, %esi)
-   addl %edi, (%esi)
+   addl %esi, (%esi)
 
 
 
@@ -93,7 +93,7 @@ boot16:
    .byte OP_ADDR16
    .byte OP_JMP
 spatch0:
-   .long boot32 - g_ia32_start16
+   .long boot32 - spatch0
    .word (1<<3)
 
 
@@ -109,7 +109,7 @@ boot32:
    movw %ax, %gs
    .byte OP_JMP
 spatch1:
-   .long 1f - g_ia32_start16
+   .long 1f - spatch1
    .word (1<<3)
 1:
    nop
@@ -236,9 +236,9 @@ _start:
    #self patching code
    #
    PC_RELATIVE(mpatch1, %esi)
-   addl %ebx, (%esi)
+   addl %esi, (%esi)
    PC_RELATIVE(mpatch2, %esi)
-   addl %ebx, (%esi)
+   addl %esi, (%esi)
 
 
    # load gdt and kernel data segment
@@ -254,7 +254,7 @@ _start:
 
    .byte OP_JMP
 mpatch1:
-   .long 1f - g_ia32_start16
+   .long 1f - mpatch1
    .word (1<<3)
 
 1:
@@ -353,12 +353,12 @@ gdt:
 gdtdesc_master:
    .word (3*8-1)
 mpatch2:
-   .long (gdt-g_ia32_start16)
+   .long (gdt-mpatch2)
    .word 0
 gdtdesc_slave:
    .word (3*8-1)
 spatch2:
-   .long (gdt-g_ia32_start16)
+   .long (gdt-spatch2)
    .word 0
 
 

@@ -3,6 +3,7 @@
 
 class dev_pde32_t{
   public:
+    enum { PAGE_SIZE = 4<<20 } ;
     enum { N=1024};
     uint32_t m_page[N] ALIGN(0x1000);
   public:
@@ -17,19 +18,23 @@ class dev_pde32_t{
       asm volatile("movl %0,%%cr3\n"::"r"(m_page):"memory");
     }
   public:
-    void set(char* x, char* p){
-      hoh_assert((get_bits<21,0>(uintptr_t(x))==0),"XXX");
-      set(get_bits<31,22>((uintptr_t)x), (uintptr_t)p, 0x87);
+    void map_identity(){
+      map_large(0,0, 0x83, 1u << (32-20));
     }
-    void map(char* begin, char* end, char* to){
-      hoh_assert(begin<end,"XXX");
-      int _i=0;
-      hoh_assert((get_bits<21,0>(uintptr_t(begin))==0),"XXX");
-      hoh_assert((get_bits<21,0>(uintptr_t(end))==0),"XXX");
-      for(char* p=begin; p<end; (p+=(4<<20)), (to+=(4<<20)), _i++){
-        set(p, to);
+
+    void map_large(addr_t va, addr_t pa, uint16_t flags, size_t num_pages){
+      for(size_t i=0 ; i< num_pages; i++){
+        hoh_assert((get_bits<21,0>(uintptr_t(va+i*PAGE_SIZE))==0),"XXX: " << va << ","<<i);
+        map(va + i* PAGE_SIZE, pa + i* PAGE_SIZE, flags);
       }
     }
+
+  private:
+    void map(addr_t va, addr_t pa, uint16_t flags){
+      hoh_assert((get_bits<21,0>(uintptr_t(va))==0),"XXX");
+      set(get_bits<31,22>((uintptr_t)va), (uintptr_t)pa, flags);
+    }
+
   private:
     void set(int i, uint32_t addr,uint16_t flags){
       hoh_assert((get_bits<11,0>(addr)==0),"XXX");

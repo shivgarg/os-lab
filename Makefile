@@ -25,6 +25,7 @@ SOURCES     = \
 ISO_SOURCES = \
               $O/iso/boot/$(NAME).exe   \
               $O/iso/boot/grub/grub.cfg \
+              $O/iso/ring3/app1.exe      \
 
 
 CPPFLAGS    = -I$I -I$I/apps
@@ -108,5 +109,8 @@ $O/iso/boot/grub/grub.cfg: $I/make/util/grub.cfg
 	mkdir -p $O/iso/boot/grub
 	cp $< $@
 
+$O/iso/ring3/%.exe: $I/ring3/%/_tmp/a.exe
+	mkdir -p $O/iso/ring3
+	cp $I/ring3/$*/_tmp/a.exe $@
 
 include $M/footer.mk

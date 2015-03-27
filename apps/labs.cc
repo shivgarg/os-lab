@@ -1,5 +1,6 @@
 #include "apps/labs.h"
 
+typedef renderstate_t sharedmesg_t;
 
 static inline channels_t& channels_get(int othercore, shm_t& shm){
   addr_t p= shm.get(othercore);
@@ -11,7 +12,7 @@ static inline channel_t& channel0_get(int othercore, shm_t& shm){
   return channels_get(othercore,shm).channel0_meta;
 }
 
-static inline renderstate_t& channel0_get_data(int othercore, shm_t& shm, size_t offset){
+static inline sharedmesg_t& channel0_get_data(int othercore, shm_t& shm, size_t offset){
   return channels_get(othercore,shm).channel0_data[offset%channel0_size].data;
 }
 
@@ -21,6 +22,9 @@ static inline renderstate_t& channel0_get_data(int othercore, shm_t& shm, size_t
 //
 static void apps_loop_step(int rank, addr_t& main_stack, preempt_t& preempt, apps_t& apps, dev_lapic_t& lapic, shm_t& shm){
   if(rank==0){
+    if(apps.state==1){
+      goto rank0_ring3_done;
+    }
     goto rank0;
   }else if(rank==1){
     goto rank1;
@@ -123,6 +127,18 @@ docompute:
   shell_step_fiber_schedular(apps.shell_state, main_stack, preempt, apps.stackptrs, apps.stackptrs_size, apps.arrays, apps.arrays_size, lapic);
 
 
+rank0_ring3:
+  //execute shell for one time slot to do the some computation in ring3, if required.
+  apps.state=1;
+  ring3_step(preempt, apps.proc, lapic);
+  apps.state=0;  //returned. cancel.
+
+  goto done; // shell_step_ring3 never returns
+rank0_ring3_done:
+
+  //cancel and cleanup, if any
+  apps.state=0;
+  ring3_step_done(apps.proc,lapic);
 
   goto done;
 rank1:
@@ -164,14 +180,37 @@ namespace lpc_kbd{
 
 
 
+static inline void elf_load_helper(int which, uint32_t* pshm, process_t& proc, bitpool_t& pool4M){
+  hoh_debug("====== RING3 ELF LOAD =========== : ");
+
+  uint32_t count = pshm[0];
+  hoh_debug("COUNT: "<<count);
+
+  for(uint32_t i=0;i<count;i++){
+    uint32_t start = pshm[1+i*2+0];
+    uint32_t end   = pshm[1+i*2+1];
+    hoh_debug("MOD: "<<start<<" "<<end);
+  }
+
+  hoh_assert(count >= which ,"XXX");
+  uint32_t start = pshm[1+which*2+0];
+  uint32_t end   = pshm[1+which*2+1];
+  hoh_assert(start <= end, "XXX");
+  uint32_t size  = end-start;
+
+  elf_load(addr_t(start), size,  proc, pool4M);
+}
 
 
 //
 // reset
 //
-extern "C" void apps_reset(int rank, apps_t& apps, shm_t& shm){
+extern "C" void apps_reset(int rank, apps_t& apps, shm_t& shm, bitpool_t& pool4M){
 
   hoh_debug(rank<<": Hello, serial!");
+
+  //load elf
+  elf_load_helper(0, (uint32_t*)shm.get_shared(), apps.proc, pool4M);
 
   if(rank==0){
     // Hello, world!
