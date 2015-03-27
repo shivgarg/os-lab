@@ -8,7 +8,7 @@
 	};
 struct shellstate_t{
 	int leftarea=0;
-	char inp[20][25];
+	char inp[22][25];
 	int keys=0;
 	int iter=0;
 	int index;
@@ -52,7 +52,7 @@ struct renderstate_t{
 	int left;
 	int leftarea=0;
 	int keys=0;
-	char inp[20][25];
+	char inp[22][25];
 	int iter;
 	int inp_ind;
 	int change;	

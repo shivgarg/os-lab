@@ -11,7 +11,7 @@
 // initialize shellstate
 //
 void shell_init(shellstate_t& state){
-  for(int i=0;i<20;i++)
+  for(int i=0;i<22;i++)
 	 state.inp[i][0]='\0';
   state.index=0;
   state.inp_ind=state.index;
@@ -105,7 +105,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
         	stateinout.change=1-stateinout.change;
         	stateinout.index-=2;
         	if(stateinout.index<0)
-        		stateinout.index+=20;
+        		stateinout.index+=22;
           int char_i=0;
         	for(int i=0;i<25;i++)
         	{
@@ -132,7 +132,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
         		{
         			stateinout.change=1-stateinout.change;
         			stateinout.index+=2;
-        			stateinout.index%=20;
+        			stateinout.index%=22;
         			int char_i=0;
           for(int i=0;i<25;i++)
           {
@@ -195,21 +195,22 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       //hoh_debug("inp_deb"<<int(stateinout.inp_ind));
       stateinout.inp_ind+=2;
       stateinout.index=stateinout.inp_ind;
-      stateinout.inp[stateinout.inp_ind][0]='\0';
-      stateinout.inp[stateinout.inp_ind+1][0]='\0';
-      stateinout.inp_ind%=20;
+      stateinout.inp[(stateinout.inp_ind)%22][0]='\0';
+      stateinout.inp[(stateinout.inp_ind+1)%22][0]='\0';
+      stateinout.inp_ind%=22;
+      stateinout.index%=22;
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
      // hoh_debug("inp_ind "<<stateinout.inp_ind);
-      if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='u' && stateinout.inp[stateinout.inp_ind-2][2]=='n' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='f' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='u' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='n' && stateinout.inp[(stateinout.inp_ind+20)%22][3]==' ')
       {
        // hoh_debug("in fib");
         int i=4,arg=0;bool ill=false;;
-        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        while(stateinout.inp[(stateinout.inp_ind+20)%22][i]!='\0')
         {
           
-          if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
-            arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+          if(int(stateinout.inp[(stateinout.inp_ind+20)%22][i])>=48 && int(stateinout.inp[(stateinout.inp_ind+20)%22][i])<=57)
+            arg=arg*10+int(stateinout.inp[(stateinout.inp_ind+20)%22][i])-48;
           else
             {ill=true;break;}
           i++;
@@ -225,10 +226,10 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
              p=p/10;
             }
             po++;
-            stateinout.inp[stateinout.inp_ind-1][po]='\0';
+            stateinout.inp[(stateinout.inp_ind+21)%22][po]='\0';
             for(int i=0;i<po;i++)
             {
-             stateinout.inp[stateinout.inp_ind-1][po-1-i]=digi[ans%10];
+             stateinout.inp[(stateinout.inp_ind+21)%22][po-1-i]=digi[ans%10];
              ans=ans/10;
             }
         }
@@ -237,29 +238,29 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
           char tmp[17]="Illegal Argument";
           tmp[16]='\0';
           for(int g=0;g<17;g++)
-            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+            stateinout.inp[(stateinout.inp_ind+21)%22][g]=tmp[g];
         }
       }
-      else if(stateinout.inp[stateinout.inp_ind-2][0]=='e' && stateinout.inp[stateinout.inp_ind-2][1]=='c' && stateinout.inp[stateinout.inp_ind-2][2]=='h' && stateinout.inp[stateinout.inp_ind-2][3]=='o' && stateinout.inp[stateinout.inp_ind-2][4]==' ')
+      else if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='e' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='c' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='h' && stateinout.inp[(stateinout.inp_ind+20)%22][3]=='o' && stateinout.inp[(stateinout.inp_ind+20)%22][4]==' ')
       {
       // hoh_debug("in echo");
         int i=5;
-        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        while(stateinout.inp[(stateinout.inp_ind+20)%22][i]!='\0')
         {
-          stateinout.inp[stateinout.inp_ind-1][i-5]=stateinout.inp[stateinout.inp_ind-2][i];
+          stateinout.inp[(stateinout.inp_ind+21)%22][i-5]=stateinout.inp[(stateinout.inp_ind+20)%22][i];
           i++;
         }
-        stateinout.inp[stateinout.inp_ind-1][i+1]='\0';
+        stateinout.inp[(stateinout.inp_ind+21)%22][i+1]='\0';
 
       }
-      else if(stateinout.inp[stateinout.inp_ind-2][0]=='c' && stateinout.inp[stateinout.inp_ind-2][1]=='o' && stateinout.inp[stateinout.inp_ind-2][2]=='r' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      else if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='c' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='o' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='r' && stateinout.inp[(stateinout.inp_ind+20)%22][3]==' ')
       {
         int i=4,arg=0;bool ill=false;;
-        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        while(stateinout.inp[(stateinout.inp_ind+20)%22][i]!='\0')
         {
           
-          if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
-            arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+          if(int(stateinout.inp[(stateinout.inp_ind+20)%22][i])>=48 && int(stateinout.inp[(stateinout.inp_ind+20)%22][i])<=57)
+            arg=arg*10+int(stateinout.inp[(stateinout.inp_ind+20)%22][i])-48;
           else
             {ill=true;break;}
           i++;
@@ -268,24 +269,24 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
         {
             stateinout.coroutine_arg=arg;
             stateinout.init_coroutine=true;
-            stateinout.coroutine_out=stateinout.inp_ind-1;
+            stateinout.coroutine_out=(stateinout.inp_ind+21)%22;
         }
         else
         {
           char tmp[17]="Illegal Argument";
           tmp[16]='\0';
           for(int g=0;g<17;g++)
-            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+            stateinout.inp[(stateinout.inp_ind+21)%22][g]=tmp[g];
         } 
       }
-      else if(stateinout.inp[stateinout.inp_ind-2][0]=='f' && stateinout.inp[stateinout.inp_ind-2][1]=='i' && stateinout.inp[stateinout.inp_ind-2][2]=='b' && stateinout.inp[stateinout.inp_ind-2][3]==' ')
+      else if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='f' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='i' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='b' && stateinout.inp[(stateinout.inp_ind+20)%22][3]==' ')
       {
         int i=4,arg=0;bool ill=false;;
-        while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+        while(stateinout.inp[(stateinout.inp_ind+20)%22][i]!='\0')
         {
           
-          if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
-            arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+          if(int(stateinout.inp[(stateinout.inp_ind+20)%22][i])>=48 && int(stateinout.inp[(stateinout.inp_ind+20)%22][i])<=57)
+            arg=arg*10+int(stateinout.inp[(stateinout.inp_ind+20)%22][i])-48;
           else
             {ill=true;break;}
           i++;
@@ -294,27 +295,27 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
         {
             stateinout.fiber_arg=arg;
             stateinout.init_fiber=true;
-            stateinout.fiber_out=stateinout.inp_ind-1;
+            stateinout.fiber_out=(stateinout.inp_ind+21)%22;
         }
         else
         {
           char tmp[17]="Illegal Argument";
           tmp[16]='\0';
           for(int g=0;g<17;g++)
-            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+            stateinout.inp[(stateinout.inp_ind+21)%22][g]=tmp[g];
         } 
       }
-      else if(stateinout.inp[stateinout.inp_ind-2][0]=='s' && stateinout.inp[stateinout.inp_ind-2][1]=='c' && stateinout.inp[stateinout.inp_ind-2][2]=='h' && stateinout.inp[stateinout.inp_ind-2][3]=='d' && stateinout.inp[stateinout.inp_ind-2][4]==' ')
+      else if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='s' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='c' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='h' && stateinout.inp[(stateinout.inp_ind+20)%22][3]=='d' && stateinout.inp[(stateinout.inp_ind+20)%22][4]==' ')
       {
         int i,arg=0;bool ill=false;
-        if(stateinout.inp[stateinout.inp_ind-2][5]=='1' && stateinout.inp[stateinout.inp_ind-2][6]==' ')
+        if(stateinout.inp[(stateinout.inp_ind+20)%22][5]=='1' && stateinout.inp[(stateinout.inp_ind+20)%22][6]==' ')
         {
           i=7;
-           while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+           while(stateinout.inp[(stateinout.inp_ind+20)%22][i]!='\0')
             {
               
-              if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
-                arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+              if(int(stateinout.inp[(stateinout.inp_ind+20)%22][i])>=48 && int(stateinout.inp[(stateinout.inp_ind+20)%22][i])<=57)
+                arg=arg*10+int(stateinout.inp[(stateinout.inp_ind+20)%22][i])-48;
               else
                 {ill=true;break;}
               i++;
@@ -322,7 +323,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
             if(!ill)
             {
                 stateinout.scheduler_arg=arg;
-                stateinout.scheduler_out=stateinout.inp_ind-1;
+                stateinout.scheduler_out=(stateinout.inp_ind+21)%22;
                 stateinout.scheduler_assign=1;
 
             }
@@ -331,16 +332,16 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
               char tmp[17]="Illegal Argument";
               tmp[16]='\0';
               for(int g=0;g<17;g++)
-                stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+                stateinout.inp[(stateinout.inp_ind+21)%22][g]=tmp[g];
             }
         }
-        else if(stateinout.inp[stateinout.inp_ind-2][5]=='2' && stateinout.inp[stateinout.inp_ind-2][6]==' ')
+        else if(stateinout.inp[(stateinout.inp_ind+20)%22][5]=='2' && stateinout.inp[(stateinout.inp_ind+20)%22][6]==' ')
         {
               i=7;
-              while(stateinout.inp[stateinout.inp_ind-2][i]!='\0')
+              while(stateinout.inp[(stateinout.inp_ind+20)%22][i]!='\0')
               {
-              if(int(stateinout.inp[stateinout.inp_ind-2][i])>=48 && int(stateinout.inp[stateinout.inp_ind-2][i])<=57)
-                arg=arg*10+int(stateinout.inp[stateinout.inp_ind-2][i])-48;
+              if(int(stateinout.inp[(stateinout.inp_ind+20)%22][i])>=48 && int(stateinout.inp[(stateinout.inp_ind+20)%22][i])<=57)
+                arg=arg*10+int(stateinout.inp[(stateinout.inp_ind+20)%22][i])-48;
               else
                 {ill=true;break;}
               i++;
@@ -348,7 +349,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
             if(!ill)
             {
                 stateinout.scheduler_arg=arg;
-                stateinout.scheduler_out=stateinout.inp_ind-1;
+                stateinout.scheduler_out=(stateinout.inp_ind+21)%22;
                 stateinout.scheduler_assign=2;
 
             }
@@ -357,7 +358,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
               char tmp[17]="Illegal Argument";
               tmp[16]='\0';
               for(int g=0;g<17;g++)
-                stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+                stateinout.inp[(stateinout.inp_ind+21)%22][g]=tmp[g];
             }          
         }
         else
@@ -365,7 +366,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
           char tmp[35]="Undefined Function";
           tmp[18]='\0';
           for(int g=0;g<25;g++)
-            stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
+            stateinout.inp[(stateinout.inp_ind+21)%22][g]=tmp[g];
 
         }
         
@@ -375,7 +376,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
         char s[16]="Illegal Command";
         s[15]='\0';
         for(int g=0;g<16;g++)
-          stateinout.inp[stateinout.inp_ind-1][g]=s[g];
+          stateinout.inp[(stateinout.inp_ind+21)%22][g]=s[g];
       }
   
   }
@@ -407,7 +408,7 @@ void shell_render(const shellstate_t& shell, renderstate_t& render){
   render.left=shell.left;
   
   render.iter=shell.iter;
-  for(int i=0;i<20;i++)
+  for(int i=0;i<22;i++)
     for(int j=0;j<25;j++)
       render.inp[i][j]=shell.inp[i][j];
   // for(int j=0;j<35;j++)
@@ -477,12 +478,12 @@ void render(const renderstate_t& state, int w, int h, addr_t vgatext_base){
     int tmp=state.inp_ind-i;
     int tmp1=state.inp_ind-i+1;
     if(state.inp_ind-i<0)
-      tmp+=20;
+      tmp+=22;
     if(tmp1<0)
-      tmp1+=20;
+      tmp1+=22;
     drawtext(w/4,20-i,"$>", 2, 0,7,w,h,vgatext_base);
-    drawtext(w/4+2,20-i,state.inp[tmp],35,0,7,w,h,vgatext_base);
-    drawtext(w/4+2,20-i+1,state.inp[tmp1],35,0,7,w,h,vgatext_base);
+    drawtext(w/4+2,20-i,state.inp[tmp],25,0,7,w,h,vgatext_base);
+    drawtext(w/4+2,20-i+1,state.inp[tmp1],25,0,7,w,h,vgatext_base);
   }
   if(state.left){
   if(state.leftarea==0)

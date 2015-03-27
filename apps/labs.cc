@@ -72,10 +72,8 @@ nokey:
 
   //reserve space to write data
   apps.channel0_writeport_write_index_tmp = apps.channel0_writeport.write_reserve(1);
-
   //write data
-  construct(&channel0_get_data(rank+1,shm,apps.channel0_writeport_write_index_tmp),
-            apps.rendertmp);
+  construct(&channel0_get_data(rank+1,shm,apps.channel0_writeport_write_index_tmp),apps.rendertmp);
 
   //sync: save/update write pointer
   apps.channel0_writeport.write_release(channel0_get(rank+1,shm)); // save write count. sync with core(rank+1)
@@ -94,6 +92,7 @@ norender:
 
   //can reserve space to delete data
   if(!apps.channel0_writeport.delete_canreserve(1)){
+    //hoh_debug("deleting\n");
     goto docompute;
   }
 
@@ -141,7 +140,6 @@ rank1:
 
   //reserve read
   apps.channel0_readport_read_index_tmp = apps.channel0_readport.read_reserve(1);
-
   // process the data
   // renderstate -> vgatext: given renderstate, render to vgatext buffer.
   render(channel0_get_data(rank-1,shm, apps.channel0_readport_read_index_tmp),

@@ -87,7 +87,7 @@ public:
     stackptrs_size = STACKPTRS_SIZE;
     arrays_size    = sizeof(arrays);
 
-    render_flag    = false;
+    render_flag    = !false;
 
     hoh_assert(arrays_size==STACKPTRS_SIZE*ARRAY_SIZE,"Bug: apps.arrays_size="<<arrays_size);
   }

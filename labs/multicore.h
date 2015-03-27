@@ -1,5 +1,5 @@
 #pragma once
-
+#include <atomic>
 //
 // INVARIANT: w_deleted_count <= w_deleting_count <= w_cached_read_count <= shared_read_count <= r_reading_count <= r_cached_write_count <= shared_write_count <= w_writing_count <= w_deleted_count + MAX_SIZE
 //
@@ -30,7 +30,7 @@
 struct channel_t{
   public:
 
-    //insert your code here
+      std:: atomic<int> read_head,write_head;
 
   public:
 
@@ -39,7 +39,9 @@ struct channel_t{
     //
     channel_t(){
 
-      // insert your code here
+      read_head=0;
+      write_head=0;
+
 
     }
 };
@@ -52,6 +54,8 @@ struct writeport_t{
 public:
     //insert your code here
 
+      int read_head,deleted_head,write_head,deleting_head;
+      size_t length;
 public:
 
   //
@@ -59,7 +63,11 @@ public:
   //
   writeport_t(size_t tsize)
   {
-    //insert code here
+      read_head=0;
+      deleted_head=(int)tsize-1;
+      deleting_head=(int)tsize-1;
+      write_head=0;
+      length=tsize;
   }
 
 public:
@@ -73,7 +81,12 @@ public:
 
     // insert your code here
 
-    return 0;
+    if(write_head==deleted_head)
+      return 1;
+    else if(write_head>deleted_head)
+      return length+(size_t)(-write_head+deleted_head+1);
+    else
+      return (size_t)(deleted_head-write_head+1);
   }
 
   //
@@ -83,16 +96,16 @@ public:
 
     // insert your code here
 
-    return false;
+    return n<=write_reservesize();
   }
 
   //
   // Reserve 'n' entries for write
   //
   size_t write_reserve(size_t n){
-    // insert your code here
+    write_head=(size_t)(write_head+(int)n)%length;
 
-    return 0;
+    return write_head;
   }
 
   //
@@ -101,9 +114,8 @@ public:
   // Read/Write shared memory data structure
   //
   void write_release(channel_t& ch){
-
-    // insert your code here
-
+      // insert your code here
+    ch.write_head=write_head;
   }
 
 
@@ -117,7 +129,7 @@ public:
   //
   void read_acquire(channel_t& ch){
 
-    //insert your code here
+    read_head=ch.read_head;
 
   }
 
@@ -129,7 +141,11 @@ public:
   //
   size_t delete_reservesize(){
     //insert your code here
-
+    
+    if(read_head<deleting_head)
+      return length+(size_t)(read_head-deleting_head-1);
+    else
+      return (size_t)(-deleting_head+read_head-1);
     return 0;
   }
 
@@ -139,7 +155,7 @@ public:
   bool delete_canreserve(size_t n){
     //insert your code here
 
-    return false;
+    return n<=delete_reservesize();
   }
 
   //
@@ -147,8 +163,8 @@ public:
   //
   size_t delete_reserve(size_t n){
     //insert your code here
-
-    return 0;
+    deleting_head=(deleting_head+n)%length;
+    return deleting_head;
   }
 
 
@@ -157,7 +173,8 @@ public:
   //
   void delete_release(){
     //insert your code here
-
+      deleted_head=deleting_head;
+      return ;
   }
 
 
@@ -173,6 +190,8 @@ public:
 
   //insert your code here
 
+      int read_head,write_head;
+      size_t length;
 
 public:
   //
@@ -181,8 +200,10 @@ public:
   readport_t(size_t tsize)
   {
 
-    //insert your code here
-
+      //insert your code here
+      read_head=0;
+      write_head=0;
+      length=tsize;
   }
   public:
 
@@ -191,8 +212,7 @@ public:
   //
   void write_acquire(channel_t& ch){
 
-    //insert your code here
-
+   write_head=ch.write_head;
   }
 
   //
@@ -200,9 +220,9 @@ public:
   //
   size_t read_reservesize(){
 
-    //insert your code here
-
-    return 0;
+     //insert your code here
+    return (length+write_head-read_head)%length;
+    
   }
 
   //
@@ -212,7 +232,7 @@ public:
 
     //insert your code here
 
-    return false;
+    return n<=read_reservesize();
   }
 
   //
@@ -221,8 +241,8 @@ public:
   size_t read_reserve(size_t n){
 
     //insert your code here
-
-    return 0;
+    read_head=(read_head+(int)n)%length;
+    return (size_t)read_head;
   }
 
   //
@@ -231,6 +251,7 @@ public:
   void read_release(channel_t& ch){
 
     //insert your code here
+    ch.read_head=read_head;
 
   }
 
