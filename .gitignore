@@ -6,3 +6,4 @@ a.out
 *.log
 _tmp
 *.hi
+cscope.out
