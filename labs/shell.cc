@@ -11,7 +11,7 @@
 // initialize shellstate
 //
 void shell_init(shellstate_t& state){
-  for(int i=0;i<200;i++)
+  for(int i=0;i<20;i++)
 	 state.inp[i][0]='\0';
   state.index=0;
   state.inp_ind=state.index;
@@ -105,9 +105,9 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
         	stateinout.change=1-stateinout.change;
         	stateinout.index-=2;
         	if(stateinout.index<0)
-        		stateinout.index+=200;
+        		stateinout.index+=20;
           int char_i=0;
-        	for(int i=0;i<35;i++)
+        	for(int i=0;i<25;i++)
         	{
             if(stateinout.inp[stateinout.index][i]=='\0')
               break;
@@ -132,9 +132,9 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
         		{
         			stateinout.change=1-stateinout.change;
         			stateinout.index+=2;
-        			stateinout.index%=200;
+        			stateinout.index%=20;
         			int char_i=0;
-          for(int i=0;i<35;i++)
+          for(int i=0;i<25;i++)
           {
             if(stateinout.inp[stateinout.index][i]=='\0')
               break;
@@ -197,7 +197,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       stateinout.index=stateinout.inp_ind;
       stateinout.inp[stateinout.inp_ind][0]='\0';
       stateinout.inp[stateinout.inp_ind+1][0]='\0';
-      stateinout.inp_ind%=200;
+      stateinout.inp_ind%=20;
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
      // hoh_debug("inp_ind "<<stateinout.inp_ind);
@@ -364,7 +364,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
         {
           char tmp[35]="Undefined Function";
           tmp[18]='\0';
-          for(int g=0;g<35;g++)
+          for(int g=0;g<25;g++)
             stateinout.inp[stateinout.inp_ind-1][g]=tmp[g];
 
         }
@@ -407,8 +407,8 @@ void shell_render(const shellstate_t& shell, renderstate_t& render){
   render.left=shell.left;
   
   render.iter=shell.iter;
-  for(int i=0;i<200;i++)
-    for(int j=0;j<35;j++)
+  for(int i=0;i<20;i++)
+    for(int j=0;j<25;j++)
       render.inp[i][j]=shell.inp[i][j];
   // for(int j=0;j<35;j++)
   //   render.coroutine_out[j]=shell.coroutine_out[j];
@@ -477,9 +477,9 @@ void render(const renderstate_t& state, int w, int h, addr_t vgatext_base){
     int tmp=state.inp_ind-i;
     int tmp1=state.inp_ind-i+1;
     if(state.inp_ind-i<0)
-      tmp+=200;
+      tmp+=20;
     if(tmp1<0)
-      tmp1+=200;
+      tmp1+=20;
     drawtext(w/4,20-i,"$>", 2, 0,7,w,h,vgatext_base);
     drawtext(w/4+2,20-i,state.inp[tmp],35,0,7,w,h,vgatext_base);
     drawtext(w/4+2,20-i+1,state.inp[tmp1],35,0,7,w,h,vgatext_base);
