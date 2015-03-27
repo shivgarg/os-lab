@@ -166,32 +166,9 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
     	stateinout.left%=2;
     }
     else if(scankey==28)
-    {
-      stateinout.output=1;
+    { 
+      char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       
-    }
-
-    // increment the
-}
-
-
-//
-// do computation
-//
-void shell_step(shellstate_t& stateinout){
-		
-char digi[]={'0','1','2','3','4','5','6','7','8','9'};
-  //
-  //one way:
-  // if a function is enabled in stateinout
-  //   call that function( with arguments stored in stateinout) ;
-  //
-  stateinout.iter++;
-    if(stateinout.iter<0)
-      stateinout.iter=0;
-  if(stateinout.output)
-  {
-  	stateinout.output=0;
       //hoh_debug("inp_deb"<<int(stateinout.inp_ind));
       stateinout.inp_ind+=2;
       stateinout.index=stateinout.inp_ind;
@@ -201,6 +178,7 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
       stateinout.index%=22;
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
+                   stateinout.output=0;
      // hoh_debug("inp_ind "<<stateinout.inp_ind);
       if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='f' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='u' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='n' && stateinout.inp[(stateinout.inp_ind+20)%22][3]==' ')
       {
@@ -379,7 +357,29 @@ char digi[]={'0','1','2','3','4','5','6','7','8','9'};
           stateinout.inp[(stateinout.inp_ind+21)%22][g]=s[g];
       }
   
-  }
+  
+      
+    }
+
+    // increment the
+}
+
+
+//
+// do computation
+//
+void shell_step(shellstate_t& stateinout){
+		
+
+  //
+  //one way:
+  // if a function is enabled in stateinout
+  //   call that function( with arguments stored in stateinout) ;
+  //
+  stateinout.iter++;
+    if(stateinout.iter<0)
+      stateinout.iter=0;
+ 
 
 
 
