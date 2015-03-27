@@ -146,18 +146,18 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     	//hoh_debug("slot "<<slt);
     	if(slt==-1)
     	{
-    		char tmp[35]="Low on Resources";
+    		char tmp[25]="Low on Resources";
     		tmp[16]='\0';
-    		for(int l=0;l<35;l++)
+    		for(int l=0;l<25;l++)
     			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
 
     	}
     	else if(shellstate.run_instances[0]==3)
     	{
-    		char tmp[35]="Three Instances already running";
-    		tmp[31]='\0';
+    		char tmp[25]="3 Instances running";
+    		tmp[19]='\0';
     		shellstate.schd_slots[slt]=false;
-    		for(int l=0;l<35;l++)
+    		for(int l=0;l<25;l++)
     			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
     	}	
     	else{
@@ -186,18 +186,18 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     	//hoh_debug("slot "<<slt);
     	if(slt==-1)
     	{
-    		char tmp[35]="Low on Resources";
+    		char tmp[25]="Low on Resources";
     		tmp[16]='\0';
-    		for(int l=0;l<35;l++)
+    		for(int l=0;l<25;l++)
     			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
 
     	}
     	else if(shellstate.run_instances[1]==3)
     	{
-    		char tmp[35]="Three Instances already running";
-    		tmp[31]='\0';
+    		char tmp[35]="3 Instances running";
+    		tmp[19]='\0';
     		shellstate.schd_slots[slt]=false;
-    		for(int l=0;l<35;l++)
+    		for(int l=0;l<25;l++)
     			shellstate.inp[shellstate.scheduler_out][l]=tmp[l];
     	}
     	else{
