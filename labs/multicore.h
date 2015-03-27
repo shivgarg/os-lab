@@ -64,8 +64,8 @@ public:
   writeport_t(size_t tsize)
   {
       read_head=0;
-      deleted_head=(int)tsize-1;
-      deleting_head=(int)tsize-1;
+      deleted_head=0;
+      deleting_head=0;
       write_head=0;
       length=tsize;
   }
@@ -81,17 +81,11 @@ public:
 
     // insert your code here
 
-    if(write_head==deleted_head)
-      return 1;
-    else if(write_head>deleted_head)
-      return length+(size_t)(-write_head+deleted_head+1);
-    else
-      return (size_t)(deleted_head-write_head+1);
-  }
+    return (size_t)((int)length-(write_head-deleted_head));}
 
   //
   // Can write 'n' entries?
-  //
+  //111
   bool write_canreserve(size_t n){
 
     // insert your code here
@@ -103,9 +97,9 @@ public:
   // Reserve 'n' entries for write
   //
   size_t write_reserve(size_t n){
-    write_head=(size_t)(write_head+(int)n)%length;
+    write_head=(write_head+(int)n);
 
-    return write_head;
+    return (size_t)(write_head%((int)length));
   }
 
   //
@@ -141,12 +135,8 @@ public:
   //
   size_t delete_reservesize(){
     //insert your code here
-    
-    if(read_head<deleting_head)
-      return length+(size_t)(read_head-deleting_head-1);
-    else
-      return (size_t)(-deleting_head+read_head-1);
-    return 0;
+      return (size_t)(read_head-deleting_head);  
+  
   }
 
   //
@@ -163,8 +153,8 @@ public:
   //
   size_t delete_reserve(size_t n){
     //insert your code here
-    deleting_head=(deleting_head+n)%length;
-    return deleting_head;
+    deleting_head=(deleting_head+n);
+    return (size_t)(deleting_head%((int)length));
   }
 
 
@@ -221,7 +211,7 @@ public:
   size_t read_reservesize(){
 
      //insert your code here
-    return (length+write_head-read_head)%length;
+    return (size_t)(write_head-read_head);
     
   }
 
@@ -241,8 +231,8 @@ public:
   size_t read_reserve(size_t n){
 
     //insert your code here
-    read_head=(read_head+(int)n)%length;
-    return (size_t)read_head;
+    read_head=(read_head+(int)n);
+    return (size_t)(read_head%((int)length));
   }
 
   //
