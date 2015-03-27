@@ -224,7 +224,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
         lapic.reset_timer_count(0);
         hoh_debug("context switched out\n");
-        __asm("sti\n\t");
+        //__asm("sti\n\t");
         lapic.reset_timer_count(0);
     	shellstate.scheduler_run+=ind;
     	shellstate.scheduler_run%=5;

@@ -84,6 +84,7 @@ struct preempt_t{
       "   popl %ecx                                             \n\t"\
       "   popl %ebx                                             \n\t"\
       "   popl %eax                                             \n\t"\
+      "	  sti													\n\t"\
       " ret_i:                                                  \n\t"\
       "   jmp iret_toring0                                      \n\t"\
       )                                        \
