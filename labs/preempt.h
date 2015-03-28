@@ -25,7 +25,7 @@
 
 struct preempt_t{
   // your data structure, if any
-  addr_t saved_stack; //feel free to change it - provided as an example
+  addr_t *saved_stack; //feel free to change it - provided as an example
 
 };
 
@@ -84,7 +84,7 @@ struct preempt_t{
       "   popl %ecx                                             \n\t"\
       "   popl %ebx                                             \n\t"\
       "   popl %eax                                             \n\t"\
-      "	  sti													\n\t"\
+      "	  #sti													\n\t"\
       " ret_i:                                                  \n\t"\
       "   jmp iret_toring0                                      \n\t"\
       )                                        \
