@@ -303,7 +303,40 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                 stateinout.scheduler_arg=arg;
                 stateinout.scheduler_out=(stateinout.inp_ind+21)%22;
                 stateinout.scheduler_assign=1;
+                int slt=-1;
+                for(int i=0;i<5;i++)
+                {
+                  if(!stateinout.schd_slots[i])
+                    { 
+                      stateinout.schd_slots[i]=true;
+                      slt=i;
+                      stateinout.first[slt]=true;
+                      stateinout.fibs[slt].ret=stateinout.inp[stateinout.scheduler_out];
+                      stateinout.fibs[slt].arg=arg;
+                      stateinout.fibs[slt].run_inst=&stateinout.run_instances[0];
+                      stateinout.fibs[slt].done=&stateinout.schd_slots[slt];
+                      stateinout.fibs[slt].fun=1;
+                      break;
+                    }
+                }
+                //hoh_debug("slot "<<slt);
+                if(slt==-1)
+                {
+                  char tmp[25]="Low on Resources";
+                  tmp[16]='\0';
+                  for(int l=0;l<25;l++)
+                    stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
 
+                }
+                else if(stateinout.run_instances[0]==3)
+                {
+                  char tmp[25]="3 Instances running";
+                  tmp[19]='\0';
+                  stateinout.schd_slots[slt]=false;
+                  for(int l=0;l<25;l++)
+                    stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
+                } 
+                
             }
             else
             {
@@ -329,6 +362,39 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                 stateinout.scheduler_arg=arg;
                 stateinout.scheduler_out=(stateinout.inp_ind+21)%22;
                 stateinout.scheduler_assign=2;
+                int slt=-1;
+                for(int i=0;i<5;i++)
+                {
+                  if(!stateinout.schd_slots[i])
+                    { 
+                      stateinout.schd_slots[i]=true;
+                      slt=i;
+                      stateinout.first[slt]=true;
+                      stateinout.fibs[slt].ret=stateinout.inp[stateinout.scheduler_out];
+                      stateinout.fibs[slt].arg=arg;
+                      stateinout.fibs[slt].run_inst=&stateinout.run_instances[1];
+                      stateinout.fibs[slt].done=&stateinout.schd_slots[slt];
+                      stateinout.fibs[slt].fun=2;
+                      break;
+                    }
+                }
+                //hoh_debug("slot "<<slt);
+                if(slt==-1)
+                {
+                  char tmp[25]="Low on Resources";
+                  tmp[16]='\0';
+                  for(int l=0;l<25;l++)
+                    stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
+
+                }
+                else if(stateinout.run_instances[0]==3)
+                {
+                  char tmp[25]="3 Instances running";
+                  tmp[19]='\0';
+                  stateinout.schd_slots[slt]=false;
+                  for(int l=0;l<25;l++)
+                    stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
+                }
 
             }
             else

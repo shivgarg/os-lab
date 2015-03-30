@@ -4,7 +4,10 @@
 
 	struct pair_int{
 		bool * done;
-		int * slot;
+		int * run_inst;
+		int fun;
+		char * ret;
+		int arg;
 	};
 struct shellstate_t{
 	int leftarea=0;
@@ -42,9 +45,12 @@ struct shellstate_t{
 	int scheduler_arg;
 	int scheduler_out;
 	bool schd_slots[10];
+	int first[5];
+	int fib_inst[5];
+	int fib_arg[5];
 	int run_instances[5];
 
-	pair_int fib1,fib2;
+	pair_int fibs[5];
 
 };
 

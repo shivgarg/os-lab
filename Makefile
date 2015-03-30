@@ -77,7 +77,7 @@ LDFLAGS     = -static -T $(LINK.script) \
 
 QEMU=qemu-system-i386
 #QEMU = ~/X/qemu.git/i386-softmmu/qemu-system-i386 
-QEMUFLAGS = -cpu core2duo -smp 2 -m 1024 
+QEMUFLAGS = -cpu Haswell -smp 2 -m 1024 
 QEMULOG= -D qemu.log -d in_asm,int
 
 all:: exe

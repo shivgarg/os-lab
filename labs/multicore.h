@@ -81,7 +81,8 @@ public:
 
     // insert your code here
 
-    return (size_t)((int)length-(write_head-deleted_head));}
+  return (size_t)((int)length-(write_head-deleted_head));
+  }
 
   //
   // Can write 'n' entries?
@@ -99,7 +100,7 @@ public:
   size_t write_reserve(size_t n){
     write_head=(write_head+(int)n);
 
-    return (size_t)(write_head%((int)length));
+    return (size_t)((write_head-n)%((int)length));
   }
 
   //
@@ -154,7 +155,7 @@ public:
   size_t delete_reserve(size_t n){
     //insert your code here
     deleting_head=(deleting_head+n);
-    return (size_t)(deleting_head%((int)length));
+    return (size_t)((deleting_head-n)%((int)length));
   }
 
 
@@ -232,7 +233,7 @@ public:
 
     //insert your code here
     read_head=(read_head+(int)n);
-    return (size_t)(read_head%((int)length));
+    return (size_t)((read_head-n)%((int)length));
   }
 
   //
