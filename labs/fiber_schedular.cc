@@ -149,7 +149,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
         {
             shellstate.first[(shellstate.scheduler_run+ind)%5]=false;
             uint32_t stk_off=((shellstate.scheduler_run+ind)%5+1)*((uint32_t)arrays_size)/10;
-            (*(shellstate.fibs[(shellstate.scheduler_run+ind)%5].run_inst))++;
+            //(*(shellstate.fibs[(shellstate.scheduler_run+ind)%5].run_inst))++;
             if(shellstate.fibs[(shellstate.scheduler_run+ind)%5].fun==1){
                 stack_init4(stackptrs[(shellstate.scheduler_run+ind)%5],arrays,stk_off,&one,&main_stack,&stackptrs[(shellstate.scheduler_run+ind)%5],&shellstate.fibs[(shellstate.scheduler_run+ind)%5],&preempt);            
             }

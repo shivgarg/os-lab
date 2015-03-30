@@ -314,6 +314,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                       stateinout.fibs[slt].ret=stateinout.inp[stateinout.scheduler_out];
                       stateinout.fibs[slt].arg=arg;
                       stateinout.fibs[slt].run_inst=&stateinout.run_instances[0];
+                      stateinout.run_instances[0]++;
                       stateinout.fibs[slt].done=&stateinout.schd_slots[slt];
                       stateinout.fibs[slt].fun=1;
                       break;
@@ -328,8 +329,11 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                     stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
 
                 }
-                else if(stateinout.run_instances[0]==3)
+                else if(stateinout.run_instances[0]==4)
                 {
+                   stateinout.first[slt]=false;
+                   stateinout.schd_slots[slt]=false;
+                   stateinout.run_instances[0]--;
                   char tmp[25]="3 Instances running";
                   tmp[19]='\0';
                   stateinout.schd_slots[slt]=false;
@@ -373,6 +377,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                       stateinout.fibs[slt].ret=stateinout.inp[stateinout.scheduler_out];
                       stateinout.fibs[slt].arg=arg;
                       stateinout.fibs[slt].run_inst=&stateinout.run_instances[1];
+                      stateinout.run_instances[1]++;
                       stateinout.fibs[slt].done=&stateinout.schd_slots[slt];
                       stateinout.fibs[slt].fun=2;
                       break;
@@ -387,8 +392,11 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                     stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
 
                 }
-                else if(stateinout.run_instances[0]==3)
+                else if(stateinout.run_instances[1]==4)
                 {
+                  stateinout.first[slt]=false;
+                  stateinout.schd_slots[slt]=false;
+                  stateinout.run_instances[1]--;
                   char tmp[25]="3 Instances running";
                   tmp[19]='\0';
                   stateinout.schd_slots[slt]=false;
