@@ -28,16 +28,17 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	int i=1,j=1,k=1;
 	int ans;
 	int& shell_run=*(pl->run_inst);
+    hoh_debug("inst cnt"<<*(pl->run_inst));
     int count=0;
     int arg=pl->arg;
     hoh_debug(arg);
 	for(i=1;i<arg;i++){
-        //hoh_debug("here");
+       // hoh_debug("here");
 		for(j=1;j<arg;j++){
 			for(k=1;k<arg;k++)
 				{
 					count++;
-                    hoh_debug("in one "<<i << " "<< j << " "<< k<< " "<< arg);
+                   
                     ans=i*j/k;
 					
                            // for(int jk=0;jk<5;jk++)
@@ -46,8 +47,8 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
                
         }
          pre->saved_stack=0;
-        hoh_debug("yield\n");
-        hoh_debug("yield\n");
+        // hoh_debug("yield\n");
+        // hoh_debug("yield\n");
         stack_saverestore(f_stack,main_stack);
     }
     count++;
@@ -73,6 +74,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	done=false;	
 	hoh_debug("before final");
 	shell_run--;
+    hoh_debug(shell_run);
 	//hoh_debug("before final"<<(*run));
     pre->saved_stack=0;
           // for(i=0;i<5;i++)
@@ -127,6 +129,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	}
 	done=false;	
 	shell_run--;
+    hoh_debug(shell_run);
 //	hoh_debug("before final");
    // pre->saved_stack=0;
       // for(int i=0;i<5;i++)
@@ -176,7 +179,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
         lapic.reset_timer_count(1);
        // hoh_debug("going to "<< (shellstate.scheduler_run+ind)%5);
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
-        hoh_debug("context switched out\n");
+       // hoh_debug("context switched out\n");
         lapic.reset_timer_count(0);
         //__asm("sti");
       

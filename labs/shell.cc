@@ -332,7 +332,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
                     stateinout.inp[stateinout.scheduler_out][l]=tmp[l];
 
                 }
-                else if(stateinout.run_instances[0]>3)
+                else if(stateinout.run_instances[0]==4)
                 {
                    stateinout.first[slt]=false;
                    stateinout.schd_slots[slt]=false;
