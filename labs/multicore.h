@@ -30,7 +30,7 @@
 struct channel_t{
   public:
 
-      std:: atomic<int> read_head,write_head;
+      std:: atomic<uint> read_head,write_head;
 
   public:
 
@@ -54,7 +54,7 @@ struct writeport_t{
 public:
     //insert your code here
 
-      int read_head,deleted_head,write_head,deleting_head;
+      uint read_head,deleted_head,write_head,deleting_head;
       size_t length;
 public:
 
@@ -81,7 +81,7 @@ public:
 
     // insert your code here
 
-  return (size_t)((int)length-(write_head-deleted_head));
+  return (size_t)((uint)length-(write_head-deleted_head));
   }
 
   //
@@ -100,7 +100,7 @@ public:
   size_t write_reserve(size_t n){
     write_head=(write_head+(int)n);
 
-    return (size_t)((write_head-n)%((int)length));
+    return (size_t)((write_head-n)%((uint)length));
   }
 
   //
@@ -154,8 +154,8 @@ public:
   //
   size_t delete_reserve(size_t n){
     //insert your code here
-    deleting_head=(deleting_head+n);
-    return (size_t)((deleting_head-n)%((int)length));
+    deleting_head=(deleting_head+(uint)n);
+    return (size_t)((deleting_head-n)%((uint)length));
   }
 
 
@@ -181,7 +181,7 @@ public:
 
   //insert your code here
 
-      int read_head,write_head;
+      uint read_head,write_head;
       size_t length;
 
 public:
@@ -232,8 +232,8 @@ public:
   size_t read_reserve(size_t n){
 
     //insert your code here
-    read_head=(read_head+(int)n);
-    return (size_t)((read_head-n)%((int)length));
+    read_head=(read_head+(uint)n);
+    return (size_t)((read_head-n)%((uint)length));
   }
 
   //

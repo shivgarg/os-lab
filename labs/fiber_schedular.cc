@@ -30,21 +30,29 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	int& shell_run=*(pl->run_inst);
     int count=0;
     int arg=pl->arg;
+    hoh_debug(arg);
 	for(i=1;i<arg;i++){
         //hoh_debug("here");
-		for(j=1;j<arg;j++)
+		for(j=1;j<arg;j++){
 			for(k=1;k<arg;k++)
 				{
 					count++;
-                   // hoh_debug("in one "<<i << " "<< j << " "<< k<< " "<< arg);
+                    hoh_debug("in one "<<i << " "<< j << " "<< k<< " "<< arg);
                     ans=i*j/k;
-					//pre->saved_stack=0;
+					
                            // for(int jk=0;jk<5;jk++)
-                    //hoh_debug("yield\n");
-                    //stack_saverestore(f_stack,main_stack);
+                    
 				}
+               
+        }
+         pre->saved_stack=0;
+        hoh_debug("yield\n");
+        hoh_debug("yield\n");
+        stack_saverestore(f_stack,main_stack);
     }
-	ans=i*j/k+count;
+    count++;
+	ans=i*j/k;
+    hoh_debug(ans);
 	int po=0;
 	int p=ans;
     //hoh_debug("asas\n");
@@ -55,16 +63,18 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	}
 	po++;
 	retvalue[po]='\0';
+    if(ans<0)
+        ans+=1000000000;
 	for(i=0;i<po;i++)
 	{
  		retvalue[po-1-i]=digi1[ans%10];
  		ans=ans/10;
 	}
 	done=false;	
-	//hoh_debug("before final"<<(*run));
+	hoh_debug("before final");
 	shell_run--;
 	//hoh_debug("before final"<<(*run));
-    //pre->saved_stack=0;
+    pre->saved_stack=0;
           // for(i=0;i<5;i++)
     //hoh_debug("yield\n");
 	stack_saverestore(f_stack,main_stack);
@@ -92,10 +102,10 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 			t=true;
 		
 		}
-        pre->saved_stack=0;
+       // pre->saved_stack=0;
         // for(int ik=0;ik<5;ik++)
        // hoh_debug("yield\n");
-		stack_saverestore(f_stack,main_stack);
+		//stack_saverestore(f_stack,main_stack);
 	}
 	if(t)
 		ans=0;
@@ -118,9 +128,9 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	done=false;	
 	shell_run--;
 //	hoh_debug("before final");
-    pre->saved_stack=0;
+   // pre->saved_stack=0;
       // for(int i=0;i<5;i++)
-    hoh_debug("yield\n");
+    //hoh_debug("yield\n");
 
     stack_saverestore(f_stack,main_stack);
 
@@ -141,7 +151,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
     	ind++;
         //hoh_debug("ind "<< ind);
     }
-    
+   // hoh_debug(ind);
     if(ind!=6)
     {
     	//hoh_debug("ind run "<<(shellstate.scheduler_run+ind)%5<<" "<< ind);
@@ -161,11 +171,12 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
 
         }
         else{
+            //hoh_debug("asasa");
         preempt.saved_stack=&stackptrs[(shellstate.scheduler_run+ind)%5];
-        lapic.reset_timer_count(10000);
+        lapic.reset_timer_count(1);
        // hoh_debug("going to "<< (shellstate.scheduler_run+ind)%5);
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
-        //hoh_debug("context switched out\n");
+        hoh_debug("context switched out\n");
         lapic.reset_timer_count(0);
         //__asm("sti");
       
