@@ -27,8 +27,8 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	bool& done = *(pl->done);
 	int i=1,j=1,k=1;
 	int ans;
-	int& shell_run=*(pl->run_inst);
-    hoh_debug("inst cnt"<<*(pl->run_inst));
+	int* shell_run=(pl->run_inst);
+    //hoh_debug("inst cnt"<<*(pl->run_inst));
     int count=0;
     int arg=pl->arg;
     hoh_debug(arg);
@@ -70,13 +70,13 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 	{
  		retvalue[po-1-i]=digi1[ans%10];
  		ans=ans/10;
-	}
-	done=false;	
-	hoh_debug("before final");
-	shell_run--;
-    hoh_debug(shell_run);
-	//hoh_debug("before final"<<(*run));
+    }
     pre->saved_stack=0;
+    (*shell_run)--;
+    done=false; 
+    hoh_debug("before final");
+    hoh_debug(*shell_run);
+    //hoh_debug("before final"<<(*run));
           // for(i=0;i<5;i++)
     //hoh_debug("yield\n");
 	stack_saverestore(f_stack,main_stack);
@@ -127,11 +127,11 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
  		retvalue[po-1-i]=digi1[ans%10];
  		ans=ans/10;
 	}
-	done=false;	
-	shell_run--;
+    pre->saved_stack=0;
+    shell_run--;
+    done=false; 
     hoh_debug(shell_run);
-//	hoh_debug("before final");
-   // pre->saved_stack=0;
+//  hoh_debug("before final");
       // for(int i=0;i<5;i++)
     //hoh_debug("yield\n");
 
@@ -176,7 +176,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
         else{
             //hoh_debug("asasa");
         preempt.saved_stack=&stackptrs[(shellstate.scheduler_run+ind)%5];
-        lapic.reset_timer_count(1);
+        lapic.reset_timer_count(100);
        // hoh_debug("going to "<< (shellstate.scheduler_run+ind)%5);
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
        // hoh_debug("context switched out\n");
