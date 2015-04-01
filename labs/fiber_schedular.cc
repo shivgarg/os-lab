@@ -47,7 +47,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
                
         }
          pre->saved_stack=0;
-        // hoh_debug("yield\n");
+         hoh_debug("yield\n");
         // hoh_debug("yield\n");
         stack_saverestore(f_stack,main_stack);
     }
@@ -179,7 +179,7 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
         lapic.reset_timer_count(100);
        // hoh_debug("going to "<< (shellstate.scheduler_run+ind)%5);
     	stack_saverestore(main_stack,stackptrs[(shellstate.scheduler_run+ind)%5]);
-       // hoh_debug("context switched out\n");
+        hoh_debug("context switched out\n");
         lapic.reset_timer_count(0);
         //__asm("sti");
       

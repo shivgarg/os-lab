@@ -155,7 +155,7 @@ public:
   size_t delete_reserve(size_t n){
     //insert your code here
     deleting_head=(deleting_head+(uint)n);
-    return (size_t)((deleting_head-n)%((uint)length));
+    return (size_t)((deleting_head-(uint)n)%((uint)length));
   }
 
 
@@ -233,7 +233,7 @@ public:
 
     //insert your code here
     read_head=(read_head+(uint)n);
-    return (size_t)((read_head-n)%((uint)length));
+    return (size_t)((read_head-(uint)n)%((uint)length));
   }
 
   //
