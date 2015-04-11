@@ -63,9 +63,9 @@ nokey:
   //
   if(apps.render_flag && render_eq(apps.render_state, apps.rendertmp)){
     apps.render_state=apps.rendertmp;
-    apps.render_flag = true;
     goto norender;
   }
+  apps.render_flag = true;
 
   //can reserve space to write data
   if(!apps.channel0_writeport.write_canreserve(1)){
@@ -210,7 +210,9 @@ extern "C" void apps_reset(int rank, apps_t& apps, shm_t& shm, bitpool_t& pool4M
   hoh_debug(rank<<": Hello, serial!");
 
   //load elf
-  elf_load_helper(0, (uint32_t*)shm.get_shared(), apps.proc, pool4M);
+  if(rank==0){
+    elf_load_helper(0, (uint32_t*)shm.get_shared(), apps.proc, pool4M);
+  }
 
   if(rank==0){
     // Hello, world!

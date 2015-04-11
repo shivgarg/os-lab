@@ -17,6 +17,7 @@ void config_init(int rank, config_t& confg){
 
 struct core_t{
 public:
+  uint32_t    syscallmmio[16];
   core_t*     self;
   int         rank;
   addr_t      main_stack;
@@ -54,8 +55,8 @@ extern "C" void core_mem_init(int rank, addr_t masterro, addr_t masterrw, addr_t
   enum { PAGE_SIZE=4<<10 };
   bitpool_t pool_tmp(uint32_t(PAGE_SIZE),masterrw);
 
-  //addr_t from=masterrw+PAGE_SIZE*2;
-  //addr_t to=masterrw+(4<<20);
+  //addr_t from = masterrw         + PAGE_SIZE*2;
+  //addr_t to   = masterrw+(4<<20) - PAGE_SIZE;
 
   //for(addr_t p=from; p<to; p+=pool_tmp.datasize()){
   //  pool_tmp.add_mem(p,p+pool_tmp.datasize());

@@ -34,6 +34,7 @@ CXXFLAGS = -std=c++0x -ffreestanding -fno-rtti -fno-exceptions \
 
 #options specific for except.cc
 CXXFLAGS.x86/except.cc = $(NO_SIMD)
+CXXFLAGS.util/lib.cc   = $(NO_SIMD) -fno-tree-loop-distribute-patterns
 
 
 # simd
