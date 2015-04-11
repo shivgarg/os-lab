@@ -25,8 +25,15 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
 
   addr_t to = alloc(pool4M); 
 
-
-
+ 
+  proc.eip=
+  proc.eflags=
+  proc.rank=0;
+  proc.masterr0=0;
+  proc.masterrw=alloc(pool4M);
+  proc.sharedrw=0;		
+  proc.startip=
+  proc.stackend=
   // 
   // insert your code here
   //
