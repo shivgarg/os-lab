@@ -26,7 +26,7 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
 
   addr_t to = alloc(pool4M); 
 // ELF LOADED
-  /*for(int i=0;i<prog_num;i++)
+  for(int i=0;i<prog_num;i++)
   {
 	if(prog_header[i].p_type!=PT_LOAD){
 		continue;
@@ -47,15 +47,15 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
   proc.startip=(addr_t)header.e_entry;
   proc.stackend=(addr_t)((uint)proc.masterrw+pgsize-4096);
   proc.mmu.map_identity();
-  
+  proc.esp=(uint32_t)proc.stackend+4096-16; 
   proc.mmu.map_large(proc.masterrw,proc.masterrw,0x87,1);
   proc.mmu.map_large(to,to,0x85,1);
 //EMERGENCY STACK INIT
   memcpy(proc.masterrw+pgsize-4,(void*)&proc.sharedrw,4);
   memcpy(proc.masterrw+pgsize-8,(void*)&proc.masterrw,4);
   memcpy(proc.masterrw+pgsize-12,(void*)&proc.masterro,4);
-  memcpy(proc.masterrw+pgsize-4,(void*)&proc.rank,4);
-*/
+  memcpy(proc.masterrw+pgsize-16,(void*)&proc.rank,4);
+   
   // 
   // insert your code here
   //
@@ -70,6 +70,27 @@ static inline void ring3_step(preempt_t& preempt, process_t& proc, dev_lapic_t& 
   //
   //insert your code here
   //
+asm volatile(								     \
+ 	" #fxrstor " STR(process_offset_fpu_simd) "(%0)			\n\t"\
+	" movl " STR(process_offset_edi) "(%0), %%edi			\n\t"\
+	" movl " STR(process_offset_esi) "(%0), %%esi			\n\t"\		
+	" movl " STR(process_offset_ebp) "(%0), %%ebp			\n\t"\
+	" movl " STR(process_offset_ebx) "(%0), %%ebx			\n\t"\
+	" movl " STR(process_offset_eax) "(%0), %%eax			\n\t"\
+	" movl " STR(process_offset_ecx) "(%0), %%ecx			\n\t"\
+	" movl " STR(process_offset_edx) "(%0), %%edx			\n\t"\
+	" pushl $0x4							\n\t"\
+	" pushl " STR(process_offset_esp) "(%0)				\n\t"\
+	" pushl " STR(process_offset_eflags) "(%0)			\n\t"\
+	" pushl $0x3							\n\t"\
+	" pushl " STR(process_offset_eip) "(%0)				\n\t"\
+	" iret								\n\t"\	
+	:									\
+	:"a" (&proc)								\
+ 	:									\
+ 	);									
+
+
 
 }
 

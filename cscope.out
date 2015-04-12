@@ -1,4 +1,4 @@
-cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001467886
+cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001468529
 	@apps/devices/pci.h
 
 1 #´agm¨
@@ -157661,7 +157661,7 @@ e_’Œy
 ´oc
 .
 eæags
-=
+=0x3200;
 
 43 
 ´oc
@@ -157717,11 +157717,85 @@ ma¡”rw
 pgsize
 -4096);
 
-53 
+49 
+´oc
+.
+mmu
+.
+	`m­_id’t™y
+();
+
+51 
+´oc
+.
+mmu
+.
+	`m­_Ïrge
+Õroc.
+ma¡”rw
+,proc.masterrw,0x87,1);
+
+52 
+´oc
+.
+mmu
+.
+	`m­_Ïrge
+(
+to
+,to,0x85,1);
+
+54 
+	`memýy
+(
+´oc
+.
+ma¡”rw
++
+pgsize
+-4,(*)&´oc.
+sh¬edrw
+,4);
+
+55 
+	`memýy
+(
+´oc
+.
+ma¡”rw
++
+pgsize
+-8,(*)&proc.masterrw,4);
+
+56 
+	`memýy
+(
+´oc
+.
+ma¡”rw
++
+pgsize
+-12,(*)&´oc.
+ma¡”ro
+,4);
+
+57 
+	`memýy
+(
+´oc
+.
+ma¡”rw
++
+pgsize
+-4,(*)&´oc.
+¿nk
+,4);
+
+63 
 	}
 }
 
-58 
+68 
 šlše
  
 	$ršg3_¡•
@@ -157739,11 +157813,19 @@ dev_Ïpic_t
 Ïpic
 ){
 
-64 
+73 
+asm
+ volatile(
+
+77 : "a" (&
+´oc
+)
+
+83 
 	}
 }
 
-66 
+85 
 šlše
  
 	$ršg3_¡•_dÚe
@@ -157757,7 +157839,7 @@ dev_Ïpic_t
 Ïpic
 ){
 
-72 
+91 
 	}
 }
 
@@ -161166,6 +161248,10 @@ maš_¡ack
 9 
 asm
  volatile ("nop ");
+
+10 
+	`hoh_debug
+("in„ing3");
 
 11 
 	}
@@ -221983,6 +222069,34 @@ CHARCLASS_NAME_MAX
 
 	)
 
+	@/usr/include/bits/predefs.h
+
+19 #iâdeà
+_PREDEFS_H
+
+
+20 
+	#_PREDEFS_H
+
+
+	)
+
+22 #iâdeà
+_STDC_PREDEF_H
+
+
+27 
+	#__STDC_IEC_559__
+ 1
+
+	)
+
+28 
+	#__STDC_IEC_559_COMPLEX__
+ 1
+
+	)
+
 	@/usr/include/bits/stdlib-float.h
 
 19 #iâdeà
@@ -240104,8 +240218,8 @@ STA_CLK
 .
 1
 /usr/include
-133
-3089
+134
+3117
 apps/devices/pci.h
 apps/generated/lpc_kbd.dev.h
 apps/generated/pci_hdr0.dev.h
@@ -240208,6 +240322,7 @@ x86/main.h
 /usr/include/bits/endian.h
 /usr/include/bits/posix1_lim.h
 /usr/include/bits/posix2_lim.h
+/usr/include/bits/predefs.h
 /usr/include/bits/stdlib-float.h
 /usr/include/bits/stdlib-ldbl.h
 /usr/include/bits/stdlib.h

@@ -7,7 +7,7 @@
 static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps){
 
   asm volatile ("nop ");
-
+  hoh_debug("in ring3");
 }
 
 
