@@ -1,4 +1,4 @@
-cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001467131
+cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001467886
 	@apps/devices/pci.h
 
 1 #¥agm®
@@ -157479,7 +157479,13 @@ c‹e_off£t_maö°ack
 	~<Æg‹ôhm
 >
 
-12 
+11 
+	#pgsize
+ 4096*1024
+
+	)
+
+13 
 ölöe
  
 	$ñf_lﬂd
@@ -157501,11 +157507,11 @@ bôpoﬁ_t
 poﬁ4M
 ){
 
-13 íum {
+14 íum {
 PAGE_SIZE
 =4<<20};
 
-15 
+16 
 	`hoh_as£π
 (
 	`ñf_ˇƒód_¥og_hódî
@@ -157515,7 +157521,7 @@ PAGE_SIZE
 ‰omsize
 ), "XXX");
 
-16 c⁄° 
+17 c⁄° 
 Elf32_Ehdr
 & 
 hódî
@@ -157523,7 +157529,7 @@ hódî
 ‰om
 );
 
-17 
+18 
 uöt32_t
  
 ¥og_off£t
@@ -157533,7 +157539,7 @@ hódî
 e_phoff
 ;
 
-18 c⁄° 
+19 c⁄° 
 Elf32_Phdr
 * 
 ¥og_hódî
@@ -157543,7 +157549,7 @@ Elf32_Phdr
 ¥og_off£t
 );
 
-19 
+20 
 uöt32_t
  
 ¥og_num
@@ -157553,7 +157559,7 @@ hódî
 e_phnum
 ;
 
-21 
+22 
 	`ñf_dump
 (
 ‰om
@@ -157561,7 +157567,7 @@ e_phnum
 ‰omsize
 );
 
-23 
+24 
 size_t
  
 num∑ges
@@ -157573,13 +157579,13 @@ num∑ges
 ¥og_num
 );
 
-24 
+25 
 	`hoh_as£π
 (
 num∑ges
  == 1, "XXX");
 
-26 
+27 
 addr_t
  
 to
@@ -157589,11 +157595,133 @@ to
 poﬁ4M
 );
 
+29 
+i
+=0;i<
+¥og_num
+;i++)
+
+31 if(
+¥og_hódî
+[
+i
+].
+p_ty≥
+!=
+PT_LOAD
+){
+
 34 
+	`mem˝y
+(
+to
++
+¥og_hódî
+[
+i
+].
+p_vaddr
+,(*)’rog_hódî[i].
+p_off£t
++
+‰om
+),¥og_hódî[i].
+p_memsz
+);
+
+35 
+	`mem£t
+(
+to
++
+¥og_hódî
+[
+i
+].
+p_vaddr
++¥og_hódî[i].
+p_fûesz
+,0,¥og_hódî[i].
+p_memsz
+-prog_header[i].p_filesz);
+
+41 
+¥oc
+.
+eù
+=(
+uöt
+)
+hódî
+.
+e_íåy
+;
+
+42 
+¥oc
+.
+eÊags
+=
+
+43 
+¥oc
+.
+ønk
+=0;
+
+44 
+¥oc
+.
+ma°îro
+=0;
+
+45 
+¥oc
+.
+ma°îrw
+=
+	`Æloc
+(
+poﬁ4M
+);
+
+46 
+¥oc
+.
+sh¨edrw
+=0;
+
+47 
+¥oc
+.
+°¨tù
+=(
+addr_t
+)
+hódî
+.
+e_íåy
+;
+
+48 
+¥oc
+.
+°ackíd
+=(
+addr_t
+)((
+uöt
+Ìroc.
+ma°îrw
++
+pgsize
+-4096);
+
+53 
 	}
 }
 
-39 
+58 
 ölöe
  
 	$rög3_°ï
@@ -157611,11 +157739,11 @@ dev_œpic_t
 œpic
 ){
 
-45 
+64 
 	}
 }
 
-47 
+66 
 ölöe
  
 	$rög3_°ï_d⁄e
@@ -157629,7 +157757,7 @@ dev_œpic_t
 œpic
 ){
 
-53 
+72 
 	}
 }
 
@@ -161162,6 +161290,76 @@ maö_°ack
 * 
 ≠ps
 );
+
+	@ring3/app1/devices/lapic.h
+
+1 #¥agm®
+⁄˚
+
+
+3 
+	~"gíî©ed/x≠ic.dev.h
+"
+
+4 
+	~"devi˚s/c⁄fig.h
+"
+
+6 ˛as†
+	cdev_œpic_t
+{
+
+7 
+	mpublic
+:
+
+8 
+	$dev_œpic_t
+(
+addr_t
+ 
+ba£
+){
+
+10 
+public
+:
+
+11 
+	$dump
+(){
+
+12 
+	}
+}
+
+13 
+	$ª£t_timî_cou¡
+(
+uöt32_t
+ 
+cou¡
+){
+
+14 
+	}
+}
+
+15 
+	$ª£t_timî_cou¡
+(
+uöt32_t
+ 
+cou¡
+, 
+x≠ic_divide_t
+ 
+div_vÆ
+){
+
+16 
+	}
+}
 
 	@ring3/app1/x86/except.cc
 
@@ -221785,34 +221983,6 @@ CHARCLASS_NAME_MAX
 
 	)
 
-	@/usr/include/bits/predefs.h
-
-19 #i‚de‡
-_PREDEFS_H
-
-
-20 
-	#_PREDEFS_H
-
-
-	)
-
-22 #i‚de‡
-_STDC_PREDEF_H
-
-
-27 
-	#__STDC_IEC_559__
- 1
-
-	)
-
-28 
-	#__STDC_IEC_559_COMPLEX__
- 1
-
-	)
-
 	@/usr/include/bits/stdlib-float.h
 
 19 #i‚de‡
@@ -239935,7 +240105,7 @@ STA_CLK
 1
 /usr/include
 133
-3090
+3089
 apps/devices/pci.h
 apps/generated/lpc_kbd.dev.h
 apps/generated/pci_hdr0.dev.h
@@ -239979,6 +240149,7 @@ labs/shell.h
 labs/vgatext.h
 ring3/app1/apps/labs.cc
 ring3/app1/apps/labs.h
+ring3/app1/devices/lapic.h
 ring3/app1/x86/except.cc
 ring3/app1/x86/except.h
 ring3/app1/x86/main.cc
@@ -240037,7 +240208,6 @@ x86/main.h
 /usr/include/bits/endian.h
 /usr/include/bits/posix1_lim.h
 /usr/include/bits/posix2_lim.h
-/usr/include/bits/predefs.h
 /usr/include/bits/stdlib-float.h
 /usr/include/bits/stdlib-ldbl.h
 /usr/include/bits/stdlib.h

@@ -8,6 +8,7 @@
 #include <stddef.h>
 #include <algorithm>
 
+#define pgsize 4096*1024
 
 static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpool_t& pool4M){
   enum {PAGE_SIZE=4<<20};
@@ -24,16 +25,37 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
   hoh_assert(numpages == 1, "XXX");
 
   addr_t to = alloc(pool4M); 
+// ELF LOADED
+  /*for(int i=0;i<prog_num;i++)
+  {
+	if(prog_header[i].p_type!=PT_LOAD){
+		continue;
+	}
+	memcpy(to+prog_header[i].p_vaddr,(void *)(prog_header[i].p_offset+from),prog_header[i].p_memsz);
+	memset(to+prog_header[i].p_vaddr+prog_header[i].p_filesz,0,prog_header[i].p_memsz-prog_header[i].p_filesz);
 
- 
-  proc.eip=
-  proc.eflags=
+	
+  }
+	
+ //PROC INITIALISATION
+  proc.eip=(uint)header.e_entry;
+  proc.eflags=0x3200;
   proc.rank=0;
-  proc.masterr0=0;
+  proc.masterro=0;
   proc.masterrw=alloc(pool4M);
   proc.sharedrw=0;		
-  proc.startip=
-  proc.stackend=
+  proc.startip=(addr_t)header.e_entry;
+  proc.stackend=(addr_t)((uint)proc.masterrw+pgsize-4096);
+  proc.mmu.map_identity();
+  
+  proc.mmu.map_large(proc.masterrw,proc.masterrw,0x87,1);
+  proc.mmu.map_large(to,to,0x85,1);
+//EMERGENCY STACK INIT
+  memcpy(proc.masterrw+pgsize-4,(void*)&proc.sharedrw,4);
+  memcpy(proc.masterrw+pgsize-8,(void*)&proc.masterrw,4);
+  memcpy(proc.masterrw+pgsize-12,(void*)&proc.masterro,4);
+  memcpy(proc.masterrw+pgsize-4,(void*)&proc.rank,4);
+*/
   // 
   // insert your code here
   //
