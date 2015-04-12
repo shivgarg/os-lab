@@ -1,4 +1,4 @@
-cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001468529
+cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001469340
 	@apps/devices/pci.h
 
 1 #¥agm®
@@ -157595,13 +157595,13 @@ to
 poﬁ4M
 );
 
-29 
+30 
 i
 =0;i<
 ¥og_num
 ;i++)
 
-31 if(
+32 if(
 ¥og_hódî
 [
 i
@@ -157611,7 +157611,7 @@ p_ty≥
 PT_LOAD
 ){
 
-34 
+35 
 	`mem˝y
 (
 to
@@ -157626,10 +157626,10 @@ p_off£t
 +
 ‰om
 ),¥og_hódî[i].
-p_memsz
+p_fûesz
 );
 
-35 
+36 
 	`mem£t
 (
 to
@@ -157645,17 +157645,27 @@ p_fûesz
 p_memsz
 -prog_header[i].p_filesz);
 
-41 
+40 
 ¥oc
 .
 eù
 =(
 uöt
-)
+)(
 hódî
 .
 e_íåy
-;
++
+to
+);
+
+41 
+	`hoh_debug
+("PROC EIP"<< 
+¥oc
+.
+eù
+);
 
 42 
 ¥oc
@@ -157697,11 +157707,13 @@ sh¨edrw
 °¨tù
 =(
 addr_t
-)
+)(
 hódî
 .
 e_íåy
-;
++
+to
+);
 
 48 
 ¥oc
@@ -157725,7 +157737,25 @@ mmu
 	`m≠_idítôy
 ();
 
+50 
+¥oc
+.
+e•
+=(
+uöt32_t
+Ìroc.
+°ackíd
++4096-16;
+
 51 
+	`hoh_debug
+("PROC ESP"<< 
+¥oc
+.
+e•
+);
+
+53 
 ¥oc
 .
 mmu
@@ -157735,7 +157765,7 @@ mmu
 ma°îrw
 ,proc.masterrw,0x87,1);
 
-52 
+54 
 ¥oc
 .
 mmu
@@ -157745,7 +157775,7 @@ mmu
 to
 ,to,0x85,1);
 
-54 
+56 
 	`mem˝y
 (
 ¥oc
@@ -157757,7 +157787,7 @@ pgsize
 sh¨edrw
 ,4);
 
-55 
+57 
 	`mem˝y
 (
 ¥oc
@@ -157767,7 +157797,7 @@ ma°îrw
 pgsize
 -8,(*)&proc.masterrw,4);
 
-56 
+58 
 	`mem˝y
 (
 ¥oc
@@ -157779,7 +157809,7 @@ pgsize
 ma°îro
 ,4);
 
-57 
+59 
 	`mem˝y
 (
 ¥oc
@@ -157787,15 +157817,15 @@ ma°îro
 ma°îrw
 +
 pgsize
--4,(*)&¥oc.
+-16,(*)&¥oc.
 ønk
 ,4);
 
-63 
+65 
 	}
 }
 
-68 
+70 
 ölöe
  
 	$rög3_°ï
@@ -157813,19 +157843,93 @@ dev_œpic_t
 œpic
 ){
 
-73 
-asm
- volatile(
-
-77 : "a" (&
+76 
 ¥oc
-)
+.
+mmu
+.
+	`ª£t
+();
 
-83 
+77 
+asm
+ volatile( \
+
+78 " #fxr°‹ " 
+	`STR
+(
+¥o˚ss_off£t_Âu_simd
+) "(%0) \n\t"\
+
+80 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_edi
+) "(%0), %%edi \n\t"\
+
+81 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_esi
+) "(%0), %%esi \n\t"\
+
+82 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_ebp
+) "(%0), %%ebp \n\t"\
+
+83 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_ebx
+) "(%0), %%ebx \n\t"\
+
+84 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_óx
+) "(%0), %%eax \n\t"\
+
+85 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_ecx
+) "(%0), %%ecx \n\t"\
+
+87 "Öush»" 
+	`STR
+(
+¥o˚ss_off£t_e•
+) "(%0) \n\t"\
+
+88 "Öush»" 
+	`STR
+(
+¥o˚ss_off£t_eÊags
+) "(%0) \n\t"\
+
+90 "Öush»" 
+	`STR
+(
+¥o˚ss_off£t_eù
+) "(%0) \n\t"\
+
+91 " mov»" 
+	`STR
+(
+¥o˚ss_off£t_edx
+) "(%0), %%edx \n\t"\
+
+94 :"d" (&
+¥oc
+) \
+
+100 
 	}
 }
 
-85 
+102 
 ölöe
  
 	$rög3_°ï_d⁄e
@@ -157839,7 +157943,7 @@ dev_œpic_t
 œpic
 ){
 
-91 
+108 
 	}
 }
 
