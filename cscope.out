@@ -1,4 +1,4 @@
-cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001469653
+cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001469645
 	@apps/devices/pci.h
 
 1 #¥agm®
@@ -157985,7 +157985,13 @@ dev_œpic_t
 œpic
 ){
 
-120 
+119 
+œpic
+.
+	`ª£t_timî_cou¡
+(0);
+
+122 
 	}
 }
 
@@ -161397,17 +161403,13 @@ asm
 
 12 
 i
-=0;i<10000;i++)
+=0;i<100;i++)
 
 13 
 	`hoh_debug
 ("IIIIIIIIIIII "<<
 i
 );
-
-14 
-	`hoh_debug
-("inÑing3 wdwfefwef");
 
 15 
 	}

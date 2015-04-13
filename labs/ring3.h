@@ -116,6 +116,8 @@ static inline void ring3_step_done(process_t& proc, dev_lapic_t& lapic){
   //
   //insert your code here
   //
+	lapic.reset_timer_count(0);
+
 
 }
 
