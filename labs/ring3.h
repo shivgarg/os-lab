@@ -72,20 +72,27 @@ static inline void ring3_step(preempt_t& preempt, process_t& proc, dev_lapic_t& 
   //
   //insert your code here
   //
+	asm volatile(							\
+		"movl %%cr3 ,%%esi				\n\t"\
+		"movl %%esi ,%%gs:32				\n\t"\
+		:
+		:
+		);
 
 	proc.mmu.reset();
+	lapic.reset_timer_count(1000000);
 asm volatile(								     \
- 	" #fxrstor " STR(process_offset_fpu_simd) "(%0)			\n\t"\
+ 	" fxrstor " STR(process_offset_edi) "(%0)			\n\t"\
 	" movl " STR(process_offset_edi) "(%0), %%edi			\n\t"\
 	" movl " STR(process_offset_esi) "(%0), %%esi			\n\t"\
 	" movl " STR(process_offset_ebp) "(%0), %%ebp			\n\t"\
 	" movl " STR(process_offset_ebx) "(%0), %%ebx			\n\t"\
 	" movl " STR(process_offset_eax) "(%0), %%eax			\n\t"\
 	" movl " STR(process_offset_ecx) "(%0), %%ecx			\n\t"\
-	" pushl $0x4											\n\t"\
+	" pushl $0x23											\n\t"\
 	" pushl " STR(process_offset_esp) "(%0)					\n\t"\
 	" pushl " STR(process_offset_eflags) "(%0)				\n\t"\
-	" pushl $0x3											\n\t"\
+	" pushl $0x1b											\n\t"\
 	" pushl " STR(process_offset_eip) "(%0)					\n\t"\
 	" movl " STR(process_offset_edx) "(%0), %%edx			\n\t"\
 	" iretl													\n\t"\
@@ -93,7 +100,7 @@ asm volatile(								     \
 	:"d" (&proc)												 \
  	:															 \
  	);									
-
+	
 
 
 }

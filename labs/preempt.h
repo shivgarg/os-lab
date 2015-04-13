@@ -26,6 +26,8 @@
 struct preempt_t{
   // your data structure, if any
   addr_t *saved_stack; //feel free to change it - provided as an example
+  addr_t *kernel_pgt;
+  addr_t *proc;
 
 };
 
