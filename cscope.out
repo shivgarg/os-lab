@@ -1,4 +1,4 @@
-cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001469554
+cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001469653
 	@apps/devices/pci.h
 
 1 #¥agm®
@@ -157423,13 +157423,13 @@ addr_t
 
 29 
 addr_t
- *
+ 
 	mkî√l_pgt
 ;
 
 30 
 addr_t
- *
+ 
 	m¥oc
 ;
 
@@ -157871,11 +157871,21 @@ dev_œpic_t
 œpic
 ){
 
-75 
+78 
+œpic
+.
+	`ª£t_timî_cou¡
+(10000000);
+
+79 
 asm
  volatile( \
 
-82 
+86 :"d" (&
+¥oc
+) \
+
+89 
 ¥oc
 .
 mmu
@@ -157883,91 +157893,85 @@ mmu
 	`ª£t
 ();
 
-83 
-œpic
-.
-	`ª£t_timî_cou¡
-(1000000);
-
-84 
+90 
 asm
  volatile( \
 
-85 " fxr°‹ " 
+91 " fxr°‹ " 
 	`STR
 (
 ¥o˚ss_off£t_edi
 ) "(%0) \n\t"\
 
-86 " mov»" 
+92 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_edi
 ) "(%0), %%edi \n\t"\
 
-87 " mov»" 
+93 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_esi
 ) "(%0), %%esi \n\t"\
 
-88 " mov»" 
+94 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_ebp
 ) "(%0), %%ebp \n\t"\
 
-89 " mov»" 
+95 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_ebx
 ) "(%0), %%ebx \n\t"\
 
-90 " mov»" 
+96 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_óx
 ) "(%0), %%eax \n\t"\
 
-91 " mov»" 
+97 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_ecx
 ) "(%0), %%ecx \n\t"\
 
-93 "Öush»" 
+99 "Öush»" 
 	`STR
 (
 ¥o˚ss_off£t_e•
 ) "(%0) \n\t"\
 
-94 "Öush»" 
+100 "Öush»" 
 	`STR
 (
 ¥o˚ss_off£t_eÊags
 ) "(%0) \n\t"\
 
-96 "Öush»" 
+102 "Öush»" 
 	`STR
 (
 ¥o˚ss_off£t_eù
 ) "(%0) \n\t"\
 
-97 " mov»" 
+103 " mov»" 
 	`STR
 (
 ¥o˚ss_off£t_edx
 ) "(%0), %%edx \n\t"\
 
-100 :"d" (&
+106 :"d" (&
 ¥oc
 ) \
 
-106 
+112 
 	}
 }
 
-108 
+114 
 ölöe
  
 	$rög3_°ï_d⁄e
@@ -157981,7 +157985,7 @@ dev_œpic_t
 œpic
 ){
 
-114 
+120 
 	}
 }
 
@@ -158019,7 +158023,7 @@ _«me
 _f
 ) " \n\t"\
 
-43 
+53 
 
 	)
 
@@ -161373,7 +161377,7 @@ bg
 	~"≠ps/œbs.h
 "
 
-7 
+9 
 	$≠ps_lo›_°ï
 (
 ønk
@@ -161387,19 +161391,29 @@ maö_°ack
 ≠ps
 ){
 
-9 
+11 
 asm
  volatile ("nop ");
 
-10 
-	`hoh_debug
-("inÑing3");
+12 
+i
+=0;i<10000;i++)
 
-11 
+13 
+	`hoh_debug
+("IIIIIIIIIIII "<<
+i
+);
+
+14 
+	`hoh_debug
+("inÑing3 wdwfefwef");
+
+15 
 	}
 }
 
-18 "C" 
+22 "C" 
 	$≠ps_ª£t
 (
 ønk
@@ -161413,11 +161427,11 @@ bôpoﬁ_t
 poﬁ4k
 ){
 
-21 
+25 
 	}
 }
 
-27 "C" 
+31 "C" 
 	$≠ps_lo›
 (
 ønk
@@ -161431,7 +161445,7 @@ pmaö_°ack
 ∑µs
 ){
 
-28 
+32 
 addr_t
 & 
 maö_°ack
@@ -161439,7 +161453,7 @@ maö_°ack
 pmaö_°ack
 ;
 
-29 
+33 
 ≠ps_t
 & 
 ≠ps
@@ -161447,19 +161461,19 @@ pmaö_°ack
 ∑µs
 ;
 
-31 
+35 
 uöt32_t
  
 e•
 ;
 
-32 
+36 
 asm
  vﬁ©ûê("mov %%e•,%0":"Ù"(
 e•
 )::);
 
-35 
+39 
 	`≠ps_lo›_°ï
 (
 ønk
@@ -161469,7 +161483,7 @@ maö_°ack
 ≠ps
 );
 
-38 
+42 
 	}
 }
 
