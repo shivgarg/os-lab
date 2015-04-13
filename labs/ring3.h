@@ -25,29 +25,31 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
   hoh_assert(numpages == 1, "XXX");
 
   addr_t to = alloc(pool4M); 
+
 // ELF LOADED
   for(int i=0;i<prog_num;i++)
   {
 	if(prog_header[i].p_type!=PT_LOAD){
 		continue;
 	}
-	memcpy(to+prog_header[i].p_vaddr,(void *)(prog_header[i].p_offset+from),prog_header[i].p_memsz);
+	memcpy(to+prog_header[i].p_vaddr,(void *)(prog_header[i].p_offset+from),prog_header[i].p_filesz);
 	memset(to+prog_header[i].p_vaddr+prog_header[i].p_filesz,0,prog_header[i].p_memsz-prog_header[i].p_filesz);
-
-	
   }
 	
  //PROC INITIALISATION
-  proc.eip=(uint)(to+header.e_entry);
-  proc.eflags=0x3000;
+  proc.eip=(uint)(header.e_entry+to);
+  hoh_debug("PROC EIP"<< proc.eip);
+  proc.eflags=0x3200;
   proc.rank=0;
   proc.masterro=0;
   proc.masterrw=alloc(pool4M);
   proc.sharedrw=0;		
-  proc.startip=(addr_t)(to+header.e_entry);
+  proc.startip=(addr_t)(header.e_entry+to);
   proc.stackend=(addr_t)((uint)proc.masterrw+pgsize-4096);
   proc.mmu.map_identity();
   proc.esp=(uint32_t)proc.stackend+4096-16; 
+  hoh_debug("PROC ESP"<< proc.esp);
+
   proc.mmu.map_large(proc.masterrw,proc.masterrw,0x87,1);
   proc.mmu.map_large(to,to,0x85,1);
 //EMERGENCY STACK INIT
@@ -70,32 +72,35 @@ static inline void ring3_step(preempt_t& preempt, process_t& proc, dev_lapic_t& 
   //insert your code here
   //
 
+	asm volatile(							\
+		"movl %%cr3 ,%%esi				\n\t"\
+		"movl %%esi ,%%gs:32				\n\t"\
+		:
+		:
+		);
+
+	proc.mmu.reset();
+	lapic.reset_timer_count(1000000);
 asm volatile(								     \
- 	" #fxrstor " STR(process_offset_fpu_simd) "(%0)			\n\t"\
+ 	" fxrstor " STR(process_offset_edi) "(%0)			\n\t"\
 	" movl " STR(process_offset_edi) "(%0), %%edi			\n\t"\
 	" movl " STR(process_offset_esi) "(%0), %%esi			\n\t"\
 	" movl " STR(process_offset_ebp) "(%0), %%ebp			\n\t"\
 	" movl " STR(process_offset_ebx) "(%0), %%ebx			\n\t"\
 	" movl " STR(process_offset_eax) "(%0), %%eax			\n\t"\
 	" movl " STR(process_offset_ecx) "(%0), %%ecx			\n\t"\
-  " pushl %%edx                                 \n\t"\
-  " movl " STR(process_offset_edx) "(%%edx), %%edx     \n\t"\
-  " pushl %%edx                                      \n\t"\
-  " movl 4(%%esp) ,%%edx                               \n\t"\
-  " movl " STR(process_offset_mmu) "(%%edx), %%edx     \n\t"\
-  " movl  %%edx,%%cr3                                \n\t"\
-  " addl $0x8 , %%esp                                        \n\t"\
-	" pushl $0x4							\n\t"\
-	" pushl " STR(process_offset_esp) "(%0)				\n\t"\
-	" pushl " STR(process_offset_eflags) "(%0)			\n\t"\
-	" pushl $0x3							\n\t"\
-	" pushl " STR(process_offset_eip) "(%0)				\n\t"\
-	" iretl								\n\t"\
-	:									\
-	:"d" (&proc)								\
- 	:									\
+	" pushl $0x23											\n\t"\
+	" pushl " STR(process_offset_esp) "(%0)					\n\t"\
+	" pushl " STR(process_offset_eflags) "(%0)				\n\t"\
+	" pushl $0x1b											\n\t"\
+	" pushl " STR(process_offset_eip) "(%0)					\n\t"\
+	" movl " STR(process_offset_edx) "(%0), %%edx			\n\t"\
+	" iretl													\n\t"\
+	:															 \
+	:"d" (&proc)												 \
+ 	:															 \
  	);									
-
+	
 
 
 }

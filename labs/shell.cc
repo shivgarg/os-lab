@@ -178,7 +178,7 @@ void shell_update(uint8_t scankey, shellstate_t& stateinout){
       stateinout.index%=22;
       stateinout.char_ind=0;
       stateinout.change=1-stateinout.change;
-                   stateinout.output=0;
+      stateinout.output=0;
      // hoh_debug("inp_ind "<<stateinout.inp_ind);
       if(stateinout.inp[(stateinout.inp_ind+20)%22][0]=='f' && stateinout.inp[(stateinout.inp_ind+20)%22][1]=='u' && stateinout.inp[(stateinout.inp_ind+20)%22][2]=='n' && stateinout.inp[(stateinout.inp_ind+20)%22][3]==' ')
       {

@@ -18,7 +18,7 @@
 
 
 
-void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
+void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre,int* change){
 	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
 	hoh_debug("running\n");
 	addr_t& main_stack=*pmain_stack;
@@ -76,6 +76,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
     done=false; 
     hoh_debug("before final");
     hoh_debug(*shell_run);
+    *change=1-*change;
     //hoh_debug("before final"<<(*run));
           // for(i=0;i<5;i++)
     //hoh_debug("yield\n");
@@ -84,7 +85,7 @@ void one(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
 
 }
 
-void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
+void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre,int* change){
 	char digi1[]={'0','1','2','3','4','5','6','7','8','9'};
 	hoh_debug("running\n");
 	addr_t& main_stack=*pmain_stack;
@@ -131,6 +132,7 @@ void two(addr_t* pmain_stack, addr_t* pf_stack, pair_int * pl,preempt_t *pre){
     shell_run--;
     done=false; 
     hoh_debug(shell_run);
+    *change=1-*change;
 //  hoh_debug("before final");
       // for(int i=0;i<5;i++)
     //hoh_debug("yield\n");
@@ -164,11 +166,11 @@ void shell_step_fiber_schedular(shellstate_t& shellstate, addr_t& main_stack,pre
             uint32_t stk_off=((shellstate.scheduler_run+ind)%5+1)*((uint32_t)arrays_size)/10;
             //(*(shellstate.fibs[(shellstate.scheduler_run+ind)%5].run_inst))++;
             if(shellstate.fibs[(shellstate.scheduler_run+ind)%5].fun==1){
-                stack_init4(stackptrs[(shellstate.scheduler_run+ind)%5],arrays,stk_off,&one,&main_stack,&stackptrs[(shellstate.scheduler_run+ind)%5],&shellstate.fibs[(shellstate.scheduler_run+ind)%5],&preempt);            
+                stack_init5(stackptrs[(shellstate.scheduler_run+ind)%5],arrays,stk_off,&one,&main_stack,&stackptrs[(shellstate.scheduler_run+ind)%5],&shellstate.fibs[(shellstate.scheduler_run+ind)%5],&preempt,&shellstate.change);            
             }
             else
             {
-                stack_init4(stackptrs[(shellstate.scheduler_run+ind)%5],arrays,stk_off,&two,&main_stack,&stackptrs[(shellstate.scheduler_run+ind)%5],&shellstate.fibs[(shellstate.scheduler_run+ind)%5],&preempt);            
+                stack_init5(stackptrs[(shellstate.scheduler_run+ind)%5],arrays,stk_off,&two,&main_stack,&stackptrs[(shellstate.scheduler_run+ind)%5],&shellstate.fibs[(shellstate.scheduler_run+ind)%5],&preempt,&shellstate.change);            
             }
 
 
