@@ -57,7 +57,6 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
   memcpy(proc.masterrw+pgsize-8,(void*)&proc.masterrw,4);
   memcpy(proc.masterrw+pgsize-12,(void*)&proc.masterro,4);
   memcpy(proc.masterrw+pgsize-16,(void*)&proc.rank,4);
-   
   // 
   // insert your code here
   //
