@@ -4,15 +4,14 @@
 //
 // app step
 //
-int i=0;
+
 
 static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps){
 
   asm volatile ("nop ");
-  hoh_debug("in ring3");
-  i++;
-  hoh_debug("I "<< i );
-
+  for(int i=0;i<100;i++)
+  hoh_debug("IIIIIIIIIIII "<<i);
+//hoh_debug("in ring3 wdwfefwef");
 }
 
 

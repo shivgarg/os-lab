@@ -72,15 +72,20 @@ static inline void ring3_step(preempt_t& preempt, process_t& proc, dev_lapic_t& 
   //insert your code here
   //
 
+
+	//hoh_debug()
+	lapic.reset_timer_count(10000000);
 	asm volatile(							\
+		" cli							\n\t"\
 		"movl %%cr3 ,%%esi				\n\t"\
-		"movl %%esi ,%%gs:32				\n\t"\
-		:
-		:
+		"movl %%esi ,%%gs:28				\n\t"\
+		"movl %%edx,	%%esi					\n\t"\	
+		"movl %%esi, %%gs:32				\n\t"\
+		:										\			
+		:"d" (&proc)							\
 		);
 
 	proc.mmu.reset();
-	lapic.reset_timer_count(1000000);
 asm volatile(								     \
  	" fxrstor " STR(process_offset_edi) "(%0)			\n\t"\
 	" movl " STR(process_offset_edi) "(%0), %%edi			\n\t"\
@@ -110,6 +115,8 @@ static inline void ring3_step_done(process_t& proc, dev_lapic_t& lapic){
   //
   //insert your code here
   //
+	lapic.reset_timer_count(0);
+
 
 }
 
