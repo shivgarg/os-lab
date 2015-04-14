@@ -80,7 +80,7 @@ extern "C" void core_loop(int rank, core_t* p_core){
   hoh_assert(rank == core.rank, "XXX");
   hoh_debug(rank<<": core_loop begin");
 
-  apps_loop(core.rank, &core.main_stack, &core.preempt, &core.apps, &core.hal.lapic, &core.shm);
+  apps_loop(core.rank, &core.main_stack, &core.preempt, &core.apps, &core.hal.lapic, &core.shm, &core.pool4M);
 }
 
 
