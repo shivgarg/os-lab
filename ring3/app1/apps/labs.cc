@@ -11,6 +11,9 @@ static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps){
   asm volatile ("nop ");
   for(int i=0;i<100;i++)
   hoh_debug("IIIIIIIIIIII "<<i);
+	int *p=0;
+	hoh_debug("aasda"<<*p);
+
 //hoh_debug("in ring3 wdwfefwef");
 }
 

@@ -1,4 +1,4 @@
-cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001469645
+cscope 15 $HOME/Documents/sem6/OS/Labs/hohlabs               0001470974
 	@apps/devices/pci.h
 
 1 #´agm¨
@@ -17025,13 +17025,17 @@ __DN
 	~"­ps/Ïbs.h
 "
 
-3 
+2 
+	~"Ïbs/ršg3_downÿÎ.h
+"
+
+4 
 »nd”¡©e_t
  
 	tsh¬edmesg_t
 ;
 
-5 
+6 
 šlše
  
 	gchªÃls_t
@@ -17045,7 +17049,7 @@ shm_t
 shm
 ){
 
-6 
+7 
 addr_t
  
 p
@@ -17057,17 +17061,17 @@ shm
 Ùh”cÜe
 );
 
-7  *(
+8  *(
 chªÃls_t
 *)
 p
 ;
 
-8 
+9 
 	}
 }
 
-11 
+12 
 šlše
  
 	gchªÃl_t
@@ -17081,7 +17085,7 @@ shm_t
 shm
 ){
 
-12  
+13  
 	`chªÃls_g‘
 (
 Ùh”cÜe
@@ -17091,11 +17095,11 @@ shm
 chªÃl0_m‘a
 ;
 
-13 
+14 
 	}
 }
 
-15 
+16 
 šlše
  
 	gsh¬edmesg_t
@@ -17113,7 +17117,7 @@ size_t
 off£t
 ){
 
-16  
+17  
 	`chªÃls_g‘
 (
 Ùh”cÜe
@@ -17129,11 +17133,11 @@ chªÃl0_size
 d©a
 ;
 
-17 
+18 
 	}
 }
 
-23 
+24 
 	$­ps_loÝ_¡•
 (
 ¿nk
@@ -17157,43 +17161,47 @@ dev_Ïpic_t
 shm_t
 & 
 shm
+, 
+b™poÞ_t
+& 
+poÞ4M
 ){
 
-24 if(
+25 if(
 ¿nk
 ==0){
 
-25 if(
+26 if(
 ­ps
 .
 ¡©e
 ==1){
 
-26 
+27 
 ¿nk0_ršg3_dÚe
 ;
 
-28 
+29 
 ¿nk0
 ;
 
-29 }if(
+30 }if(
 ¿nk
 ==1){
 
-30 
+31 
 ¿nk1
 ;
 
-33 
+34 
 dÚe
 ;
 
-34 
+35 
 ¿nk0
 :
 
-36 if(!
+37 if(!
 Íc_kbd
 ::
 	`has_key
@@ -17201,11 +17209,11 @@ dÚe
 ­ps
 .lpc_kbd)){
 
-37 
+38 
 nokey
 ;
 
-40 
+41 
 ­ps
 .
 šput
@@ -17215,17 +17223,17 @@ nokey
 	`g‘_key
 (apps.lpc_kbd);
 
-42 if(
+43 if(
 ­ps
 .
 šput
  & 0x80){
 
-43 
+44 
 nokey
 ;
 
-47 
+48 
 	`sh–l_upd©e
 (
 ­ps
@@ -17235,7 +17243,7 @@ nokey
 sh–l_¡©e
 );
 
-49 if(
+50 if(
 Íc_kbd
 ::
 	`has_key
@@ -17243,15 +17251,15 @@ sh–l_¡©e
 ­ps
 .lpc_kbd)){
 
-50 
+51 
 dÚe
 ;
 
-53 
+54 
 nokey
 :
 
-56 
+57 
 	`sh–l_»nd”
 (
 ­ps
@@ -17261,7 +17269,7 @@ sh–l_¡©e
 »nd”tmp
 );
 
-64 if(
+65 if(
 ­ps
 .
 »nd”_æag
@@ -17273,7 +17281,7 @@ sh–l_¡©e
 »nd”tmp
 )){
 
-65 
+66 
 ­ps
 .
 »nd”_¡©e
@@ -17281,7 +17289,11 @@ sh–l_¡©e
 »nd”tmp
 ;
 
-66 
+67 
+nÜ’d”
+;
+
+69 
 ­ps
 .
 »nd”_æag
@@ -17289,11 +17301,7 @@ sh–l_¡©e
 Œue
 ;
 
-67 
-nÜ’d”
-;
-
-71 if(!
+72 if(!
 ­ps
 .
 chªÃl0_wr™•Üt
@@ -17301,11 +17309,11 @@ chªÃl0_wr™•Üt
 	`wr™e_ÿÄe£rve
 (1)){
 
-73 
+74 
 nÜ’d”
 ;
 
-78 
+79 
 ­ps
 .
 chªÃl0_wr™•Üt_wr™e_šdex_tmp
@@ -17315,7 +17323,7 @@ chªÃl0_wr™•Üt
 	`wr™e_»£rve
 (1);
 
-80 
+81 
 	`cÚ¡ruù
 (&
 	`chªÃl0_g‘_d©a
@@ -17331,7 +17339,7 @@ chªÃl0_wr™•Üt_wr™e_šdex_tmp
 »nd”tmp
 );
 
-83 
+84 
 ­ps
 .
 chªÃl0_wr™•Üt
@@ -17345,7 +17353,7 @@ chªÃl0_wr™•Üt
 shm
 ));
 
-86 
+87 
 ­ps
 .
 »nd”_¡©e
@@ -17353,11 +17361,11 @@ shm
 »nd”tmp
 ;
 
-90 
+91 
 nÜ’d”
 :
 
-94 
+95 
 ­ps
 .
 chªÃl0_wr™•Üt
@@ -17371,7 +17379,7 @@ chªÃl0_wr™•Üt
 shm
 ));
 
-98 if(!
+99 if(!
 ­ps
 .
 chªÃl0_wr™•Üt
@@ -17379,11 +17387,11 @@ chªÃl0_wr™•Üt
 	`d–‘e_ÿÄe£rve
 (1)){
 
-100 
+101 
 docompu‹
 ;
 
-104 
+105 
 ­ps
 .
 chªÃl0_wr™•Üt_d–‘e_šdex_tmp
@@ -17393,7 +17401,7 @@ chªÃl0_wr™•Üt
 	`d–‘e_»£rve
 (1);
 
-106 
+107 
 	`de¡roy
 (&
 	`chªÃl0_g‘_d©a
@@ -17407,7 +17415,7 @@ shm
 chªÃl0_wr™•Üt_d–‘e_šdex_tmp
 ));
 
-109 
+110 
 ­ps
 .
 chªÃl0_wr™•Üt
@@ -17415,7 +17423,7 @@ chªÃl0_wr™•Üt
 	`d–‘e_»Ëa£
 ();
 
-111 if(
+112 if(
 Íc_kbd
 ::
 	`has_key
@@ -17423,15 +17431,15 @@ chªÃl0_wr™•Üt
 ­ps
 .lpc_kbd)){
 
-112 
+113 
 dÚe
 ;
 
-115 
+116 
 docompu‹
 :
 
-118 
+119 
 	`sh–l_¡•
 (
 ­ps
@@ -17439,7 +17447,7 @@ docompu‹
 sh–l_¡©e
 );
 
-121 
+122 
 	`sh–l_¡•_cÜoutše
 (
 ­ps
@@ -17451,7 +17459,7 @@ f_cÜo
 f_loÿls
 );
 
-124 
+125 
 	`sh–l_¡•_fib”
 (
 ­ps
@@ -17471,7 +17479,7 @@ f_¬¿ysize
 Ïpic
 );
 
-127 
+128 
 	`sh–l_¡•_fib”_scheduÏr
 (
 ­ps
@@ -17493,17 +17501,17 @@ maš_¡ack
 Ïpic
 );
 
-130 
+131 
 ¿nk0_ršg3
 :
 
-132 
+133 
 ­ps
 .
 ¡©e
 =1;
 
-133 
+134 
 	`ršg3_¡•
 (
 ´“m±
@@ -17515,27 +17523,27 @@ maš_¡ack
 Ïpic
 );
 
-134 
+135 
 ­ps
 .
 ¡©e
 =0;
 
-136 
+137 
 dÚe
 ;
 
-137 
+138 
 ¿nk0_ršg3_dÚe
 :
 
-140 
+141 
 ­ps
 .
 ¡©e
 =0;
 
-141 
+142 
 	`ršg3_¡•_dÚe
 (
 ­ps
@@ -17545,15 +17553,27 @@ dÚe
 Ïpic
 );
 
-143 
+143 
+	`ršg3_downÿÎ
+(
+­ps
+.
+´oc
+,
+Ïpic
+,
+poÞ4M
+);
+
+145 
 dÚe
 ;
 
-144 
+146 
 ¿nk1
 :
 
-149 
+151 
 ­ps
 .
 chªÃl0_»adpÜt
@@ -17567,7 +17587,7 @@ chªÃl0_»adpÜt
 shm
 ));
 
-152 if(!
+154 if(!
 ­ps
 .
 chªÃl0_»adpÜt
@@ -17575,11 +17595,11 @@ chªÃl0_»adpÜt
 	`»ad_ÿÄe£rve
 (1)){
 
-154 
+156 
 dÚe
 ;
 
-158 
+160 
 ­ps
 .
 chªÃl0_»adpÜt_»ad_šdex_tmp
@@ -17589,7 +17609,7 @@ chªÃl0_»adpÜt
 	`»ad_»£rve
 (1);
 
-161 
+163 
 	`»nd”
 (
 	`chªÃl0_g‘_d©a
@@ -17603,7 +17623,7 @@ shm
 chªÃl0_»adpÜt_»ad_šdex_tmp
 ),
 
-162 
+164 
 ­ps
 .
 vg©ext_width
@@ -17613,7 +17633,7 @@ vg©ext_height
 vg©ext_ba£
 );
 
-166 
+168 
 ­ps
 .
 chªÃl0_»adpÜt
@@ -17627,25 +17647,25 @@ chªÃl0_»adpÜt
 shm
 ));
 
-168 
+170 
 dÚe
 ;
 
-169 
+171 
 dÚe
 :
 
-171 
+173 
 	}
 }
 
-173 
+175 
 Çme¥aû
  
 	gÍc_kbd
 {
 
-174 
+176 
 šlše
  
 »£t
@@ -17655,13 +17675,13 @@ dÚe
 dev
 ){
 
-175 
+177 
 Íc_kbd_š™Ÿlize
 (&
 dev
 ,0x60);
 
-183 
+185 
 šlše
  
 	$–f_lßd_h–³r
@@ -17681,11 +17701,11 @@ b™poÞ_t
 poÞ4M
 ){
 
-184 
+186 
 	`hoh_debug
 ("====== RING3 ELF LOAD =========== : ");
 
-186 
+188 
 ušt32_t
  
 couÁ
@@ -17693,13 +17713,13 @@ couÁ
 pshm
 [0];
 
-187 
+189 
 	`hoh_debug
 ("COUNT: "<<
 couÁ
 );
 
-189 
+191 
 ušt32_t
  
 i
@@ -17707,7 +17727,7 @@ i
 couÁ
 ;i++){
 
-190 
+192 
 ušt32_t
  
 ¡¬t
@@ -17717,7 +17737,7 @@ pshm
 i
 *2+0];
 
-191 
+193 
 ušt32_t
  
 ’d
@@ -17727,7 +17747,7 @@ pshm
 i
 *2+1];
 
-192 
+194 
 	`hoh_debug
 ("MOD: "<<
 ¡¬t
@@ -17735,7 +17755,7 @@ i
 ’d
 );
 
-195 
+197 
 	`hoh_as£¹
 (
 couÁ
@@ -17743,7 +17763,7 @@ couÁ
 which
  ,"XXX");
 
-196 
+198 
 ušt32_t
  
 ¡¬t
@@ -17753,7 +17773,7 @@ pshm
 which
 *2+0];
 
-197 
+199 
 ušt32_t
  
 ’d
@@ -17763,7 +17783,7 @@ pshm
 which
 *2+1];
 
-198 
+200 
 	`hoh_as£¹
 (
 ¡¬t
@@ -17771,7 +17791,7 @@ which
 ’d
 , "XXX");
 
-199 
+201 
 ušt32_t
  
 size
@@ -17781,7 +17801,7 @@ size
 ¡¬t
 ;
 
-201 
+203 
 	`–f_lßd
 (
 	`addr_t
@@ -17795,11 +17815,11 @@ size
 poÞ4M
 );
 
-202 
+204 
 	}
 }
 
-208 "C" 
+210 "C" 
 	$­ps_»£t
 (
 ¿nk
@@ -17817,13 +17837,17 @@ b™poÞ_t
 poÞ4M
 ){
 
-210 
+212 
 	`hoh_debug
 (
 ¿nk
 <<": Hello, serial!");
 
-213 
+215 if(
+¿nk
+==0){
+
+216 
 	`–f_lßd_h–³r
 (0, (
 ušt32_t
@@ -17839,21 +17863,21 @@ shm
 poÞ4M
 );
 
-215 if(
+219 if(
 ¿nk
 ==0){
 
-217 cÚ¡ * 
+221 cÚ¡ * 
 p
 ="Hello, world!";
 
-218 
+222 
 loc
 =0;*
 p
 ;loc++,p++){
 
-219 
+223 
 vg©ext
 ::
 	`wr™ech¬
@@ -17867,11 +17891,11 @@ p
 vg©ext_ba£
 );
 
-223 if(
+227 if(
 ¿nk
 ==0){
 
-224 
+228 
 Íc_kbd
 ::
 	`»£t
@@ -17879,7 +17903,7 @@ vg©ext_ba£
 ­ps
 .lpc_kbd);
 
-227 
+231 
 	`sh–l_š™
 (
 ­ps
@@ -17887,11 +17911,11 @@ vg©ext_ba£
 sh–l_¡©e
 );
 
-229 
+233 
 	}
 }
 
-234 "C" 
+238 "C" 
 	$­ps_loÝ
 (
 ¿nk
@@ -17915,9 +17939,13 @@ dev_Ïpic_t
 shm_t
 * 
 pshm
+, 
+b™poÞ_t
+* 
+µoÞ4M
 ){
 
-235 
+239 
 addr_t
 & 
 maš_¡ack
@@ -17925,7 +17953,7 @@ maš_¡ack
 pmaš_¡ack
 ;
 
-236 
+240 
 ´“m±_t
 & 
 ´“m±
@@ -17933,7 +17961,7 @@ pmaš_¡ack
 µ»em±
 ;
 
-237 
+241 
 ­ps_t
 & 
 ­ps
@@ -17941,7 +17969,7 @@ pmaš_¡ack
 p_­ps
 ;
 
-238 
+242 
 dev_Ïpic_t
 & 
 Ïpic
@@ -17949,7 +17977,7 @@ dev_Ïpic_t
 ¶­ic
 ;
 
-239 
+243 
 shm_t
 & 
 shm
@@ -17957,25 +17985,33 @@ shm
 pshm
 ;
 
-240 
+244 
+b™poÞ_t
+& 
+poÞ4M
+ = *
+µoÞ4M
+;
+
+245 
 ušt32_t
  
 e¥
 ;
 
-241 
+246 
 asm
  vÞ©ž("mov %%e¥,%0":"ô"(
 e¥
 )::);
 
-242 
+247 
 	`hoh_debug
 ("­ps_loÝ:ƒ¥="<<
 e¥
 );
 
-245 
+250 
 	`­ps_loÝ_¡•
 (
 ¿nk
@@ -17985,13 +18021,15 @@ maš_¡ack
 ´“m±
 , 
 ­ps
-,
+, 
 Ïpic
-,
+, 
 shm
+, 
+poÞ4M
 );
 
-247 
+252 
 	}
 }
 
@@ -18397,6 +18435,10 @@ dev_Ïpic_t
 shm_t
 * 
 pshm
+, 
+b™poÞ_t
+* 
+µoÞ4M
 );
 
 	@devices/cmos.h
@@ -157897,12 +157939,6 @@ mmu
 asm
  volatile( \
 
-91 " fxr¡Ü " 
-	`STR
-(
-´oûss_off£t_edi
-) "(%0) \n\t"\
-
 92 " movÈ" 
 	`STR
 (
@@ -157995,6 +158031,176 @@ dev_Ïpic_t
 	}
 }
 
+	@labs/ring3_downcall.h
+
+1 #´agm¨
+Úû
+
+
+4 
+	~"utž/ršg3.h
+"
+
+5 
+	~"deviûs/Ïpic.h
+"
+
+6 
+	~"utž/b™poÞ.h
+"
+
+8 
+šlše
+ 
+	$ršg3_downÿÎ
+(
+´oûss_t
+& 
+´oc
+, 
+dev_Ïpic_t
+& 
+Ïpic
+, 
+b™poÞ_t
+& 
+poÞ4M
+){
+
+10 
+ušt32_t
+* 
+sy¡emÿÎ_mmio
+ = 
+»š‹½»t_ÿ¡
+<ušt32_t*>(
+´oc
+.
+ma¡”rw
+);
+
+11 
+ušt32_t
+ 
+âum
+ = 
+sy¡emÿÎ_mmio
+[1];
+
+13 if(
+âum
+==0){
+
+17 
+ušt32_t
+ 
+çrg1
+=
+sy¡emÿÎ_mmio
+[2];
+
+18 
+ušt32_t
+ 
+çrg2
+=
+sy¡emÿÎ_mmio
+[3];
+
+19 
+ušt32_t
+ 
+çrg3
+=
+sy¡emÿÎ_mmio
+[4];
+
+22 
+	`hoh_debug
+("Sy¡emÿÎ: "<<
+âum
+<<": "<<
+çrg1
+<<","<<
+çrg2
+<<","<<
+çrg3
+);
+
+24 
+ušt32_t
+ 
+ä‘1
+=0;
+
+25 
+ušt32_t
+ 
+ä‘2
+=0;
+
+26 
+ušt32_t
+ 
+ä‘3
+=0;
+
+28 
+âum
+){
+
+30 
+	`hoh_debug
+("Invalid system call. Killinghe‡pplication");
+
+68 if(
+âum
+!=0){
+
+70 
+sy¡emÿÎ_mmio
+[2]=
+ä‘1
+;
+
+71 
+sy¡emÿÎ_mmio
+[3]=
+ä‘2
+;
+
+72 
+sy¡emÿÎ_mmio
+[4]=
+ä‘3
+;
+
+73 
+sy¡emÿÎ_mmio
+[1]=0;
+
+76 
+	`hoh_debug
+("Sy¡emÿÎ: "<<
+âum
+<<": "<<
+çrg1
+<<","<<
+çrg2
+<<","<<
+çrg3
+<<" RESULT: "<<
+ä‘1
+<<","<<
+ä‘2
+<<","<<
+ä‘3
+);
+
+78 
+	}
+}
+
 	@labs/ring3_preempt.h
 
 1 #´agm¨
@@ -158043,7 +158249,7 @@ _f
 	~"utž/cÚfig.h
 "
 
-15 
+16 
 	#_ršg3_upÿÎ
 (
 _Çme
@@ -158051,25 +158257,25 @@ _Çme
 _f
 ) \
 
-16 
+17 
 	`__asm
 ( \
 
-18 " " 
+19 " " 
 	`STR
 (
 _Çme
 ) ": \n\t"\
 
-36 " c®È" 
-	`STR
+54 " movÈ%ecx, 0x14(%e¥) \n\t"\
+
+	)
+
+63 " c®È" 
+STR
 (
 _f
 ) " \n\t"\
-
-43 
-
-	)
 
 	@labs/serial.h
 
@@ -161411,11 +161617,21 @@ i
 i
 );
 
+14 *
+p
+=0;
+
 15 
+	`hoh_debug
+("¯sda"<<*
+p
+);
+
+18 
 	}
 }
 
-22 "C" 
+25 "C" 
 	$­ps_»£t
 (
 ¿nk
@@ -161429,11 +161645,11 @@ b™poÞ_t
 poÞ4k
 ){
 
-25 
+28 
 	}
 }
 
-31 "C" 
+34 "C" 
 	$­ps_loÝ
 (
 ¿nk
@@ -161447,7 +161663,7 @@ pmaš_¡ack
 ·µs
 ){
 
-32 
+35 
 addr_t
 & 
 maš_¡ack
@@ -161455,7 +161671,7 @@ maš_¡ack
 pmaš_¡ack
 ;
 
-33 
+36 
 ­ps_t
 & 
 ­ps
@@ -161463,19 +161679,19 @@ pmaš_¡ack
 ·µs
 ;
 
-35 
+38 
 ušt32_t
  
 e¥
 ;
 
-36 
+39 
 asm
  vÞ©ž("mov %%e¥,%0":"ô"(
 e¥
 )::);
 
-39 
+42 
 	`­ps_loÝ_¡•
 (
 ¿nk
@@ -161485,7 +161701,7 @@ maš_¡ack
 ­ps
 );
 
-42 
+45 
 	}
 }
 
@@ -174331,31 +174547,55 @@ addr_t
 	m¡ack’d
 ;
 
-59 
+57 
+	#´oûss_off£t_¡©e
+ (1024+64)
+
+	)
+
+58 
+ušt32_t
+ 
+	m¡©e
+;
+
+60 
+	#´oûss_off£t_iÝl
+ (1024+68)
+
+	)
+
+61 
+ušt32_t
+ 
+	miÝl
+;
+
+63 
 	#´oûss_off£t_mmu
  4096
 
 	)
 
-60 
+64 
 dev_pde32_t
  
 	mmmu
 ;
 
-63 
+67 
 	mpublic
 :
 
-64 
+68 
 ´oûss_t
 (){
 
-65 
+69 
 e
 =0;
 
-66 
+70 
 	meæags
 =
 —x
@@ -174375,51 +174615,59 @@ esi
 edi
 =0;
 
-67 
+71 
 	m—x
 =0x01010101;
 
-68 
+72 
 	mecx
 =0x02020202;
 
-69 
+73 
 	medx
 =0x03030303;
 
-70 
+74 
 	mebx
 =0x04040404;
 
-71 
+75 
 	me¥
 =0x05050505;
 
-72 
+76 
 	mebp
 =0x06060606;
 
-73 
+77 
 	mesi
 =0x07070707;
 
-74 
+78 
 	medi
 =0x08080808;
 
-76 
+80 
 	mma¡”ro
 =0;
 
-77 
+81 
 	mma¡”rw
 =0;
 
-78 
+82 
 	msh¬edrw
 =0;
 
-80 
+84 
+	m¡©e
+=0;
+
+85 
+	miÝl
+=0;
+
+87 
 hoh_as£¹
 (
 off£tof
@@ -174429,7 +174677,7 @@ off£tof
 åu_simd
 ) ==0, "XXX");
 
-81 
+88 
 hoh_as£¹
 (
 off£tof
@@ -174439,7 +174687,7 @@ off£tof
 edi
 ) == 1024, "XXX");
 
-82 
+89 
 hoh_as£¹
 (
 off£tof
@@ -174449,7 +174697,7 @@ off£tof
 e
 ) == 1056, "XXX");
 
-83 
+90 
 hoh_as£¹
 (
 off£tof
@@ -174459,7 +174707,7 @@ off£tof
 mmu
 ) == 4096, "XXX");
 
-93 
+100 
 šlše
  
 size_t
@@ -174475,17 +174723,17 @@ size_t
 ´og_num
 ){
 
-94 ’um {
+101 ’um {
 PAGE_SIZE
 =4<<20};
 
-95 
+102 
 size_t
  
 »t
 =0;
 
-97 
+104 
 addr_t
  
 mš_¡¬t
@@ -174493,7 +174741,7 @@ mš_¡¬t
 	`addr_t
 (0xffffffff);
 
-98 
+105 
 addr_t
  
 max_’d
@@ -174501,13 +174749,13 @@ max_’d
 	`addr_t
 (0);
 
-100 
+107 
 i
 =0;i<
 ´og_num
 ; i++){
 
-101 if(
+108 if(
 ´og_h—d”
 [
 i
@@ -174517,7 +174765,7 @@ p_ty³
 PT_LOAD
 ){
 
-105 
+112 
 addr_t
  
 ¡¬t
@@ -174535,7 +174783,7 @@ p_vaddr
 PAGE_SIZE
 );
 
-106 
+113 
 addr_t
  
 ’d
@@ -174555,7 +174803,7 @@ p_memsz
 PAGE_SIZE
  );
 
-108 
+115 
 	`hoh_as£¹
 (
 ¡¬t
@@ -174563,7 +174811,7 @@ PAGE_SIZE
 ’d
 , "XXX");
 
-110 
+117 
 mš_¡¬t
  = 
 ¡d
@@ -174573,7 +174821,7 @@ mš_¡¬t
 ¡¬t
 );
 
-111 
+118 
 max_’d
  = 
 ¡d
@@ -174583,7 +174831,7 @@ max_’d
 ’d
 );
 
-115  (
+122  (
 mš_¡¬t
  < 
 max_’d
@@ -174595,7 +174843,7 @@ PAGE_SIZE
 	`´ev®ign
 (min_start,PAGE_SIZE))/PAGE_SIZE : 0;
 
-117 
+124 
 	}
 }
 
@@ -178523,6 +178771,8 @@ h®
 Ïpic
 , &cÜe.
 shm
+, &cÜe.
+poÞ4M
 );
 
 84 
@@ -240376,8 +240626,8 @@ STA_CLK
 .
 1
 /usr/include
-134
-3117
+135
+3139
 apps/devices/pci.h
 apps/generated/lpc_kbd.dev.h
 apps/generated/pci_hdr0.dev.h
@@ -240413,6 +240663,7 @@ labs/keyboard.h
 labs/multicore.h
 labs/preempt.h
 labs/ring3.h
+labs/ring3_downcall.h
 labs/ring3_preempt.h
 labs/ring3_upcall.h
 labs/serial.h

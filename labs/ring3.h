@@ -88,7 +88,7 @@ static inline void ring3_step(preempt_t& preempt, process_t& proc, dev_lapic_t& 
 
 	proc.mmu.reset();
 asm volatile(								     \
- 	" fxrstor " STR(process_offset_edi) "(%0)			\n\t"\
+ 	" fxrstor (%0)			\n\t"\
 	" movl " STR(process_offset_edi) "(%0), %%edi			\n\t"\
 	" movl " STR(process_offset_esi) "(%0), %%esi			\n\t"\
 	" movl " STR(process_offset_ebp) "(%0), %%ebp			\n\t"\
