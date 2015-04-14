@@ -1,5 +1,7 @@
 #pragma once
 #include "util/util.h"
+#include <algorithm>
+//#include <utility>
 
 class dev_pde32_t{
   public:
@@ -29,13 +31,11 @@ class dev_pde32_t{
       }
     }
 
-  private:
     void map(addr_t va, addr_t pa, uint16_t flags){
       hoh_assert((get_bits<21,0>(uintptr_t(va))==0),"XXX");
       set(get_bits<31,22>((uintptr_t)va), (uintptr_t)pa, flags);
     }
 
-  private:
     void set(int i, uint32_t addr,uint16_t flags){
       hoh_assert((get_bits<11,0>(addr)==0),"XXX");
       hoh_assert(i>=0 && i<N,"XXX");
@@ -45,5 +45,21 @@ class dev_pde32_t{
       hoh_assert(i>=0 && i<N,"XXX");
       set(i,0,2);
     }
+    uint32_t get(int i)const{
+      hoh_assert(i>=0 && i<N,"XXX");
+      return m_page[i];
+    }
+    uint32_t get_flags(int i)const{
+      return get_bits<11,0>(get(i));
+    }
+    void swap(int i, int j){
+      hoh_assert(i>=0 && i<N,"XXX");
+      std::swap(m_page[i],m_page[j]);
+    }
+    uint32_t get_addr(int i)const{
+      hoh_assert(i>=0 && i<N,"XXX");
+      return get_bits<31,12>(get(i));
+    }
+
 };
 
