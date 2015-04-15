@@ -43,7 +43,7 @@
          "	movl %ebx, 0x40c(%eax)			\n\t"\
          "  movl %gs:28, %ebx				\n\t"\
          "	movl %ebx, %cr3					\n\t"\
-         "  #sti	                              \n\t"\
+         "  sti	                              \n\t"\
          "                                   \n\t"\
          "  movl $0, %ebp                    \n\t"\
          "  pushl %gs:0                      \n\t"\
