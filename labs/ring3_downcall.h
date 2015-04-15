@@ -55,20 +55,20 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 				}break;
 			case 8:	{	
 					fret1=1;
-					fret2=mmio::read8(farg2,0);
+					fret2=mmio::read8((addr_t)farg2,0);
 				}break;
 			case 16:{
 					fret1=1;
-					fret2=mmio::read16(farg2,0);
+					fret2=mmio::read16((addr_t)farg2,0);
 				}break;
 			case 32:{
 					fret1=1;
-					fret2=mmio::read32(farg2,0);
+					fret2=mmio::read32((addr_t)farg2,0);
 				}break;					
 		}
           }break;
   case 3: {  //mmio_write
-		swtich(farg1)
+		switch(farg1)
 		{
 			default:{
 					proc.state=0;
@@ -78,15 +78,15 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 				}break;
 			case 8:	{
 					fret1=1;
-					mmio::write8(farg2,0,farg3);
+					mmio::write8((addr_t)farg2,0,farg3);
 				}break;
 			case 16:{
 					fret1=1;
-					mmio::write16(farg2,0,farg3);
+					mmio::write16((addr_t)farg2,0,farg3);
 				}break;
 			case 32:{
 					fret1=1;
-					mmio::write32(farg2,0,farg3);
+					mmio::write32((addr_t)farg2,0,farg3);
 				}break;
 		}
           }break;
@@ -101,15 +101,15 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 				}break;
 			case 8:	{
 					fret1=1;
-					fret2=io::read8(farg2,0);
+					fret2=io::read8((io_t)farg2,0);
 				}break;
 			case 16:{
 					fret1=1;
-					fret2=io::read16(farg2,0);
+					fret2=io::read16((io_t)farg2,0);
 				}break;
 			case 32:{
 					fret1=1;
-					fret2=io::read32(farg2,0);
+					fret2=io::read32((io_t)farg2,0);
 				}break;
 		}
           }break;
@@ -124,15 +124,15 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 				}break;
 			case 8:	{
 					fret1=1;
-					io::write8(farg2,0,farg3);
+					io::write8((io_t)farg2,0,farg3);
 				}break;
 			case 16:{
 					fret1=1;
-					io::write16(farg2,0,farg3);
+					io::write16((io_t)farg2,0,farg3);
 				}break;
 			case 32:{
 					fret1=1;
-					io::write32(farg2,0,farg3);
+					io::write32((io_t)farg2,0,farg3);
 				}break;
 
 		}	
@@ -142,7 +142,7 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
              //swap using: proc.mmu.get/set()
 		hoh_assert(farg1>=0x80000000 && farg1<=0xc0000000 && farg2>=0x80000000 && farg2<=0xc0000000,"Outside VA Range");
 		fret1=1;
-		proc.mmu.swap(prevalign(farg1,0x400000),prevalign(farg2,0x400000));
+		proc.mmu.swap(farg1>>22,farg2>>22);
 		
           }break;
   case 7: {  //mmu_mapmmio
@@ -151,18 +151,47 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 
 		hoh_assert(!(farg1>=0x80000000 && farg1<=0xc0000000),"Mapped Address Outside VA Range");
 		fret1=1;
-		proc.mmu.map(prevalign(farg1,0x400000),prevalign(farg1,0x400000),0x87);
+		proc.mmu.map(prevalign((addr_t)farg1,0x400000),prevalign((addr_t)farg1,0x400000),0x87);
           }break;
   case 8: {  //mmu_mappmio
              //proc.iopl=3; and make sure in your ring3_step you respect this variable
 		proc.iopl=3;
 		fret1=1;
           }break;
-  case 9: {  //addr_t x=alloc(pool4M);
-             //unused_page = 0;
-             //unused_page = find a page in VA_RANGE. ie: [ (0x2<<30) , (0x3<<30) )
-             //if you're able to find a page: 
-             //   proc.mmu.map_large(unused_page,x,0x87);
+  case 9: {  
+		addr_t x=alloc(pool4M);
+		if(x==0)
+		{
+			fret1=0;
+			fret2=0;
+			hoh_assert(x!=0,"Page Alloc failed");
+		}
+		else
+		{
+			int unused_page = 0;
+             		for(int i=0x80000000;i<=0xc0000000;i+=0x400000)
+			{
+				if(proc.mmu.m_page[i>>22] & 0x4==1)
+				{
+					unused_page=i;
+					break;
+				}
+			}
+			if(unused_page==0)
+			{
+				fret1=0;
+				fret2=0;
+				hoh_assert(unused_page!=0,"No VA Page Available");
+			}	
+			else
+			{
+				fret1=1;
+				fret2=unused_page<<22;
+		        	proc.mmu.map_large((addr_t)(unused_page<<22),x,0x87,1);
+			}
+		}
+//if you're able to find a page: 
+
           }break;
   }
 
