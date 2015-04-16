@@ -85,7 +85,6 @@ all:: exe
 
 qemu:: iso
 	$(QEMU) $(QEMUFLAGS) $(QEMULOG) -serial stdio -serial null -cdrom $O/$(NAME).iso
-
 qemu-gdb:: iso
 	$(QEMU) $(QEMUFLAGS) -S -s -serial stdio  -serial null -cdrom $O/$(NAME).iso 
 

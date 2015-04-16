@@ -40,6 +40,7 @@
          "  movl %ebx, 0x424(%eax)			\n\t"\
          "  popl %ebx					\n\t"\
          "  movl %ebx, 0x40c(%eax)			\n\t"\
+	 "  popl %ebx					\n\t"\
          "  movl %gs:28, %ebx				\n\t"\
          "  movl %ebx, %cr3				\n\t"\
          "  sti						\n\t"\

@@ -32,9 +32,9 @@
          "  movl %ecx,-0x4(%ebx)             \n\t"\
          "  movl 0x20(%esp),%ecx             \n\t"\
          "  movl %ecx,-0x8(%ebx)             \n\t"\
-         "  movl 0xc(%esp), %ecx             \n\t"\
+         "  movl 0x10(%esp), %ecx             \n\t"\
          "  movl %ecx,-0xc(%ebx)             \n\t"\
-         "  movl 0x10(%esp),%ecx             \n\t"\
+         "  movl 0xc(%esp),%ecx             \n\t"\
          "  movl %ecx,-0x10(%ebx)            \n\t"\
          "  movl 0x434(%eax), %ecx           \n\t"\
          "  movl %ecx, -0x14(%ebx)           \n\t"\

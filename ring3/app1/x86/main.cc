@@ -110,8 +110,29 @@ extern "C" void core_loop(int rank, core_t* pcore){
   core_t& core=*pcore;
   hoh_assert(rank == core.rank, "XXX");
   hoh_debug(rank<<": core_loop begin");
-
+  
+test_systemcall(core.syscallmmio,9,0,0,0);
+  int p=1024;
+  int *pg =(int*)core.syscallmmio[3];
+//  memcpy((void*)core.syscallmmio[3],(void*)&p,4); 
+  test_systemcall(core.syscallmmio,9,0,0,0);
+  int *pg1=(int*)core.syscallmmio[3];
+	*pg=12;
+	*pg1=21;
+ test_systemcall(core.syscallmmio,6,(int)pg,(int)pg1,0);
+ // int op=*((int*)pg1);
+ // hoh_assert(op==p,"Not equal");
+	hoh_debug("*pg 21"<<*pg);
+	hoh_debug("*pg1 12"<<*pg1);
+  test_systemcall(core.syscallmmio,8,0,0,0);
+  test_systemcall(core.syscallmmio,5,16,0x3f8,0x53);
+  test_systemcall(core.syscallmmio,3,32,0x800000,0x1221230);
+  test_systemcall(core.syscallmmio,2,32,0x800000,0);
+  test_systemcall(core.syscallmmio,7,0x10000000,0,0);
+  memcpy((void*)0x10000000,(void*)&p,4);
+	hoh_debug("nva case"<<*(int*)0x10000000);
   apps_loop(core.rank, &core.main_stack, &core.apps);
+
 }
 
 

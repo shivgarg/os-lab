@@ -149,7 +149,7 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
              //align va using prev_align
              //proc.mmu.map
 
-		hoh_assert(!(farg1>=0x80000000 && farg1<=0xc0000000),"Mapped Address Outside VA Range");
+		hoh_assert(!(farg1>=0x80000000 && farg1<=0xc0000000),"Mapped Address Inside VA Range");
 		fret1=1;
 		proc.mmu.map(prevalign((addr_t)farg1,0x400000),prevalign((addr_t)farg1,0x400000),0x87);
           }break;
@@ -159,19 +159,21 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 		fret1=1;
           }break;
   case 9: {  
-		addr_t x=alloc(pool4M);
-		if(x==0)
+
+		if(!canalloc(pool4M))
 		{
 			fret1=0;
 			fret2=0;
-			hoh_assert(x!=0,"Page Alloc failed");
+			hoh_assert(false,"could not allocate page");
 		}
 		else
 		{
-			int unused_page = 0;
-             		for(int i=0x80000000;i<=0xc0000000;i+=0x400000)
+			
+			addr_t x=alloc(pool4M);
+			uint32_t unused_page = 0;
+		        for(uint32_t i=0x80000000;i<=0xc0000000;i+=0x400000)
 			{
-				if(proc.mmu.m_page[i>>22] & 0x4==1)
+				if((proc.mmu.m_page[i>>22] & 0x4)==0)
 				{
 					unused_page=i;
 					break;
@@ -181,13 +183,14 @@ static inline void ring3_downcall(process_t& proc, dev_lapic_t& lapic, bitpool_t
 			{
 				fret1=0;
 				fret2=0;
-				hoh_assert(unused_page!=0,"No VA Page Available");
+				hoh_assert(false,"No va page available");
 			}	
 			else
 			{
 				fret1=1;
-				fret2=unused_page<<22;
-		        	proc.mmu.map_large((addr_t)(unused_page<<22),x,0x87,1);
+				fret2=unused_page;
+			        proc.mmu.map((addr_t)(unused_page),x,0x87);
+				hoh_debug("MAPPED SUCCESSFULLY"<< (unused_page>>22) <<" " <<proc.mmu.m_page[unused_page>>22]);
 			}
 		}
 //if you're able to find a page: 

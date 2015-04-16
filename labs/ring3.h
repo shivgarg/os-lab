@@ -23,7 +23,7 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
 
   size_t numpages = elf_numpages(prog_header,prog_num);
   hoh_assert(numpages == 1, "XXX");
-
+  hoh_assert(header.e_entry<pgsize,"Start IP outside page");
   addr_t to = alloc(pool4M); 
 
 // ELF LOADED
@@ -34,17 +34,19 @@ static inline void elf_load(addr_t from, size_t fromsize, process_t& proc, bitpo
 	}
 	hoh_assert(prog_header[i].p_filesz<=prog_header[i].p_memsz,"Mem size is less than file size");
 	hoh_assert(prog_header[i].p_memsz<=pgsize,"ELF larger than 4MB");
+	hoh_assert(prog_header[i].p_filesz<fromsize,"Header filesz greater than ELF Size");
 	hoh_assert(prog_header[i].p_offset+prog_header[i].p_filesz<fromsize, "Header greater than fromsize");
 	hoh_assert(prog_header[i].p_vaddr+prog_header[i].p_memsz<=pgsize,"Pgsize exceeded while copying executable");
 	hoh_assert(prog_header[i].p_vaddr<pgsize,"Vaddr greater than pgsize");
-	hoh_assert(prog_header[i].p_offset%prog_header[i].p_align==prog_header[i].p_vaddr%prog_header[i].p_align,"Not aligned");
+	if(prog_header[i].p_align>0)
+		hoh_assert(prog_header[i].p_offset%prog_header[i].p_align==prog_header[i].p_vaddr%prog_header[i].p_align,"Not aligned");
+	hoh_assert(prog_header[i].p_offset<fromsize,"Offset for laoding outside ELF");
 	memcpy(to+prog_header[i].p_vaddr,(void *)(prog_header[i].p_offset+from),prog_header[i].p_filesz);
 	memset(to+prog_header[i].p_vaddr+prog_header[i].p_filesz,0,prog_header[i].p_memsz-prog_header[i].p_filesz);
   }
 	
  //PROC INITIALISATION
   proc.eip=(uint)(header.e_entry+to);
-  hoh_debug("PROC EIP"<< proc.eip);
   proc.eflags=0x3200;
   proc.rank=0;
   proc.masterro=0;
