@@ -124,6 +124,7 @@ test_systemcall(core.syscallmmio,9,0,0,0);
  // hoh_assert(op==p,"Not equal");
 	hoh_debug("*pg 21"<<*pg);
 	hoh_debug("*pg1 12"<<*pg1);
+    test_systemcall(core.syscallmmio,1,0,0,0);
   test_systemcall(core.syscallmmio,8,0,0,0);
   test_systemcall(core.syscallmmio,5,16,0x3f8,0x53);
   test_systemcall(core.syscallmmio,3,32,0x800000,0x1221230);
