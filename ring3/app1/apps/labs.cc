@@ -47,11 +47,11 @@ void test_systemcall(uint32_t* systemcallmmio,uint32_t arg,uint32_t a,uint32_t b
 static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps){
 
   asm volatile ("nop ");
-//  asm volatile("int3");
+// asm volatile("int3");
 //	for(int i=0;i<10;i++)
 //		hoh_debug("hi from ring3 "<<i);
-	// int *p=0;
-	// hoh_debug("aasda"<<*p);
+	 int *p=0;
+	 hoh_debug("aasda"<<*p);
 //hoh_debug("in ring3 wdwfefwef");
 }
 
