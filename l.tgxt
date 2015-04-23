@@ -1,6 +1,0 @@
-mkdir -p ./_tmp/iso/boot
-cp ./_tmp/hoh.exe _tmp/iso/boot/hoh.exe
-mkdir -p ./_tmp/iso/ring3
-cp ./ring3/app1/_tmp/a.exe _tmp/iso/ring3/app1.exe
-grub-mkrescue -o _tmp/hoh.iso ./_tmp/iso
-Enabling BIOS support ...
