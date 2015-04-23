@@ -1,66 +1,105 @@
 #include "apps/labs.h"
 
+#include "x86/except.h"
 
 //
 // app step
 //
 
+void for_each();
+static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps, uint32_t* systemcallmmio){
 
-
-void test_systemcall(uint32_t* systemcallmmio,uint32_t arg,uint32_t a,uint32_t b,uint32_t c){
-
-  uint32_t fnum=arg;
-  uint32_t arg1=a;
-  uint32_t arg2=b;
-  uint32_t arg3=c;
-
-  //.....
-
-  systemcallmmio[2]=arg1;
-  systemcallmmio[3]=arg2;
-  systemcallmmio[4]=arg3;
-  systemcallmmio[1]=fnum; //write this field at the end.
-
-  hoh_debug("Shell Before making system call");
-  asm volatile("int $0x48":::"memory");
-  hoh_debug("Shell After making system call");
-
-  hoh_assert(systemcallmmio[1]==0,"XXX");
-  uint32_t ret1=systemcallmmio[2];
-  uint32_t ret2=systemcallmmio[3];
-  uint32_t ret3=systemcallmmio[4];
-
- hoh_debug("RETURN VALUE "<< ret1<<" " <<ret2 <<" " <<ret3); 
-
+	hoh_debug("looping");
+	for_each();
+	uint32_t q;
+	xsyscall(systemcallmmio,0x1,0,0,0,q,q,q);
 }
 
-
-
-
-
-
-
-
-
-
-
-static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps){
-
-  asm volatile ("nop ");
-// asm volatile("int3");
-//	for(int i=0;i<10;i++)
-//		hoh_debug("hi from ring3 "<<i);
-	 int *p=0;
-	 hoh_debug("aasda"<<*p);
-//hoh_debug("in ring3 wdwfefwef");
+uint32_t f2(uint8_t x,uint8_t y,uint8_t z)
+{
+	//hoh_debug("aa "<<(2<<30)+4*(((uint32_t)x)*256*256+((uint32_t)y)*256+z));
+	// /hoh_debug("aqdqwdqwdqqq");
+	return *(uint32_t*)((uint32_t)(2<<30)+4*(((uint32_t)x)*256*256+((uint32_t)y)*256+z));
 }
 
+uint32_t sum_neighbours(int x, int y, int z){
+		//hoh_debug("X "<<x<<"Y "<<y<<"Z "<<z);
+		uint8_t d=1;
+           uint32_t sum=0;
+            for(int i=0; i<2*d; i++){
+              for(int j=0; j<2*d; j++){
+                 for(int k=0; k<2*d; k++){
+			//hoh_debug("asasasa "<<x+(uint8_t)i<<" "<<y+(uint8_t)j<<" "<<z+(uint8_t)k);
+                   sum += f2((uint8_t)(x+i), (uint8_t)(y+j), (uint8_t)(z+k));
+                 }
+              }
+            }
+	
+	return sum;
+        }
+/*
+uint32_t weightedsum_neighbours(uint8_t x, uint8_t y, uint8_t z){
+           size_t sum=0;
+            for(int i=-d; i<d; i++){
+              for(int j=-d; j<d; j++){
+                 for(int k=-d; k<d; k++){
+                   sum += w(i,j,k,d) * f2(x+i, y+j, z+k);
+                 }
+              }
+            }
+        }
+*/
+void for_each()
+{
+	hoh_debug("in for each start");
+	uint32_t a=0;
+	for(int x=0;x<256;x++){
+		hoh_debug("X  "<<a);
+		for(int y=0;y<256;y++){
+			hoh_debug("Y "<<a<< " "<< x << " "<< y );
+			for(int z=0;z<256;z++)
+			{	
 
+			//hoh_debug("being called"<<a<<" "<<x <<" "<< y << " "<<z);
+				 a+=sum_neighbours(x,y,z);
+				
+			}
+				}
+}
+	hoh_debug("as "<<a);
+}
 
 //
 // reset
 //
-extern "C" void apps_reset(int rank, apps_t& apps, bitpool_t& pool4k){
+extern "C" void apps_reset(int rank, apps_t& apps, bitpool_t& pool4k, uint32_t* systemcallmmio){
+
+hoh_debug("in here");
+  asm volatile ("nop ");
+
+/*  uint32_t ret1;
+  uint32_t ret2;
+  uint32_t ret3;
+  xsyscall(systemcallmmio, 0x9, 0,0,0, ret1,ret2,ret3);
+  hoh_debug("Allocated at: "<<ret2);
+
+  addr_t varray=addr_t(2<<30);
+  if(ret1!=uintptr_t(varray)){
+    xsyscall(systemcallmmio, 0x6, ret2,uintptr_t(varray),0, ret1, ret2, ret3);
+  }
+  
+  hoh_debug("Testing ....");
+  *varray=0;
+  hoh_debug("Testing done....");
+
+  hoh_debug("Bomb..");
+  *(varray+(4<<20))=0;
+  hoh_debug(" Comb defused..");
+
+*/
+  //..... print return values
+
+
 
 
 }
@@ -69,7 +108,7 @@ extern "C" void apps_reset(int rank, apps_t& apps, bitpool_t& pool4k){
 //
 // main loop
 //
-extern "C" void apps_loop(int rank, addr_t* pmain_stack, apps_t* papps){
+extern "C" void apps_loop(int rank, addr_t* pmain_stack, apps_t* papps, uint32_t* systemcallmmio){
   addr_t& main_stack = *pmain_stack;
   apps_t& apps       = *papps;
 
@@ -77,7 +116,7 @@ extern "C" void apps_loop(int rank, addr_t* pmain_stack, apps_t* papps){
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
 
   for(;;){
-    apps_loop_step(rank, main_stack, apps);
+    apps_loop_step(rank, main_stack, apps, systemcallmmio);
   }
 
 }
