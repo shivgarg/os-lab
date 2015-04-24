@@ -17,9 +17,9 @@ static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps, uint32_t*
 
 uint32_t f2(uint8_t x,uint8_t y,uint8_t z)
 {
-	//hoh_debug("aa "<<(2<<30)+4*(((uint32_t)x)*256*256+((uint32_t)y)*256+z));
+	//hoh_debug("aa "<<(2<<30)+4*(((uint32_t)x)*256u*256u+((uint32_t)y)*256+z));
 	// /hoh_debug("aqdqwdqwdqqq");
-	return *(uint32_t*)((uint32_t)(2<<30)+4*(((uint32_t)x)*256*256+((uint32_t)y)*256+z));
+	return *(uint32_t*)((uint32_t)(2<<30)+4*(((uint32_t)x)*256u*256u+((uint32_t)y)*256u+z));
 }
 
 uint32_t sum_neighbours(int x, int y, int z){
