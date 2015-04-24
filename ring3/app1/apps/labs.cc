@@ -18,23 +18,24 @@ static void apps_loop_step(int rank, addr_t& main_stack, apps_t& apps, uint32_t*
 uint32_t f2(uint8_t x,uint8_t y,uint8_t z)
 {
 	//hoh_debug("aa "<<(2<<30)+4*(((uint32_t)x)*256u*256u+((uint32_t)y)*256+z));
-	// /hoh_debug("aqdqwdqwdqqq");
+	//hoh_debug("aqdqwdqwdqqq");
 	return *(uint32_t*)((uint32_t)(2<<30)+4*(((uint32_t)x)*256u*256u+((uint32_t)y)*256u+z));
 }
 
 uint32_t sum_neighbours(int x, int y, int z){
 		//hoh_debug("X "<<x<<"Y "<<y<<"Z "<<z);
-		uint8_t d=1;
+			int d=64;
            uint32_t sum=0;
-            for(int i=0; i<2*d; i++){
-              for(int j=0; j<2*d; j++){
-                 for(int k=0; k<2*d; k++){
+            for(int i=-d; i<d; i++){
+              for(int j=-d; j<d; j++){
+                 for(int k=-d; k<d; k++){
 			//hoh_debug("asasasa "<<x+(uint8_t)i<<" "<<y+(uint8_t)j<<" "<<z+(uint8_t)k);
                    sum += f2((uint8_t)(x+i), (uint8_t)(y+j), (uint8_t)(z+k));
+          //         hoh_debug("running sum"<< sum);
                  }
               }
             }
-	
+	//hoh_debug("sum value being returned "<<sum);
 	return sum;
         }
 /*
@@ -53,15 +54,18 @@ void for_each()
 {
 	hoh_debug("in for each start");
 	uint32_t a=0;
-	for(int x=0;x<256;x++){
+	for(int x=0;x<256;x+=32){
 		//hoh_debug("X  "<<a);
-		for(int y=0;y<256;y++){
-		//	hoh_debug("Y "<<a<< " "<< x << " "<< y );
-			for(int z=0;z<256;z++)
+		for(int y=0;y<256;y+=32){
+			//hoh_debug("Y "<<a<< " "<< x << " "<< y );
+			for(int z=0;z<256;z+=32)
 			{	
 
 			//hoh_debug("being called"<<a<<" "<<x <<" "<< y << " "<<z);
-				 a+=sum_neighbours(x,y,z);
+        uint32_t tmp=sum_neighbours(x,y,z);
+        //hoh_assert(tmp==0x200000,"PANIC . VALUE NOT AS EXPECTED");
+				 a+=tmp;
+        // hoh_debug("sum value "<< tmp);
 				
 			}
 				}
@@ -93,10 +97,10 @@ hoh_debug("in here");
   hoh_debug("Testing done....");
 
   hoh_debug("Bomb..");
-  *(varray+(4<<20))=0;
-  hoh_debug(" Comb defused..");
+  *(varray+(4<<20))=0;*/
+  hoh_debug("Comb defused..");
 
-*/
+
   //..... print return values
 
 

@@ -144,10 +144,10 @@ user_exception:
 
     leal 20(%esp), %edx
     pushl %edx
-
+    pushl %edx
     PC_RELATIVE(handle_user_fault, %eax)
     call *%eax
-
+    addl $4, %esp
     popl %edx
 
     #test %eax, %eax

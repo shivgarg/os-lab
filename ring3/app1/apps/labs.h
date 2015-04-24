@@ -6,10 +6,12 @@
 struct apps_t{
 	int bitvector[16];
 	int count;
+	uint32_t fault_cnt;
 	apps_t(){
 		count=0;
 		for(int i=0;i<16;i++)
 			bitvector[i]=0;
+		fault_cnt=0;
 	}
 };
 

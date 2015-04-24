@@ -40,5 +40,6 @@ public:
   }
 };
 
+ extern "C" void core_reset(int rank, core_t& core) STACK_FORCE_ALIGN;
 
-
+       extern "C" void core_loop(int rank, core_t* pcore) STACK_FORCE_ALIGN;
