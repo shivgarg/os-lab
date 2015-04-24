@@ -54,9 +54,9 @@ void for_each()
 	hoh_debug("in for each start");
 	uint32_t a=0;
 	for(int x=0;x<256;x++){
-		hoh_debug("X  "<<a);
+		//hoh_debug("X  "<<a);
 		for(int y=0;y<256;y++){
-			hoh_debug("Y "<<a<< " "<< x << " "<< y );
+		//	hoh_debug("Y "<<a<< " "<< x << " "<< y );
 			for(int z=0;z<256;z++)
 			{	
 

@@ -43,6 +43,12 @@ extern "C" void handle_user_fault(usertrapframe_t& x){
 	uint32_t ret3;
 	xsyscall(core.syscallmmio,0x9,0,0,0,ret1,ret2,ret3);
 	core.apps.count++;
+	for(int i=0;i<16;i++)
+	{
+		if(core.apps.bitvector[i]>0)
+			core.apps.bitvector[i]++;
+	}
+	core.apps.bitvector[((uint32_t)prevalign(addr_t(x.cr2),4<<20)-0x80000000)/0x400000]=1;
 	if((uint32_t)ret2!=(uint32_t)prevalign(addr_t(x.cr2),4<<20))
 	{
 		xsyscall(core.syscallmmio,0x6,(uint32_t)prevalign(addr_t(x.cr2),4<<20),(uint32_t)ret2,0,ret1,ret2,ret3);
@@ -50,14 +56,11 @@ extern "C" void handle_user_fault(usertrapframe_t& x){
 	uint32_t last_add=(uint32_t)prevalign(addr_t(x.cr2),4<<20)+4*1024*1024;
 	for(uint32_t ind=(uint32_t)prevalign(addr_t(x.cr2),4<<20);ind<last_add;ind+=4)
 	{
+		hoh_debug("ind "<< ind);
 		*((uint32_t *)ind)=f((ind-0x80000000)/(0x40000),((ind-0x80000000)%0x40000)/0x400,(ind-0x80000000)%0x400);
 	}
-	for(int i=0;i<16;i++)
-	{
-		if(core.apps.bitvector[i]>0)
-			core.apps.bitvector[i]++;
-	}
-	core.apps.bitvector[((uint32_t)prevalign(addr_t(x.cr2),4<<20)-0x80000000)/0x400000]=1;
+	hoh_debug("done init");
+	
 	
  }
  else
@@ -81,6 +84,7 @@ extern "C" void handle_user_fault(usertrapframe_t& x){
   uint32_t last_add=(uint32_t)prevalign(addr_t(x.cr2),4<<20)+4*1024*1024;
   for(uint32_t indx=(uint32_t)prevalign(addr_t(x.cr2),4<<20);indx<last_add;indx+=4)
   {
+       hoh_debug("indx "<< indx);
        *((uint32_t*)indx)=f((indx-0x80000000)/(0x40000),((indx-0x80000000)%0x40000)/0x400,(indx-0x80000000)%0x400);
   }
  
