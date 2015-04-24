@@ -503,33 +503,34 @@ _handler(handler_downcall,              kmf_downcall,               kff_downcall
 //
 // Specialize for each sub classes
 //
-_ring0_cfunc(kmf_critical, c_critical);
-_ring0_cfunc(kff_critical, c_critical);
-_ring3_cfunc(uf_critical,  c_critical);
+_ring0_cfunc(kmf_critical, wc_critical);
+_ring0_cfunc(kff_critical, wc_critical);
+_ring3_cfunc(uf_critical,  wc_critical);
 
-_ring0_cfunc(kmf_user, c_user_ring0);
-_ring0_cfunc(kff_user, c_user_ring0);
-_ring3_upcall(uf_user, c_upcall_ring3);
+_ring0_cfunc(kmf_user, wc_user_ring0);
+_ring0_cfunc(kff_user, wc_user_ring0);
+_ring3_upcall(uf_user, wc_upcall_ring3);
 
-_ring0_cfunc(kmf_pic_master, c_pic_master);
-_ring0_cfunc(kff_pic_master, c_pic_master);
-_ring3_cfunc(uf_pic_master,  c_pic_master);
+_ring0_cfunc(kmf_pic_master, wc_pic_master);
+_ring0_cfunc(kff_pic_master, wc_pic_master);
+_ring3_cfunc(uf_pic_master,  wc_pic_master);
 
-_ring0_cfunc(kmf_pic_slave, c_pic_slave);
-_ring0_cfunc(kff_pic_slave, c_pic_slave);
-_ring3_cfunc(uf_pic_slave,  c_pic_slave);
+_ring0_cfunc(kmf_pic_slave, wc_pic_slave);
+_ring0_cfunc(kff_pic_slave, wc_pic_slave);
+_ring3_cfunc(uf_pic_slave,  wc_pic_slave);
 
-_ring0_cfunc(kmf_lapic, c_lapic);
-_ring0_cfunc(kff_lapic, c_lapic);
-_ring3_cfunc(uf_lapic,  c_lapic);
+_ring0_cfunc(kmf_lapic, wc_lapic);
+_ring0_cfunc(kff_lapic, wc_lapic);
+_ring3_cfunc(uf_lapic,  wc_lapic);
 
-_ring0_setflag(kmf_lapic_internal, c_lapic_internal);
-_ring0_preempt(kff_lapic_internal, c_lapic_internal);
-_ring3_preempt(uf_lapic_internal,  c_lapic_internal);
+_ring0_setflag(kmf_lapic_internal, wc_lapic_internal);
+_ring0_preempt(kff_lapic_internal, wc_lapic_internal);
+_ring3_preempt(uf_lapic_internal,  wc_lapic_internal);
 
-_ring0_die(kmf_downcall,  c_downcall);
-_ring0_die(kff_downcall,  c_downcall);
-_ring3_preempt(uf_downcall, c_downcall);
+
+_ring0_die(kmf_downcall,    wc_downcall);
+_ring0_die(kff_downcall,    wc_downcall);
+_ring3_preempt(uf_downcall, wc_downcall);
 
 
 
@@ -564,12 +565,42 @@ __asm(
     "  iretl                            \n\t"
     );
 
+//
+//
+// The c_handler functions API has been changed
+// to just take the exception number as an argument.
+//
+// So let's push the exception number with the help of wrapper
+// since labs are already out
+//
+//
+#  define  wrap_cfunc(_name,_f)                   \
+         __asm(                                   \
+         "  .text                            \n\t"\
+         " " STR(_name) ":                   \n\t"\
+         "  movl  16(%esp), %eax             \n\t"\
+         "  pushl %eax                       \n\t"\
+         "  call  " STR(_f) "                \n\t"\
+         "  addl  $4, %esp                   \n\t"\
+         "  retl                             \n\t"\
+         )                                        \
+
+
+wrap_cfunc(wc_critical      ,c_critical);
+wrap_cfunc(wc_user_ring0    ,c_user_ring0);
+wrap_cfunc(wc_user_ring3    ,c_user_ring3);
+wrap_cfunc(wc_pic_master    ,c_pic_master);
+wrap_cfunc(wc_pic_slave     ,c_pic_slave);
+wrap_cfunc(wc_lapic         ,c_lapic);
+wrap_cfunc(wc_lapic_internal,c_lapic_internal);
+wrap_cfunc(wc_upcall_ring3,  c_upcall_ring3);
+wrap_cfunc(wc_downcall,      c_downcall);
 
 
 //
 // C helper for Class 1 ISRs
 //
-__isr_helper void c_critical(regs_t regs, int x){
+__isr_helper void c_critical(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr critical: "<<x<<"  esp="<<esp);
@@ -579,7 +610,7 @@ __isr_helper void c_critical(regs_t regs, int x){
 //
 // C helper for Class 2a,2b ISRs
 //
-__isr_helper void c_user_ring0(regs_t regs, int x){
+__isr_helper void c_user_ring0(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr user ring0: "<<x<<"  esp="<<esp);
@@ -589,7 +620,7 @@ __isr_helper void c_user_ring0(regs_t regs, int x){
 //
 // C helper for Class 2a,2b ISRs
 //
-__isr_helper void c_user_ring3(regs_t regs, int x){
+__isr_helper void c_user_ring3(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr user ring3: "<<x<<"  esp="<<esp);
@@ -598,7 +629,7 @@ __isr_helper void c_user_ring3(regs_t regs, int x){
 //
 // C helper for Class 2a,2b ISRs
 //
-__isr_helper void c_upcall_ring3(regs_t regs, int x){
+__isr_helper void c_upcall_ring3(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": upcall: inside isr user ring3: "<<x<<"  esp="<<esp);
@@ -610,7 +641,7 @@ __isr_helper void c_upcall_ring3(regs_t regs, int x){
 //
 // C helper for Class 3a ISRs
 //
-__isr_helper void c_pic_master(regs_t regs, int x){
+__isr_helper void c_pic_master(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr pic_master: "<<x<<"  esp="<<esp);
@@ -624,7 +655,7 @@ __isr_helper void c_pic_master(regs_t regs, int x){
 //
 // C helper for Class 3b ISRs
 //
-__isr_helper void c_pic_slave(regs_t regs, int x){
+__isr_helper void c_pic_slave(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr pic_slave: "<<x<<"  esp="<<esp);
@@ -641,7 +672,7 @@ __isr_helper void c_pic_slave(regs_t regs, int x){
 //
 // C helper for Class 4a ISRs
 //
-__isr_helper void c_lapic(regs_t regs, int x){
+__isr_helper void c_lapic(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   if(x==2){
@@ -657,7 +688,7 @@ __isr_helper void c_lapic(regs_t regs, int x){
 //
 // C helper for Class 4b ISRs
 //
-__isr_helper void c_lapic_internal(regs_t regs, int x){
+__isr_helper void c_lapic_internal(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   if(x==lapic_internal_spurious){
@@ -673,7 +704,7 @@ __isr_helper void c_lapic_internal(regs_t regs, int x){
 //
 // C helper for Class 5 ISRs
 //
-__isr_helper void c_downcall(regs_t regs, int x){
+__isr_helper void c_downcall(int x){
   uint32_t esp;
   asm volatile ("mov %%esp,%0":"=r"(esp)::);
   hoh_debug(": inside isr downcall: "<<x<<"  esp="<<esp);
