@@ -87,15 +87,17 @@ static inline void ring3_step(preempt_t& preempt, process_t& proc, dev_lapic_t& 
 	if(proc.state==1)
 	{
 		proc.eflags=(proc.eflags & ~(3u<<12)) | (proc.iopl<<12);
-		lapic.reset_timer_count(0);
+		lapic.reset_timer_count(10000000);
 		asm volatile(							 \
+			" pushl %%esi 					\n\t"
 			"cli							\n\t"\
 			"movl %%cr3 ,%%esi 					\n\t"\
 			"movl %%esi ,%%gs:28					\n\t"\
 			"movl %%edx ,%%esi 					\n\t"\
 			"movl %%esi ,%%gs:32					\n\t"\
+			" popl %%esi 						\n\t"
 			:							 \
-			:"d" (&proc)						 \
+			:"d" (&proc) 					 \
 			);
 		proc.mmu.reset();
 		asm volatile(								 \
