@@ -25,17 +25,31 @@ uint32_t f2(uint8_t x,uint8_t y,uint8_t z)
 uint32_t sum_neighbours(int x, int y, int z){
 		//hoh_debug("X "<<x<<"Y "<<y<<"Z "<<z);
 			int d=64;
-           uint32_t sum=0;
+      uint32_t sum=0;
+      if((z/32)%2==1){
             for(int i=-d; i<d; i++){
               for(int j=-d; j<d; j++){
                  for(int k=-d; k<d; k++){
-			//hoh_debug("asasasa "<<x+(uint8_t)i<<" "<<y+(uint8_t)j<<" "<<z+(uint8_t)k);
+		
                    sum += f2((uint8_t)(x+i), (uint8_t)(y+j), (uint8_t)(z+k));
-          //         hoh_debug("running sum"<< sum);
+    
                  }
               }
             }
-	//hoh_debug("sum value being returned "<<sum);
+          }
+      else
+      {
+          for(int i=d-1; i>-d-1; i--){
+              for(int j=-d; j<d; j++){
+                 for(int k=-d; k<d; k++){
+    
+                   sum += f2((uint8_t)(x+i), (uint8_t)(y+j), (uint8_t)(z+k));
+    
+                 }
+              }
+            }
+      }
+	
 	return sum;
         }
 /*

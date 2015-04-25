@@ -10,7 +10,7 @@
 uint32_t f(uint8_t x,uint8_t y,uint8_t z)
 {
 	//return uint32_t(x+y+z);
-	return 1;
+	return 0;
 }
 
 extern "C" void handle_user_fault(usertrapframe_t& x){
